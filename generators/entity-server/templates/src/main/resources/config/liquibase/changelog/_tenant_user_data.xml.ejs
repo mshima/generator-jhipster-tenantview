@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Load <%= tenantNameUpperFirst %> data
+        Dev context uses faker-data so this will conflict with it.
+        Apply to prod only.
+    -->
+    <changeSet id="<%= changelogDate %>-2" author="jhipster" context="prod, test">
+        <loadData file="config/liquibase/data/<%= tenantNameLowerCase %>.csv"
+                  separator=";"
+                  tableName="<%= tenantNameLowerCase %>">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="<%= changelogDate %>-2.1" author="jhipster">
+        <loadData file="config/liquibase/data/<%= tenantNameLowerCase %>_user.csv"
+                  separator=";"
+                  tableName="jhi_user">
+            <column name="id" type="numeric"/>
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="<%= tenantNameLowerCase %>_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+                  file="config/liquibase/data/<%= tenantNameLowerCase %>_authority.csv"
+                  separator=";"
+                  tableName="jhi_authority"/>
+
+        <loadData
+                  file="config/liquibase/data/<%= tenantNameLowerCase %>_user_authority.csv"
+                  separator=";"
+                  tableName="jhi_user_authority">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+
+    </changeSet>
+</databaseChangeLog>

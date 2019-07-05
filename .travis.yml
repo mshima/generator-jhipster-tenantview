@@ -1,0 +1,23 @@
+dist: bionic
+language: node_js
+node_js:
+    - '10.16.3'
+
+env:
+    #global:
+    #    - DEBUG=jhipster:*
+    matrix:
+        - JHI_GEN_VERSION='generator-jhipster@6.4.1'
+        - JHI_GEN_VERSION='jhipster/generator-jhipster#master'
+        - JHI_GEN_VERSION='generator-jhipster@6.4.0'
+        - JHI_GEN_VERSION='generator-jhipster@6.3.1'
+        - JHI_GEN_VERSION='generator-jhipster@6.3.0'
+
+before_install:
+    - npm install -g npm
+    - npm install -g $JHI_GEN_VERSION
+
+install:
+    - npm install
+script:
+    - npm test

@@ -1,0 +1,72 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
+
+import { <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>ComponentsPage, <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>UpdatePage } from './<%= tenantFileName %>.page-object';
+
+const expect = chai.expect;
+
+describe('<%= tenantFileName %> e2e test', () => {
+
+    let navBarPage: NavBarPage;
+    let signInPage: SignInPage;
+    let <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage: <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>UpdatePage;
+    let <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage: <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>ComponentsPage;
+
+    before(async () => {
+        await browser.get('/');
+        navBarPage = new NavBarPage(true);
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.autoSignInUsing('admin', 'admin');
+        await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
+    });
+
+    it('should load <%= tenantNameLowerFirst %> management', async () => {
+        await navBarPage.clickOnAdminMenu();
+        await navBarPage.clickOnAdmin('<%= tenantFileName %>');
+        <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage = new <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>ComponentsPage();
+        await browser.wait(ec.visibilityOf(<%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.title), 5000);
+        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.getTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.title');
+    });
+
+    it('should load create <%= tenantNameLowerFirst %> management page', async () => {
+        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
+        <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage = new <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>UpdatePage();
+        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.getPageTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel');
+        expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenantStateName %>/new'));
+        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.cancel();
+    });
+
+    it('should create and save <%= tenantNameLowerFirst %> management', async () => {
+        const nbButtonsBeforeCreate = await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons();
+
+        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
+        await promise.all([<%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.setNameInput('new <%= tenantNameLowerFirst %>')]);
+        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.getNameInput()).to.eq('new <%= tenantNameLowerFirst %>', 'Expected Name value to be equals to name');
+        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.save();
+
+        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+        expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenantStateName %>'));
+    });
+
+    after(async () => {
+        await navBarPage.autoSignOut();
+    });
+});

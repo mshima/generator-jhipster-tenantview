@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity <%= tenantNameLowerCase %>.
+    -->
+    <changeSet id="<%= changelogDate %>-1" author="jhipster">
+        <addColumn tableName="jhi_user">
+            <column name="<%= tenantNameLowerCase %>_id" type="bigint"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseColumnNames="<%= tenantNameLowerCase %>_id"
+                                 baseTableName="jhi_user"
+                                 constraintName="fk_jhi_user_<%= tenantNameLowerCase %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= tenantNameLowerCase %>"/>
+    </changeSet>
+</databaseChangeLog>

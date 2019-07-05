@@ -1,0 +1,10 @@
+{
+  "generator-jhipster-blueprint": {
+    "promptValues": {
+      "githubName": "mshima",
+      "authorName": "Marcelo Shima",
+      "authorEmail": "marceloshima@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}
