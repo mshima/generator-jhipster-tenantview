@@ -19,6 +19,7 @@ As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you hav
 To install this blueprint:
 
 ```bash
+npm install -g generator-jhipster
 npm install -g generator-jhipster-tenantview
 ```
 
@@ -33,6 +34,7 @@ npm update -g generator-jhipster-tenantview
 To install this blueprint:
 
 ```bash
+yarn global add generator-jhipster
 yarn global add generator-jhipster-tenantview
 ```
 
@@ -47,7 +49,7 @@ yarn global upgrade generator-jhipster-tenantview
 To use this blueprint, run the below command
 
 ```bash
-jhipster --blueprint tenantview
+jhipster --blueprints tenantview
 ```
 
 
@@ -90,6 +92,7 @@ jhipster -d --blueprint tenantview
 
 # License
 
+Apache-2.0 © [Marcelo Boveto Shima]()
 
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-tenantview.svg
