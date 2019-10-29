@@ -54,12 +54,12 @@ jobs:
 
       strategy:
           matrix:
-              no-blueprint-jdl-default:
-                  JHI_APP: jdl-default
-                  JHI_ENTITY: jdl
-                  JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
-                  BLUEPRINT_BUILD: false
+              #no-blueprint-jdl-default:
+              #    JHI_APP: jdl-default
+              #    JHI_ENTITY: jdl
+              #    JHI_PROFILE: prod
+              #    JHI_PROTRACTOR: 1
+              #    BLUEPRINT_BUILD: false
               jdl:
                   JHI_APP: jdl-company
                   JHI_ENTITY: other
