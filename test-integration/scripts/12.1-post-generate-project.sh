@@ -53,6 +53,3 @@ if $BLUEPRINT_REGENERATE; then
     # Regenerate to fix errors
     jhipster --force --no-insight --skip-checks --with-entities --from-cli --blueprints tenantview
 fi
-
-echo "Updation webdriver from chrome"
-npm install webdriver-manager@12.1.6
