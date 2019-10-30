@@ -4,7 +4,7 @@ const chalk = require('chalk');
 
 const debug = require('debug')('tenantview:env');
 
-const autoExtender = require('./auto-extender');
+const bugfixer = require('../lib/bugfixer');
 
 const generatorPath = Env.lookupGenerator('jhipster:app');
 const generatorsPath = path.dirname(path.dirname(generatorPath));
@@ -17,7 +17,7 @@ console.log(`\nExtending peer generator-jhipster version ${chalk.yellow(`${jhips
 
 const generator = function(generator) {
     const original = require(`${generatorsPath}/${generator}`);
-    return class GeneratorExtender extends autoExtender(original) {
+    return class GeneratorExtender extends bugfixer(original, { path: path.join(__dirname, '../bugfixer') }) {
         constructor(args, opts) {
             super(args, opts);
 

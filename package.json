@@ -14,9 +14,11 @@
     "url": ""
   },
   "files": [
-    "generators"
+    "generators",
+    "lib",
+    "bugfixer"
   ],
-  "main": "generators/app/index.js",
+  "main": "lib",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mshima/generator-jhipster-tenantview.git"
