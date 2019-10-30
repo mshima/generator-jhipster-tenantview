@@ -24,16 +24,18 @@ if (localBugfixerDir !== packageBugfixerDir) {
 }
 console.log('\nLoading bugfixer at %o', bugfixerPaths);
 
-const generator = function(generator) {
+const generator = function(generator, defaultInherit) {
     const original = require(`${generatorsPath}/${generator}`);
     return class GeneratorExtender extends bugfixer(original, { path: bugfixerPaths }) {
         constructor(args, opts) {
             super(args, opts);
 
-            if (opts.inherit === undefined || opts.inherit) {
-                this.inheritPriorities(original.prototype);
-            }
             this.superPrototype = original.prototype;
+            if (defaultInherit !== undefined) {
+                if (defaultInherit) this.inheritPriorities();
+            } else if (opts.inherit === undefined || opts.inherit) {
+                this.inheritPriorities();
+            }
         }
 
         inheritPriorities(prototype = this.superPrototype, opts = {}) {
