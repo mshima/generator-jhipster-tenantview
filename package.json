@@ -1,7 +1,7 @@
 {
   "name": "generator-jhipster-tenantview",
   "version": "0.1.0",
-  "description": "Tenancy customizations",
+  "description": "JHipster blueprint with multi-tenancy and others tenancy customizations",
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
@@ -23,12 +23,12 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "debug": "3.2.6",
+    "debug": "^3.2.6",
     "faker": "^4.1.0",
     "glob": "^7.1.3",
     "lodash": "^4.17.13",
     "pkginfo": "^0.4.1",
-    "pluralize": "7.0.0",
+    "pluralize": "^7.0.0",
     "randexp": "^0.5.3",
     "require-dir-all": "^0.4.15",
     "semver": "^5.6.0",
@@ -40,7 +40,6 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "debug": "3.2.6",
     "ejs-lint": "0.3.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
