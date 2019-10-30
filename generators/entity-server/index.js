@@ -3,7 +3,7 @@ const debug = require('debug')('tenantview:entity:server');
 
 const TenantisedNeedle = require('./needle-api/needle-server-tenantised-entities-services');
 
-const mtUtils = require('../multitenancy-utils');
+const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 const Patcher = require('../../lib/patcher');
 
 const jhipsterEnv = require('../../lib/jhipster-environment');
@@ -28,9 +28,10 @@ module.exports = class extends EntityServerGenerator {
             setUpVariables() {
                 this.SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
             },
+            /* tenant variables */
+            setupTenantVariables,
             // make the necessary server code changes
             customServerCode() {
-                mtUtils.tenantVariables.call(this, this.options.tenantName || this.blueprintConfig.get('tenantName'), this, this);
                 this.patcher.patch();
 
                 const tenantisedNeedle = new TenantisedNeedle(this);

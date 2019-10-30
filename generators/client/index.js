@@ -2,7 +2,7 @@
 const debug = require('debug')('tenantview:entity');
 
 const Patcher = require('../../lib/patcher');
-const mtUtils = require('../multitenancy-utils');
+const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
 const jhipsterEnv = require('../../lib/jhipster-environment');
 
@@ -24,9 +24,9 @@ module.exports = class extends ClientGenerator {
 
     get writing() {
         const postWritingSteps = {
+            setupTenantVariables,
+
             patchFiles() {
-                // template variables
-                mtUtils.tenantVariables.call(this, this.options.tenantName || this.blueprintConfig.get('tenantName'), this);
                 this.patcher.patch();
                 this.addVendorSCSSStyle(
                     `

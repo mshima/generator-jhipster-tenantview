@@ -3,7 +3,6 @@ const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity');
 
 const mtUtils = require('../multitenancy-utils');
-
 const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const EntityGenerator = jhipsterEnv.generator('entity');
@@ -28,6 +27,9 @@ module.exports = class extends EntityGenerator {
 
     get initializing() {
         const postInitializingSteps = {
+            /* tenant variables */
+            setupTenantVariables: mtUtils.setupTenantVariables,
+
             setUpVariables() {
                 const context = this.context;
 
@@ -35,9 +37,6 @@ module.exports = class extends EntityGenerator {
                 if (context.enableTranslation === undefined) {
                     context.enableTranslation = configuration.enableTranslation;
                 }
-
-                /* tenant variables */
-                mtUtils.tenantVariables.call(this, configuration.get('tenantName'), context, this);
 
                 if (!this.isTenant) {
                     return;

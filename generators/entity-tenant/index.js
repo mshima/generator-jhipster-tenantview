@@ -27,6 +27,9 @@ module.exports = class extends EntityGenerator {
 
     get initializing() {
         const postInitializingSteps = {
+            /* tenant variables */
+            setupTenantVariables: mtUtils.setupTenantVariables,
+
             setUpVariables() {
                 const context = this.context;
 
@@ -35,8 +38,6 @@ module.exports = class extends EntityGenerator {
                     context.enableTranslation = configuration.enableTranslation;
                 }
 
-                /* tenant variables */
-                mtUtils.tenantVariables(configuration.get('tenantName'), context, this);
                 context.clientRootFolder = context.tenantClientRootFolder;
 
                 this.entityModule = context.tenantModule;

@@ -1,14 +1,10 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
-const fs = require('fs');
 const debug = require('debug')('tenantview:common');
 
-const mtUtils = require('../multitenancy-utils');
-const Patcher = require('../../lib/patcher');
-
+const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 const jhipsterEnv = require('../../lib/jhipster-environment');
 
-const jhipsterUtils = jhipsterEnv.utils;
 const CommonGenerator = jhipsterEnv.generator('common');
 
 module.exports = class extends CommonGenerator {
@@ -32,14 +28,12 @@ module.exports = class extends CommonGenerator {
             type: Boolean,
             defaults: false
         });
-
-        this.tenantName = this.options.tenantName || this.blueprintConfig.get('tenantName');
-        this.patcher = new Patcher(this);
     }
 
     get initializing() {
         const myCustomPhaseSteps = {
             loadConf() {
+                this.tenantName = this.options.tenantName || this.blueprintConfig.get('tenantName');
                 this.configOptions.baseName = this.baseName;
 
                 if (this.blueprintConfig.get('tenantChangelogDate') === undefined) {
@@ -51,10 +45,9 @@ module.exports = class extends CommonGenerator {
 
                 // This will be used by entity-server to crate "@Before" annotation in TenantAspect
                 this.configOptions.tenantAwareEntities = [];
-
-                /* tenant variables */
-                mtUtils.tenantVariables.call(this, this.blueprintConfig.get('tenantName'), this);
-            }
+            },
+            /* tenant variables */
+            setupTenantVariables
         };
         return { ...super._initializing(), ...myCustomPhaseSteps };
     }
@@ -77,9 +70,10 @@ module.exports = class extends CommonGenerator {
                     }
                 ];
                 const done = this.async();
+                const self = this;
                 this.prompt(prompts).then(props => {
                     if (props.tenantName) {
-                        mtUtils.tenantVariables.call(this, props.tenantName, this);
+                        self.tenantName = props.tenantName;
                     }
                     done();
                 });
@@ -91,12 +85,11 @@ module.exports = class extends CommonGenerator {
     get configuring() {
         const postConfiguringSteps = {
             saveConf() {
-                this.tenantNameExists = this.blueprintConfig.get('tenantName') !== undefined;
+                if (!this.tenantName) return;
+                this.alreadySaved = this.blueprintConfig.get('tenantName') !== undefined;
 
-                this.configOptions.tenantName = this.tenantName;
-
+                this.tenantName = this.configOptions.tenantName = _.camelCase(this.tenantName);
                 this.blueprintConfig.set('tenantName', this.tenantName);
-                // this.config.set('tenantChangelogDate', this.tenantChangelogDate);
             }
         };
         // configuringCustomPhaseSteps should be run after configuring, otherwise tenantName will be overridden
@@ -106,8 +99,8 @@ module.exports = class extends CommonGenerator {
     get writing() {
         const preWritingSteps = {
             generateTenant() {
-                if (this.tenantNameExists) {
-                    debug('Ignoring entity-tenant since tenantName already is saved to .yo-rc.json');
+                if (this.alreadySaved) {
+                    this.log.warn('TenantName already is saved to .yo-rc.json');
                     return;
                 }
 
@@ -125,17 +118,6 @@ module.exports = class extends CommonGenerator {
             }
         };
 
-        const postWritingSteps = {
-            autoPatcher() {
-                // npm-shrinkwrap.json vars
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.blueprints = jhipsterUtils.loadBlueprintsFromConfiguration(this);
-                this.shrinkwrapExists = fs.existsSync('npm-shrinkwrap.json');
-
-                this.patcher.patch();
-            }
-        };
-
-        return { ...preWritingSteps, ...super._writing(), ...postWritingSteps };
+        return { ...preWritingSteps, ...super._writing() };
     }
 };

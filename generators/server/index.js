@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 const Patcher = require('../../lib/patcher');
-const mtUtils = require('../multitenancy-utils');
+const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
 const jhipsterEnv = require('../../lib/jhipster-environment');
 
@@ -15,12 +15,12 @@ module.exports = class extends ServerGenerator {
 
     get writing() {
         const postWritingSteps = {
+            /* tenant variables */
+            setupTenantVariables,
+
             writeAdditionalFile() {
                 this.packageFolder = this.config.get('packageFolder');
                 // references to the various directories we'll be copying files to
-
-                // template variables
-                mtUtils.tenantVariables.call(this, this.options.tenantName || this.blueprintConfig.get('tenantName'), this);
 
                 this.patcher.patch();
             }

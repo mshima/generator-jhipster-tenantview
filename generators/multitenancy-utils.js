@@ -8,7 +8,7 @@ const debug = require('debug')('tenantview:utils');
 module.exports = {
     validateTenant,
     getArrayItemWithFieldValue,
-    tenantVariables
+    setupTenantVariables
 };
 
 function validateTenant(generator) {
@@ -62,14 +62,21 @@ function getArrayItemWithFieldValue(array, fieldName, value) {
 }
 
 // Variations in tenant name
-function tenantVariables(tenantName, context, generator = this) {
+function setupTenantVariables() {
+    const generator = this;
+    const tenantName =
+        generator.tenantName ||
+        (generator.configOptions && generator.configOptions.tenantName) ||
+        (generator.options && generator.options.tenantName) ||
+        (generator.blueprintConfig && generator.blueprintConfig.get('tenantName'));
     if (tenantName === undefined) {
         debug('tenantName is undefined');
-        return;
+        return undefined;
     }
     /* tenant variables */
     const tenantNamePluralizedAndSpinalCased = _.kebabCase(pluralize(tenantName));
 
+    const dest = generator.context || generator;
     // workaround getEntityJson always look for generator.context
     const containsContext = generator.context !== undefined;
     if (!containsContext) generator.context = {};
@@ -80,6 +87,8 @@ function tenantVariables(tenantName, context, generator = this) {
     if (tenantData === undefined) {
         debug(`Error loading ${_.upperFirst(tenantName)}`);
     }
+    const entityAngularJSSuffix = dest.entityAngularJSSuffix;
+    const context = {};
     context.tenantClientRootFolder = generator.options['tenant-root-folder'] || (tenantData && tenantData.clientRootFolder) || '';
 
     context.tenantName = _.camelCase(tenantName);
@@ -92,14 +101,14 @@ function tenantVariables(tenantName, context, generator = this) {
     context.tenantInstance = _.lowerFirst(tenantName);
     context.tenantInstancePlural = pluralize(context.tenantInstance);
     context.tenantApiUrl = tenantNamePluralizedAndSpinalCased;
-    context.tenantFileName = _.kebabCase(context.tenantNameCapitalized + _.upperFirst(context.entityAngularJSSuffix));
+    context.tenantFileName = _.kebabCase(context.tenantNameCapitalized + _.upperFirst(entityAngularJSSuffix));
     context.tenantFolderName = generator.getEntityFolderName(context.tenantClientRootFolder, context.tenantFileName);
     context.tenantModelFileName = context.tenantFolderName;
     // context.tenantParentPathAddition = context.getEntityParentPathAddition(context.clientRootFolder);
-    context.tenantPluralFileName = tenantNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
+    context.tenantPluralFileName = tenantNamePluralizedAndSpinalCased + entityAngularJSSuffix;
     context.tenantServiceFileName = context.tenantFileName;
-    context.tenantAngularName = context.tenantClass + generator.upperFirstCamelCase(context.entityAngularJSSuffix);
-    context.tenantReactName = context.tenantClass + generator.upperFirstCamelCase(context.entityAngularJSSuffix);
+    context.tenantAngularName = context.tenantClass + generator.upperFirstCamelCase(entityAngularJSSuffix);
+    context.tenantReactName = context.tenantClass + generator.upperFirstCamelCase(entityAngularJSSuffix);
 
     context.tenantStateName = `${context.tenantFileName}`;
     context.tenantModule = 'admin';
@@ -124,4 +133,6 @@ function tenantVariables(tenantName, context, generator = this) {
 
     // relative to app root
     context.tenantModelPath = 'shared/admin';
+    Object.assign(dest, context);
+    return context;
 }
