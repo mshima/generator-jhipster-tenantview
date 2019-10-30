@@ -18,8 +18,9 @@ function extend(Superclass) {
                     const time = Date.parse(creationTimestamp);
                     if (time) {
                         now = new Date(time);
-                        this.config.set('creationTimestamp', now);
+                        this.blueprintConfig.set('creationTimestamp', now);
                         now.setMinutes(now.getMinutes() + 1);
+                        this.configOptions.lastChangelogDate = now;
                     } else {
                         this.log(`Error parsing creationTimestamp ${creationTimestamp}`);
                     }
