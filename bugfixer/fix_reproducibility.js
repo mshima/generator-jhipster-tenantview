@@ -8,22 +8,20 @@ function extend(Superclass) {
     return class GeneratorExtender extends Superclass {
         dateFormatForLiquibase() {
             let now = new Date();
-            const lastChangelogDate = this.config.get('lastChangelogDate');
-            if (lastChangelogDate !== undefined) {
-                now = new Date(Date.parse(lastChangelogDate));
+            if (this.configOptions.lastChangelogDate !== undefined) {
+                now = this.configOptions.lastChangelogDate;
                 now.setMinutes(now.getMinutes() + 1);
-                this.config.set('lastChangelogDate', now);
             } else {
-                const baseChangelogDate = this.options.baseChangelogDate || this.options['base-changelog-date'];
-                if (baseChangelogDate !== undefined) {
-                    this.log(`Using baseChangelogDate ${baseChangelogDate}`);
-                    const time = Date.parse(baseChangelogDate);
+                const creationTimestamp = this.options.creationTimestamp;
+                if (creationTimestamp !== undefined) {
+                    this.log(`Using creationTimestamp ${creationTimestamp}`);
+                    const time = Date.parse(creationTimestamp);
                     if (time) {
                         now = new Date(time);
-                        this.config.set('baseChangelogDate', baseChangelogDate);
-                        this.config.set('lastChangelogDate', now);
+                        this.config.set('creationTimestamp', now);
+                        now.setMinutes(now.getMinutes() + 1);
                     } else {
-                        this.log(`Error parsing baseChangelogDate ${baseChangelogDate}`);
+                        this.log(`Error parsing creationTimestamp ${creationTimestamp}`);
                     }
                 }
             }

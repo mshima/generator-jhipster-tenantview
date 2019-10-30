@@ -40,7 +40,7 @@ const expectedFiles = {
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/company/CompanyAspect.java`,
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/CompanyResourceIT.java`,
             `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/company.csv`,
-            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20190907000000_added_entity_Company.xml`
+            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20190907000100_added_entity_Company.xml`
         ]
     },
 

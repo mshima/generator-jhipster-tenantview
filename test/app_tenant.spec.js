@@ -21,7 +21,7 @@ describe('JHipster generator with tenantview blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: 'tenantview',
-                        baseChangelogDate: '2019-09-07',
+                        creationTimestamp: '2019-09-07',
                         defaultTenantAware: true,
                         tenantFileSuffix: 'management',
                         'abort-on-patch-error': true,

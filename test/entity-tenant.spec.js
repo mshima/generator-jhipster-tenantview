@@ -34,7 +34,7 @@ describe('Subgenerator entity-tenant of tenantview JHipster blueprint', () => {
                     blueprint: 'tenantview',
                     tenantName: 'Company',
                     tenantFileSuffix: 'management',
-                    baseChangelogDate: '2019-09-07',
+                    creationTimestamp: '2019-09-07',
                     'debug-patcher': true,
                     'ignore-patch-errors': 'navbar.component.html.ejs',
                     skipChecks: true
