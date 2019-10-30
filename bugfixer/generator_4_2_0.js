@@ -8,7 +8,7 @@ const methodIsValid = function(name) {
 
 /*
  * =======================
- * Update run to yeoman-generator 4.2.0 + queueMethod with object
+ * Update run to yeoman-generator 4.2.0 + PR https://github.com/yeoman/generator/pull/1135
  */
 function extend(Superclass) {
     const GeneratorExtender = class GeneratorExtender extends Superclass {

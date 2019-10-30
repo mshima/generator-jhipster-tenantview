@@ -1,8 +1,8 @@
 /*
  * =======================
  * Init patches
- * getAllJhipsterConfig isn't getting all jhipster config
- * Workaround https://github.com/jhipster/generator-jhipster/issues/10205
+ * Issue: https://github.com/jhipster/generator-jhipster/issues/10663
+ * PR: https://github.com/jhipster/generator-jhipster/pull/10664
  */
 function extend(Superclass) {
     return class GeneratorExtender extends Superclass {
