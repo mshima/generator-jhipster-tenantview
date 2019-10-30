@@ -87,19 +87,11 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date') {
-            let formatedDate;
-            if (changelogDate !== undefined) {
-                formatedDate = changelogDate.substring(0, 4) + '-' + changelogDate.substring(4, 6) + '-' + changelogDate.substring(6, 8);
-            }
-            data = this.faker.date.recent(1, formatedDate).toISOString().split('T')[0];
+            data = this.recentForLiquibase(1, changelogDate).toISOString().split('T')[0];
         } else if (columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
-            let formatedDate;
-            if (changelogDate !== undefined) {
-                formatedDate = changelogDate.substring(0, 4) + '-' + changelogDate.substring(4, 6) + '-' + changelogDate.substring(6, 8);
-            }
-            data = this.faker.date.recent(1, formatedDate).toISOString().split('.')[0];
+            data = this.recentForLiquibase(1, changelogDate).toISOString().split('.')[0];
         } else if (columnType.startsWith('varchar')) {
             let columnName = fields[idx].fieldNameAsDatabaseColumn;
             if (columnName === 'first_name') {
@@ -161,7 +153,9 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         // Validation rules
         if (fields[idx].fieldValidate === true) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
-                data = `"${new this.randexp(fields[idx].fieldValidateRulesPattern).gen()}"`;
+                const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern)
+                randExp.max = 5;
+                data = `"${randExp.gen().replace(/"/g, '""')}"`;
             }
 
             // manage String max length
