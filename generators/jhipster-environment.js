@@ -15,10 +15,18 @@ const constants = require(`${generatorsPath}/generator-constants`);
 const jhipsterVersion = require(`${packagePath}/package.json`).version;
 
 console.log(`\nExtending peer generator-jhipster version ${chalk.yellow(`${jhipsterVersion}`)} at ${chalk.yellow(`${packagePath}`)}\n`);
+const localBugfixerDir = path.resolve('bugfixer/');
+const packageBugfixerDir = path.resolve(__dirname, '../bugfixer');
+const bugfixerPaths = [packageBugfixerDir];
+
+if (localBugfixerDir !== packageBugfixerDir) {
+    bugfixerPaths.push(localBugfixerDir);
+}
+console.log('\nLoading bugfixer at %o', bugfixerPaths);
 
 const generator = function(generator) {
     const original = require(`${generatorsPath}/${generator}`);
-    return class GeneratorExtender extends bugfixer(original, { path: path.join(__dirname, '../bugfixer') }) {
+    return class GeneratorExtender extends bugfixer(original, { path: bugfixerPaths }) {
         constructor(args, opts) {
             super(args, opts);
 
