@@ -4,9 +4,9 @@ const debug = require('debug')('tenantview:entity:server');
 const TenantisedNeedle = require('./needle-api/needle-server-tenantised-entities-services');
 
 const mtUtils = require('../multitenancy-utils');
-const Patcher = require('../patcher');
+const Patcher = require('../../lib/patcher');
 
-const jhipsterEnv = require('../jhipster-environment');
+const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const EntityServerGenerator = jhipsterEnv.generator('entity-server');
 

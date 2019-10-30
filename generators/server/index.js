@@ -1,8 +1,8 @@
 /* eslint-disable consistent-return */
-const Patcher = require('../patcher');
+const Patcher = require('../../lib/patcher');
 const mtUtils = require('../multitenancy-utils');
 
-const jhipsterEnv = require('../jhipster-environment');
+const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const ServerGenerator = jhipsterEnv.generator('server');
 

@@ -6,7 +6,7 @@ const helpers = require('yeoman-test');
 const getFilesForOptions = require('./jhipster_utils/utils').getFilesForOptions;
 const expectedFiles = require('./jhipster_utils/expected-files');
 
-const generatorsPath = require('../generators/jhipster-environment').generatorsPath;
+const generatorsPath = require('../lib/jhipster-environment').generatorsPath;
 
 const angularFiles = require(`${generatorsPath}/client/files-angular`).files;
 

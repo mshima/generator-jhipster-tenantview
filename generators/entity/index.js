@@ -4,7 +4,7 @@ const debug = require('debug')('tenantview:entity');
 
 const mtUtils = require('../multitenancy-utils');
 
-const jhipsterEnv = require('../jhipster-environment');
+const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const EntityGenerator = jhipsterEnv.generator('entity');
 

@@ -1,8 +1,8 @@
 const debug = require('debug')('tenantview:entity:client');
 
-const Patcher = require('../patcher');
+const Patcher = require('../../lib/patcher');
 
-const jhipsterEnv = require('../jhipster-environment');
+const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const EntityClientGenerator = jhipsterEnv.generator('entity-client');
 

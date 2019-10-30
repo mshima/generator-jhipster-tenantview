@@ -7,7 +7,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 // const debug = require('debug')('tenantview:generator-extender:custom-entity-module');
 
-const jhipsterEnv = require('../generators/jhipster-environment');
+const jhipsterEnv = require('../lib/jhipster-environment');
 
 const NeedleClientAngular = require(`${jhipsterEnv.generatorsPath}/client/needle-api/needle-client-angular`);
 

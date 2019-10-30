@@ -2,7 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
-const generatorsPath = require('../generators/jhipster-environment').generatorsPath;
+const generatorsPath = require('../lib/jhipster-environment').generatorsPath;
 
 describe('Subgenerator server of tenantview JHipster blueprint', () => {
     describe('Sample test', () => {

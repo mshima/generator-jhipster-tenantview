@@ -2,7 +2,7 @@ const randexp = require('randexp');
 const debug = require('debug')('tenantview:entity:server:files');
 const faker = require('faker');
 
-const jhipsterEnv = require('../../jhipster-environment');
+const jhipsterEnv = require('../../../lib/jhipster-environment');
 
 const jhipsterConstants = jhipsterEnv.constants;
 

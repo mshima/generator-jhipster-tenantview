@@ -4,9 +4,9 @@ const fs = require('fs');
 const debug = require('debug')('tenantview:common');
 
 const mtUtils = require('../multitenancy-utils');
-const Patcher = require('../patcher');
+const Patcher = require('../../lib/patcher');
 
-const jhipsterEnv = require('../jhipster-environment');
+const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const jhipsterUtils = jhipsterEnv.utils;
 const CommonGenerator = jhipsterEnv.generator('common');
