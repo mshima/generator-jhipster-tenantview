@@ -6,14 +6,15 @@ const debug = require('debug')('tenantview:env');
 
 const bugfixer = require('../lib/bugfixer');
 
-const generatorPath = Env.lookupGenerator('jhipster:app');
-const generatorsPath = path.dirname(path.dirname(generatorPath));
-const packagePath = path.dirname(generatorsPath);
+const lookupPath = Env.lookupGenerator('jhipster:app', { packagePath: true });
+const packagePath = path.parse(lookupPath).name === 'generators' ? path.dirname(lookupPath) : lookupPath;
+const generatorsPath = `${packagePath}/generators`;
+console.log(`\nFound jhispter at ${chalk.yellow(`${generatorsPath}`)}\n`);
 const utils = require(`${generatorsPath}/utils`);
 const constants = require(`${generatorsPath}/generator-constants`);
 const jhipsterVersion = require(`${packagePath}/package.json`).version;
 
-console.log(`\nExtending peer generator-jhipster version ${chalk.yellow(`${jhipsterVersion}`)} at ${chalk.yellow(`${generatorsPath}`)}\n`);
+console.log(`\nExtending peer generator-jhipster version ${chalk.yellow(`${jhipsterVersion}`)} at ${chalk.yellow(`${packagePath}`)}\n`);
 
 const generator = function(generator) {
     const original = require(`${generatorsPath}/${generator}`);
