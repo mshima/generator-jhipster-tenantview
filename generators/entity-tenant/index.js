@@ -9,7 +9,7 @@ const EntityGenerator = jhipsterEnv.generator('entity');
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
         debug(`Initializing entity-tenant ${args[0]}`);
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+        super(args, opts);
 
         this.option('tenant-root-folder', {
             desc: 'Set tenant root folder',
@@ -25,7 +25,9 @@ module.exports = class extends EntityGenerator {
     }
 
     get initializing() {
-        const postInitializingSteps = {
+        return {
+            ...super._initializing(),
+
             /* tenant variables */
             setupTenantVariables: mtUtils.setupTenantVariables,
 
@@ -43,8 +45,6 @@ module.exports = class extends EntityGenerator {
                 context.entityModule = context.tenantModule;
             }
         };
-
-        return { ...super._initializing(), ...postInitializingSteps };
     }
 
     get prompting() {
@@ -52,15 +52,15 @@ module.exports = class extends EntityGenerator {
     }
 
     get configuring() {
-        const preConfiguringSteps = {
+        return {
             preJson() {
                 mtUtils.validateTenant(this);
 
                 this.context.changelogDate = this.configOptions.tenantChangelogDate || this.blueprintConfig.get('tenantChangelogDate');
-            }
-        };
+            },
 
-        const postConfiguringSteps = {
+            ...super._configuring(),
+
             configureTenantFolder() {
                 const context = this.context;
 
@@ -78,6 +78,5 @@ module.exports = class extends EntityGenerator {
                 context.entityModelFileName = context.tenantFolderName;
             }
         };
-        return { ...preConfiguringSteps, ...super._configuring(), ...postConfiguringSteps };
     }
 };

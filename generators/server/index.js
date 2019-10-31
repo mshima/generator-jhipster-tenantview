@@ -1,10 +1,13 @@
 /* eslint-disable consistent-return */
+const debug = require('debug')('tenantview:server');
+
 const jhipsterEnv = require('../../lib/jhipster-environment');
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
 module.exports = class extends jhipsterEnv.generator('server') {
     constructor(args, opts) {
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+        debug('Initializing server blueprint');
+        super(args, opts);
     }
 
     get writing() {

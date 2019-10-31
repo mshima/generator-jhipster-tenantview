@@ -9,8 +9,8 @@ const ClientGenerator = jhipsterEnv.generator('client');
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
-        debug('Initializing client');
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+        debug('Initializing client blueprint');
+        super(args, opts); // fromBlueprint variable is important
 
         this.option('tenant-root-folder', {
             desc: 'Set tenant root folder',
@@ -20,7 +20,9 @@ module.exports = class extends ClientGenerator {
     }
 
     get writing() {
-        const postWritingSteps = {
+        return {
+            ...super._writing(),
+
             setupTenantVariables,
 
             // Apply patcher
@@ -40,6 +42,5 @@ module.exports = class extends ClientGenerator {
                 );
             }
         };
-        return { ...super._writing(), ...postWritingSteps };
     }
 };

@@ -14,13 +14,15 @@ const jhipsterConstants = jhipsterEnv.constants;
 module.exports = class extends EntityServerGenerator {
     constructor(args, opts) {
         debug(`Initializing entity-server ${opts.context.name}`);
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+        super(args, opts);
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
     }
 
     get writing() {
-        const postWritingSteps = {
+        return {
+            ...super._writing(),
+
             // sets up all the variables we'll need for the templating
             setUpVariables() {
                 this.SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
@@ -50,6 +52,5 @@ module.exports = class extends EntityServerGenerator {
                 }
             }
         };
-        return { ...super._writing(), ...postWritingSteps };
     }
 };

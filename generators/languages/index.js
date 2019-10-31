@@ -11,9 +11,8 @@ const jhipsterConstants = jhipsterEnv.constants;
 
 module.exports = class extends LanguagesGenerator {
     constructor(args, opts) {
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
-
         debug('Initializing languages blueprint');
+        super(args, opts);
     }
 
     get writing() {

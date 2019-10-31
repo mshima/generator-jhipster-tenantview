@@ -10,7 +10,7 @@ const EntityGenerator = jhipsterEnv.generator('entity');
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
         debug(`Initializing entity ${args[0]}`);
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+        super(args, opts);
 
         this.option('tenant-root-folder', {
             desc: 'Set tenant root folder',
@@ -26,7 +26,9 @@ module.exports = class extends EntityGenerator {
     }
 
     get initializing() {
-        const postInitializingSteps = {
+        return {
+            ...super._initializing(),
+
             /* tenant variables */
             setupTenantVariables: mtUtils.setupTenantVariables,
 
@@ -48,12 +50,12 @@ module.exports = class extends EntityGenerator {
                 context.entityModule = context.tenantModule;
             }
         };
-
-        return { ...super._initializing(), ...postInitializingSteps };
     }
 
     get prompting() {
-        const postPromptingSteps = {
+        return {
+            ...super._prompting(),
+
             askTenantAware() {
                 const context = this.context;
 
@@ -95,11 +97,10 @@ module.exports = class extends EntityGenerator {
                 });
             }
         };
-        return { ...super._prompting(), ...postPromptingSteps };
     }
 
     get configuring() {
-        const preConfiguringSteps = {
+        return {
             loadTenantDef() {
                 const context = this.context;
 
@@ -184,10 +185,10 @@ module.exports = class extends EntityGenerator {
                     };
                     context.relationships.push(real);
                 }
-            }
-        };
+            },
 
-        const postConfiguringSteps = {
+            ...super._configuring(),
+
             configureTenantFolder() {
                 const context = this.context;
 
@@ -219,6 +220,5 @@ module.exports = class extends EntityGenerator {
                 this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
             }
         };
-        return { ...preConfiguringSteps, ...super._configuring(), ...postConfiguringSteps };
     }
 };

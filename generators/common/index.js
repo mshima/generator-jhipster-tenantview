@@ -9,7 +9,8 @@ const CommonGenerator = jhipsterEnv.generator('common');
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
-        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
+        debug('Initializing common blueprint');
+        super(args, opts);
 
         this.option('tenant-name', {
             desc: 'Set tenant name',
@@ -31,7 +32,9 @@ module.exports = class extends CommonGenerator {
     }
 
     get initializing() {
-        const myCustomPhaseSteps = {
+        return {
+            ...super._initializing(),
+
             loadConf() {
                 this.tenantName = this.options.tenantName || this.blueprintConfig.get('tenantName');
                 this.configOptions.baseName = this.baseName;
@@ -49,11 +52,12 @@ module.exports = class extends CommonGenerator {
             /* tenant variables */
             setupTenantVariables
         };
-        return { ...super._initializing(), ...myCustomPhaseSteps };
     }
 
     get prompting() {
-        const myCustomPhaseSteps = {
+        return {
+            ...super._prompting(),
+
             askTenantAware() {
                 const prompts = [
                     {
@@ -79,11 +83,13 @@ module.exports = class extends CommonGenerator {
                 });
             }
         };
-        return { ...super._prompting(), ...myCustomPhaseSteps };
     }
 
     get configuring() {
-        const postConfiguringSteps = {
+        return {
+            ...super._configuring(),
+
+            // configuringCustomPhaseSteps should be run after configuring, otherwise tenantName will be overridden
             saveConf() {
                 if (!this.tenantName) return;
                 this.alreadySaved = this.blueprintConfig.get('tenantName') !== undefined;
@@ -92,12 +98,10 @@ module.exports = class extends CommonGenerator {
                 this.blueprintConfig.set('tenantName', this.tenantName);
             }
         };
-        // configuringCustomPhaseSteps should be run after configuring, otherwise tenantName will be overridden
-        return { ...super._configuring(), ...postConfiguringSteps };
     }
 
     get writing() {
-        const preWritingSteps = {
+        return {
             generateTenant() {
                 if (this.alreadySaved) {
                     this.log.warn('TenantName already is saved to .yo-rc.json');
@@ -115,9 +119,9 @@ module.exports = class extends CommonGenerator {
                     debug: this.isDebugEnabled,
                     arguments: [this.tenantName]
                 });
-            }
-        };
+            },
 
-        return { ...preWritingSteps, ...super._writing() };
+            ...super._writing()
+        };
     }
 };
