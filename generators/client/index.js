@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:entity');
 
-const Patcher = require('../../lib/patcher');
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
 const jhipsterEnv = require('../../lib/jhipster-environment');
@@ -10,6 +9,7 @@ const ClientGenerator = jhipsterEnv.generator('client');
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
+        debug('Initializing client');
         super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
 
         this.option('tenant-root-folder', {
@@ -17,17 +17,16 @@ module.exports = class extends ClientGenerator {
             type: String,
             default: '../admin'
         });
-
-        debug('Initializing client');
-        this.patcher = new Patcher(this);
     }
 
     get writing() {
         const postWritingSteps = {
             setupTenantVariables,
 
+            // Apply patcher
+            applyPatcher: this.applyPatcher,
+
             patchFiles() {
-                this.patcher.patch();
                 this.addVendorSCSSStyle(
                     `
 #home-menu-container {@extend .order-0;}
@@ -42,13 +41,5 @@ module.exports = class extends ClientGenerator {
             }
         };
         return { ...super._writing(), ...postWritingSteps };
-    }
-
-    get install() {
-        return super._install();
-    }
-
-    get end() {
-        return super._end();
     }
 };

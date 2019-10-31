@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:languages');
 
-const Patcher = require('../../lib/patcher');
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
 const jhipsterEnv = require('../../lib/jhipster-environment');
@@ -14,12 +13,13 @@ module.exports = class extends LanguagesGenerator {
     constructor(args, opts) {
         super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
 
-        this.patcher = new Patcher(this);
         debug('Initializing languages blueprint');
     }
 
     get writing() {
-        const postWritingSteps = {
+        return {
+            ...super._writing(),
+
             /* tenant variables */
             setupTenantVariables,
 
@@ -31,6 +31,5 @@ module.exports = class extends LanguagesGenerator {
                 });
             }
         };
-        return { ...super._writing(), ...postWritingSteps };
     }
 };

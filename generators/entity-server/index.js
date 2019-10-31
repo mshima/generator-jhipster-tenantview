@@ -4,7 +4,6 @@ const debug = require('debug')('tenantview:entity:server');
 const TenantisedNeedle = require('./needle-api/needle-server-tenantised-entities-services');
 
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
-const Patcher = require('../../lib/patcher');
 
 const jhipsterEnv = require('../../lib/jhipster-environment');
 
@@ -14,12 +13,10 @@ const jhipsterConstants = jhipsterEnv.constants;
 
 module.exports = class extends EntityServerGenerator {
     constructor(args, opts) {
+        debug(`Initializing entity-server ${opts.context.name}`);
         super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
-
-        this.patcher = new Patcher(this);
-        debug(`Initializing entity-server ${this.name}`);
     }
 
     get writing() {
@@ -30,10 +27,12 @@ module.exports = class extends EntityServerGenerator {
             },
             /* tenant variables */
             setupTenantVariables,
+
+            // Apply patcher
+            applyPatcher: this.applyPatcher,
+
             // make the necessary server code changes
             customServerCode() {
-                this.patcher.patch();
-
                 const tenantisedNeedle = new TenantisedNeedle(this);
                 if (this.tenantAware) {
                     tenantisedNeedle.addEntityToTenantAspect(this, this.name);

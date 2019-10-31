@@ -1,27 +1,16 @@
 const debug = require('debug')('tenantview:entity:client');
 
-const Patcher = require('../../lib/patcher');
-
 const jhipsterEnv = require('../../lib/jhipster-environment');
 
 const EntityClientGenerator = jhipsterEnv.generator('entity-client');
 
 module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
+        debug(`Initializing entity-client ${opts.context.name}`);
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-
-        // npm test fails probably because of errors of first run.
-        // Add ignorePatchErrors until jhipster errors as fixed.
-        this.patcher = new Patcher(this);
-        debug(`Initializing entity-client ${this.name}`);
     }
 
     get writing() {
-        const postWritingSteps = {
-            generateClientCode() {
-                this.patcher.patch();
-            }
-        };
-        return { ...super._writing(), ...postWritingSteps };
+        return { ...super._writing(), applyPatcher: this.applyPatcher };
     }
 };

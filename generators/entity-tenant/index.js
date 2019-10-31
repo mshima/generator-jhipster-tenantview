@@ -8,6 +8,7 @@ const EntityGenerator = jhipsterEnv.generator('entity');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
+        debug(`Initializing entity-tenant ${args[0]}`);
         super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
 
         this.option('tenant-root-folder', {
@@ -21,8 +22,6 @@ module.exports = class extends EntityGenerator {
 
         // pass to entity-* subgen
         this.context.isTenant = this.isTenant;
-
-        debug(`Initializing entity-tenant ${args[0]}`);
     }
 
     get initializing() {
