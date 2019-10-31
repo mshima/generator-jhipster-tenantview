@@ -55,8 +55,6 @@ module.exports = class extends EntityGenerator {
         return {
             preJson() {
                 mtUtils.validateTenant(this);
-
-                this.context.changelogDate = this.configOptions.tenantChangelogDate || this.blueprintConfig.get('tenantChangelogDate');
             },
 
             ...super._configuring(),

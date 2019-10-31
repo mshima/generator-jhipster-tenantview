@@ -121,7 +121,6 @@ module.exports = class extends EntityGenerator {
                 if (this.isTenant) {
                     // force tenant to be serviceClass
                     context.service = 'serviceClass';
-                    context.changelogDate = this.blueprintConfig.get('tenantChangelogDate');
                     return;
                 }
 

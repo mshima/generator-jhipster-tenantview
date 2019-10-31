@@ -39,13 +39,6 @@ module.exports = class extends CommonGenerator {
                 this.tenantName = this.options.tenantName || this.blueprintConfig.get('tenantName');
                 this.configOptions.baseName = this.baseName;
 
-                if (this.blueprintConfig.get('tenantChangelogDate') === undefined) {
-                    this.tenantChangelogDate = this.dateFormatForLiquibase();
-                    debug(`Using tenantChangelogDate ${this.tenantChangelogDate}`);
-                    this.blueprintConfig.set('tenantChangelogDate', this.tenantChangelogDate);
-                    this.configOptions.tenantChangelogDate = this.tenantChangelogDate;
-                }
-
                 // This will be used by entity-server to crate "@Before" annotation in TenantAspect
                 this.configOptions.tenantAwareEntities = [];
             },

@@ -17,7 +17,6 @@ function validateTenant(generator) {
 
     // force tenant to be serviceClass
     context.service = 'serviceClass';
-    context.changelogDate = generator.config.get('tenantChangelogDate');
 
     // Add name field if doesn´t exists.
     if (!getArrayItemWithFieldValue(context.fields, 'fieldName', 'name')) {
