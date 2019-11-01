@@ -57,6 +57,11 @@ describe('JHipster generator with tenantview blueprint', () => {
                             require('../generators/entity-server/index.js'), // eslint-disable-line global-require
                             'jhipster-tenantview:entity-server',
                             path.join(__dirname, '../generators/entity-server/index.js')
+                        ],
+                        [
+                            require('../generators/entity-i18n/index.js'), // eslint-disable-line global-require
+                            'jhipster-tenantview:entity-i18n',
+                            path.join(__dirname, '../generators/entity-i18n/index.js')
                         ]
                     ])
                     .withPrompts({
