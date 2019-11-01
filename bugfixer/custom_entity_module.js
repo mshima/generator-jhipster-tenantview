@@ -5,7 +5,7 @@
  */
 const chalk = require('chalk');
 const _ = require('lodash');
-// const debug = require('debug')('tenantview:generator-extender:custom-entity-module');
+const debug = require('debug')('bugfixer:custom-entity-module');
 
 const jhipsterEnv = require('../lib/jhipster-environment');
 
@@ -125,6 +125,8 @@ function extend(Superclass) {
          * Override addEntityToMenu changing the menu tenant is added to.
          */
         addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
+            debug('Running addEntityToMenu');
+            debug(this.entityModule);
             /*
              * entity-client files.js
              * this.entityUrl instead of this.entityStateName
@@ -152,6 +154,8 @@ function extend(Superclass) {
          * Override addEntityTranslationKey changing the menu tenant is added to.
          */
         addEntityTranslationKey(key, value, language) {
+            debug('Running addEntityTranslationKey');
+            debug(this.entityModule);
             if (this.clientFramework === 'react' || this.entityModule === undefined || this.entityModule === 'entities') {
                 this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
             } else if (this.entityModule === 'admin') {
@@ -174,6 +178,8 @@ function extend(Superclass) {
             clientFramework,
             microServiceName
         ) {
+            debug('Running addEntityToModule');
+            debug(this.entityModule);
             entityState = this.entityStateName;
             if (clientFramework === 'react' || this.entityModule === undefined || this.entityModule === 'entities') {
                 if (clientFramework === 'angularX') {
