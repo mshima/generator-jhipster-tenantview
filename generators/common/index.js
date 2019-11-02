@@ -1,13 +1,13 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
+const path = require('path');
+const fs = require('fs');
 const debug = require('debug')('tenantview:common');
 
-const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 const jhipsterEnv = require('../../lib/jhipster-environment');
+const mtUtils = require('../multitenancy-utils');
 
-const CommonGenerator = jhipsterEnv.generator('common');
-
-module.exports = class extends CommonGenerator {
+module.exports = class extends jhipsterEnv.generator('common') {
     constructor(args, opts) {
         debug('Initializing common blueprint');
         super(args, opts);
@@ -41,9 +41,7 @@ module.exports = class extends CommonGenerator {
 
                 // This will be used by entity-server to crate "@Before" annotation in TenantAspect
                 this.configOptions.tenantAwareEntities = [];
-            },
-            /* tenant variables */
-            setupTenantVariables
+            }
         };
     }
 
@@ -87,34 +85,80 @@ module.exports = class extends CommonGenerator {
                 if (!this.tenantName) return;
                 this.alreadySaved = this.blueprintConfig.get('tenantName') !== undefined;
 
-                this.tenantName = this.configOptions.tenantName = _.camelCase(this.tenantName);
+                this.tenantName = this.configOptions.tenantName = _.upperFirst(this.tenantName);
                 this.blueprintConfig.set('tenantName', this.tenantName);
+            },
+
+            generateTenant: this._generateTenant,
+
+            recreateChangelog() {
+                if (!this.options.recreateDate) return;
+                // Reset counter;
+                delete this.configOptions.lastChangelogDate;
+                const self = this;
+                this.getExistingEntities().forEach(entity => {
+                    // Recreate changelog
+                    entity.definition.changelogDate = self.dateFormatForLiquibase();
+
+                    const filePath = path.join('.jhipster', `${entity.name}.json`);
+                    fs.writeFileSync(filePath, JSON.stringify(entity.definition, null, 4));
+                    self.fs.writeJSON(filePath, entity.definition, null, 4);
+                });
             }
         };
     }
 
-    get writing() {
-        return {
-            generateTenant() {
-                if (this.alreadySaved) {
-                    this.log.warn('TenantName already is saved to .yo-rc.json');
-                    return;
-                }
+    /* ======================================================================== */
+    /* private methods use within generator (not exposed to modules) */
+    /* ======================================================================== */
 
-                const options = this.options;
+    _generateTenant() {
+        const tenantPath = path.join('.jhipster', `${this.tenantName}.json`);
+        if (this.fs.exists(tenantPath)) {
+            debug('Exists');
+            const definition = this.fs.readJSON(tenantPath);
+
+            let hasChanges = false;
+            if (this.options.recreateDate) {
+                definition.changelogDate = this.dateFormatForLiquibase();
+                hasChanges = true;
+            }
+
+            // Force some defaults
+            definition.service = 'serviceClass';
+            if (!definition.tenantModule || this.options.tenantModule || !definition.clientRootFolder) {
+                definition.tenantModule = definition.tenantModule || this.options.tenantModule || 'admin';
+                definition.clientRootFolder = `../${definition.tenantModule}`;
+                hasChanges = true;
+            }
+
+            if (hasChanges) {
+                // Save to disc and to buffer
+                fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4));
+                this.fs.writeJSON(tenantPath, definition, null, 4);
+            }
+        } else {
+            debug("Don't exists");
+            const definition = mtUtils.getDefaultDefinition.call(this);
+            if (!fs.existsSync('.jhipster')) {
+                fs.mkdirSync('.jhipster');
+            }
+            // getExistingEntities with Entities.useConfigurationFile uses wrote files.
+            fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4));
+            // loadEntityJson uses this.fs (mem-fs-editor) files.
+            this.fs.writeJSON(tenantPath, definition, null, 4);
+
+            if (!this.options.withEntities) {
                 const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../entity-tenant'), {
-                    ...options,
+                this.composeWith(require.resolve('../entity'), {
+                    ...this.options,
                     configOptions,
                     regenerate: false,
                     'skip-install': false,
                     debug: this.isDebugEnabled,
                     arguments: [this.tenantName]
                 });
-            },
-
-            ...super._writing()
-        };
+            }
+        }
     }
 };

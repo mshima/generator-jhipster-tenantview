@@ -14,8 +14,7 @@ module.exports = class extends ClientGenerator {
 
         this.option('tenant-root-folder', {
             desc: 'Set tenant root folder',
-            type: String,
-            default: '../admin'
+            type: String
         });
     }
 

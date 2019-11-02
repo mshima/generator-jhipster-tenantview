@@ -14,12 +14,11 @@ module.exports = class extends EntityGenerator {
 
         this.option('tenant-root-folder', {
             desc: 'Set tenant root folder',
-            type: String,
-            default: '../admin'
+            type: String
         });
 
         // current subgen
-        this.isTenant = this._.lowerFirst(args[0]) === this._.lowerFirst(this.blueprintConfig.get('tenantName'));
+        this.isTenant = this._.lowerFirst(args[0]) === this._.lowerFirst(this.options.tenantName || this.blueprintConfig.get('tenantName'));
 
         // pass to entity-* subgen
         this.context.isTenant = this.isTenant;
@@ -30,25 +29,7 @@ module.exports = class extends EntityGenerator {
             ...super._initializing(),
 
             /* tenant variables */
-            setupTenantVariables: mtUtils.setupTenantVariables,
-
-            setUpVariables() {
-                const context = this.context;
-
-                const configuration = this.getAllJhipsterConfig(this, true);
-                if (context.enableTranslation === undefined) {
-                    context.enableTranslation = configuration.enableTranslation;
-                }
-
-                if (!this.isTenant) {
-                    return;
-                }
-
-                mtUtils.validateTenant(this);
-
-                this.entityModule = context.tenantModule;
-                context.entityModule = context.tenantModule;
-            }
+            setupTenantVariables: mtUtils.setupTenantVariables
         };
     }
 
@@ -101,6 +82,23 @@ module.exports = class extends EntityGenerator {
 
     get configuring() {
         return {
+            setUpVariables() {
+                const context = this.context;
+
+                const configuration = this.getAllJhipsterConfig(this, true);
+                if (context.enableTranslation === undefined) {
+                    context.enableTranslation = configuration.enableTranslation;
+                }
+
+                if (!this.isTenant) {
+                    return;
+                }
+
+                mtUtils.validateTenant(this);
+
+                this._copy(context, 'entityModule', 'tenantModule');
+            },
+
             loadTenantDef() {
                 const context = this.context;
 
@@ -112,7 +110,7 @@ module.exports = class extends EntityGenerator {
                 }
 
                 if (this.isTenant) {
-                    context.clientRootFolder = context.tenantClientRootFolder;
+                    this._copy(context, 'clientRootFolder', 'tenantClientRootFolder');
                 }
             },
             preJson() {
@@ -121,6 +119,7 @@ module.exports = class extends EntityGenerator {
                 if (this.isTenant) {
                     // force tenant to be serviceClass
                     context.service = 'serviceClass';
+                    mtUtils.validateTenant(this);
                     return;
                 }
 
@@ -144,6 +143,10 @@ module.exports = class extends EntityGenerator {
                         tenantRelationship.ownerSide = true;
                         tenantRelationship.relationshipValidateRules = 'required';
 
+                        // entity-management-update.component.ts.ejs:
+                        // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+                        // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
+
                         if (!tenantRelationship.relationshipType) {
                             tenantRelationship.relationshipType = 'many-to-one';
                         }
@@ -156,8 +159,9 @@ module.exports = class extends EntityGenerator {
                         if (!tenantRelationship.otherEntityStateName) {
                             tenantRelationship.otherEntityStateName = otherEntityStateName;
                         }
+                        // Should be tenantFolderName, as of 6.4.1 this is wrong
                         if (!tenantRelationship.otherEntityFolderName) {
-                            tenantRelationship.otherEntityFolderName = context.tenantFolderName;
+                            tenantRelationship.otherEntityFolderName = context.tenantFileName;
                         }
                         if (!tenantRelationship.otherEntityAngularName) {
                             tenantRelationship.otherEntityAngularName = context.tenantAngularName;
@@ -178,7 +182,8 @@ module.exports = class extends EntityGenerator {
                         ownerSide: true,
                         clientRootFolder: context.tenantClientRootFolder,
                         otherEntityStateName,
-                        otherEntityFolderName: context.tenantFolderName,
+                        // Should be tenantFolderName, as of 6.4.1 this is wrong
+                        otherEntityFolderName: context.tenantFileName,
                         otherEntityAngularName: context.tenantAngularName,
                         otherEntityRelationshipName: context.tenantInstance
                     };
@@ -191,20 +196,30 @@ module.exports = class extends EntityGenerator {
             configureTenantFolder() {
                 const context = this.context;
 
+                const tenantRelationship = mtUtils.getArrayItemWithFieldValue(context.relationships, 'otherEntityName', context.tenantName);
+                if (tenantRelationship) {
+                    debug(tenantRelationship);
+                }
+
                 if (!this.isTenant) return;
 
-                context.entityFolderName = context.tenantFolderName;
-                context.entityFileName = context.tenantFileName;
+                this._copy(context, 'entityFolderName', 'tenantFolderName');
+                // Not needed for 6.4.1
+                this._copy(context, 'entityFileName', 'tenantFileName');
 
-                context.entityServiceFileName = context.tenantFileName;
+                // Not needed for 6.4.1
+                this._copy(context, 'entityServiceFileName', 'tenantFileName');
 
-                context.entityStateName = context.tenantStateName;
-                context.entityUrl = context.tenantUrl;
+                // Not needed for 6.4.1
+                this._copy(context, 'entityStateName', 'tenantStateName');
+                this._copy(context, 'entityUrl', 'tenantUrl');
 
-                context.entityTranslationKey = context.tenantTranslationKey;
-                context.entityTranslationKeyMenu = context.tenantMenuTranslationKey;
+                // Not needed for 6.4.1
+                this._copy(context, 'entityTranslationKey', 'tenantTranslationKey');
+                // Not needed for 6.4.1
+                this._copy(context, 'entityTranslationKeyMenu', 'tenantMenuTranslationKey');
+                this._copy(context, 'entityModelFileName', 'tenantFolderName');
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
-                context.entityModelFileName = context.tenantFolderName;
             },
             postJson() {
                 if (this.context.tenantAware) {
@@ -216,8 +231,20 @@ module.exports = class extends EntityGenerator {
 
                 this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
                 // Super class creates a new file without tenantAware (6.1.2), so add tenantAware to it.
+                // Fixed for 6.3.1
                 this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
             }
         };
+    }
+
+    /* ======================================================================== */
+    /* private methods use within generator (not exposed to modules) */
+    /* ======================================================================== */
+
+    _copy(context, dest, source) {
+        if (context[dest] === context[source]) {
+            this.log(`Not needed for ${jhipsterEnv.jhipsterVersion}, ${source} => ${dest}`);
+        }
+        context[dest] = context[source];
     }
 };

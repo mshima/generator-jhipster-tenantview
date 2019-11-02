@@ -23,7 +23,6 @@ describe('JHipster generator with tenantview blueprint', () => {
                         blueprint: 'tenantview',
                         creationTimestamp: '2019-09-07',
                         defaultTenantAware: true,
-                        tenantFileSuffix: 'management',
                         'abort-on-patch-error': true,
                         skipChecks: true
                     })
@@ -97,7 +96,7 @@ describe('JHipster generator with tenantview blueprint', () => {
 
             it('tenantName is saved in .yo-rc.json', () => {
                 assert.JSONFileContent('.yo-rc.json', {
-                    'generator-jhipster-tenantview': { tenantName: 'company' }
+                    'generator-jhipster-tenantview': { tenantName: 'Company' }
                 });
             });
 

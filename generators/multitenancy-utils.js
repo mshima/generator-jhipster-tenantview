@@ -7,6 +7,7 @@ const debug = require('debug')('tenantview:utils');
  */
 module.exports = {
     validateTenant,
+    getDefaultDefinition,
     getArrayItemWithFieldValue,
     setupTenantVariables
 };
@@ -60,6 +61,43 @@ function getArrayItemWithFieldValue(array, fieldName, value) {
     return found;
 }
 
+function getDefaultDefinition() {
+    const vars = setupTenantVariables.call(this);
+    return {
+        name: vars.tenantInstance,
+        fields: [
+            {
+                fieldName: 'name',
+                fieldType: 'String',
+                fieldValidateRules: ['required', 'minlength'],
+                fieldValidateRulesMinlength: 3
+            },
+            {
+                fieldName: 'idName',
+                fieldType: 'String',
+                fieldValidateRules: ['minlength'],
+                fieldValidateRulesMinlength: 3
+            }
+        ],
+        relationships: [
+            {
+                relationshipName: 'users',
+                otherEntityName: 'user',
+                relationshipType: 'one-to-many',
+                otherEntityField: 'login',
+                ownerSide: true,
+                otherEntityRelationshipName: vars.tenantNameLowerFirst
+            }
+        ],
+        changelogDate: this.dateFormatForLiquibase(),
+        entityTableName: vars.tenantNameLowerCase,
+        dto: 'no',
+        service: 'serviceClass',
+        clientRootFolder: '../admin',
+        tenantAware: false
+    };
+}
+
 // Variations in tenant name
 function setupTenantVariables() {
     const generator = this;
@@ -88,7 +126,9 @@ function setupTenantVariables() {
     }
     const entityAngularJSSuffix = dest.entityAngularJSSuffix;
     const context = {};
-    context.tenantClientRootFolder = generator.options['tenant-root-folder'] || (tenantData && tenantData.clientRootFolder) || '';
+    context.tenantModule = (tenantData && tenantData.tenantModule) || 'admin';
+    context.tenantClientRootFolder =
+        generator.options['tenant-root-folder'] || (tenantData && tenantData.clientRootFolder) || `../${context.tenantModule}`;
 
     context.tenantName = _.camelCase(tenantName);
 
@@ -110,7 +150,6 @@ function setupTenantVariables() {
     context.tenantReactName = context.tenantClass + generator.upperFirstCamelCase(entityAngularJSSuffix);
 
     context.tenantStateName = `${context.tenantFileName}`;
-    context.tenantModule = 'admin';
     context.tenantUrl = `${context.tenantModule}/${context.tenantStateName}`;
 
     context.tenantTranslationKey = context.tenantInstance;
