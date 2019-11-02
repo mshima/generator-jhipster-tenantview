@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+const assert = require('assert');
 const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity');
 
@@ -38,9 +39,9 @@ module.exports = class extends EntityGenerator {
             ...super._prompting(),
 
             askTenantAware() {
-                const context = this.context;
-
                 if (this.isTenant) return;
+
+                const context = this.context;
 
                 // tenantAware is already defined
                 if (context.fileData !== undefined && context.fileData.tenantAware !== undefined) {
@@ -54,10 +55,10 @@ module.exports = class extends EntityGenerator {
                 } else if (this.options.relationTenantAware) {
                     // look for tenantAware entities
                     // eslint-disable-next-line prettier/prettier
-                    this.newTenantAware = mtUtils.getArrayItemWithFieldValue(context.relationships, 'otherEntityName', context.tenantName) !== undefined;
+                    this.newTenantAware = this._getTenantRelationship() !== undefined;
                 } else {
                     // eslint-disable-next-line prettier/prettier
-                    defaultValue = mtUtils.getArrayItemWithFieldValue(context.relationships, 'otherEntityName', context.tenantName) !== undefined;
+                    defaultValue = this._getTenantRelationship() !== undefined;
                 }
 
                 const prompts = [
@@ -82,24 +83,22 @@ module.exports = class extends EntityGenerator {
 
     get configuring() {
         return {
-            setUpVariables() {
+            configureTenant() {
+                if (!this.isTenant) return;
+
                 const context = this.context;
-
-                const configuration = this.getAllJhipsterConfig(this, true);
-                if (context.enableTranslation === undefined) {
-                    context.enableTranslation = configuration.enableTranslation;
-                }
-
-                if (!this.isTenant) {
-                    return;
-                }
 
                 mtUtils.validateTenant(this);
 
                 this._copy(context, 'entityModule', 'tenantModule');
-            },
+                this._copy(context, 'clientRootFolder', 'tenantClientRootFolder');
 
-            loadTenantDef() {
+                // force tenant to be serviceClass
+                context.service = 'serviceClass';
+            },
+            configureTenantAware() {
+                if (this.isTenant) return;
+
                 const context = this.context;
 
                 // pass to entity-* subgen
@@ -107,72 +106,24 @@ module.exports = class extends EntityGenerator {
                     context.tenantAware = context.fileData ? context.fileData.tenantAware : false;
                 } else {
                     context.tenantAware = this.newTenantAware;
-                }
 
-                if (this.isTenant) {
-                    this._copy(context, 'clientRootFolder', 'tenantClientRootFolder');
-                }
-            },
-            preJson() {
-                const context = this.context;
-
-                if (this.isTenant) {
-                    // force tenant to be serviceClass
-                    context.service = 'serviceClass';
-                    mtUtils.validateTenant(this);
-                    return;
+                    // Save
+                    this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
+                    if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
+                        this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
+                    } else {
+                        this.storageData = { tenantAware: this.context.tenantAware };
+                    }
                 }
 
                 if (this.context.tenantAware) {
                     context.service = 'serviceClass';
 
-                    const tenantRelationship = mtUtils.getArrayItemWithFieldValue(
-                        context.relationships,
-                        'otherEntityName',
-                        context.tenantName
-                    );
-
                     let otherEntityStateName = context.tenantStateName;
                     if (context.tenantModule) {
                         otherEntityStateName = `${context.tenantModule}/${context.tenantStateName}`;
                     }
-                    // if tenant relationship already exists in the entity then set options
-                    if (tenantRelationship) {
-                        debug('Found relationship with tenant');
-                        // Force values
-                        tenantRelationship.ownerSide = true;
-                        tenantRelationship.relationshipValidateRules = 'required';
 
-                        // entity-management-update.component.ts.ejs:
-                        // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-                        // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
-
-                        if (!tenantRelationship.relationshipType) {
-                            tenantRelationship.relationshipType = 'many-to-one';
-                        }
-                        if (!tenantRelationship.otherEntityField) {
-                            tenantRelationship.otherEntityField = 'name';
-                        }
-                        if (!tenantRelationship.clientRootFolder) {
-                            tenantRelationship.clientRootFolder = context.tenantClientRootFolder;
-                        }
-                        if (!tenantRelationship.otherEntityStateName) {
-                            tenantRelationship.otherEntityStateName = otherEntityStateName;
-                        }
-                        // Should be tenantFolderName, as of 6.4.1 this is wrong
-                        if (!tenantRelationship.otherEntityFolderName) {
-                            tenantRelationship.otherEntityFolderName = context.tenantFileName;
-                        }
-                        if (!tenantRelationship.otherEntityAngularName) {
-                            tenantRelationship.otherEntityAngularName = context.tenantAngularName;
-                        }
-                        if (!tenantRelationship.otherEntityRelationshipName) {
-                            tenantRelationship.otherEntityRelationshipName = context.tenantInstance;
-                        }
-                        return;
-                    }
-
-                    this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
                     const real = {
                         relationshipName: context.tenantName,
                         otherEntityName: context.tenantName,
@@ -187,52 +138,69 @@ module.exports = class extends EntityGenerator {
                         otherEntityAngularName: context.tenantAngularName,
                         otherEntityRelationshipName: context.tenantInstance
                     };
-                    context.relationships.push(real);
+
+                    const tenantRelationship = this._getTenantRelationship();
+
+                    // if tenant relationship already exists in the entity then set options
+                    if (!tenantRelationship) {
+                        this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
+                        context.relationships.push(real);
+                        return;
+                    }
+
+                    debug('Found relationship with tenant');
+                    // Force values
+                    tenantRelationship.ownerSide = true;
+                    tenantRelationship.relationshipValidateRules = 'required';
+
+                    // entity-management-update.component.ts.ejs:
+                    // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+                    // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
+
+                    this._.defaults(tenantRelationship, real);
                 }
             },
 
             ...super._configuring(),
 
-            configureTenantFolder() {
-                const context = this.context;
-
-                const tenantRelationship = mtUtils.getArrayItemWithFieldValue(context.relationships, 'otherEntityName', context.tenantName);
+            debug() {
+                const tenantRelationship = this._getTenantRelationship();
                 if (tenantRelationship) {
                     debug(tenantRelationship);
                 }
+            },
 
+            configureAndVerifyTenant() {
                 if (!this.isTenant) return;
 
+                const context = this.context;
                 this._copy(context, 'entityFolderName', 'tenantFolderName');
-                // Not needed for 6.4.1
-                this._copy(context, 'entityFileName', 'tenantFileName');
-
-                // Not needed for 6.4.1
-                this._copy(context, 'entityServiceFileName', 'tenantFileName');
-
-                // Not needed for 6.4.1
-                this._copy(context, 'entityStateName', 'tenantStateName');
                 this._copy(context, 'entityUrl', 'tenantUrl');
-
-                // Not needed for 6.4.1
-                this._copy(context, 'entityTranslationKey', 'tenantTranslationKey');
-                // Not needed for 6.4.1
-                this._copy(context, 'entityTranslationKeyMenu', 'tenantMenuTranslationKey');
                 this._copy(context, 'entityModelFileName', 'tenantFolderName');
+                this._copy(context, 'entityTranslationKey', 'tenantTranslationKey');
+                this._copy(context, 'entityTranslationKeyMenu', 'tenantMenuTranslationKey');
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
+
+                this._assert(context, 'entityFileName', 'tenantFileName');
+                this._assert(context, 'entityServiceFileName', 'tenantFileName');
+                this._assert(context, 'entityStateName', 'tenantStateName');
             },
             postJson() {
-                if (this.context.tenantAware) {
-                    if (this.configOptions.tenantAwareEntities === undefined) {
-                        this.configOptions.tenantAwareEntities = [];
-                    }
-                    this.configOptions.tenantAwareEntities.push(this.context.entityClass);
-                }
+                if (this.isTenant) return;
 
-                this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
                 // Super class creates a new file without tenantAware (6.1.2), so add tenantAware to it.
                 // Fixed for 6.3.1
-                this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
+                if (this.isJhipsterVersionLessThan('6.3.1')) {
+                    this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
+                    this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
+                }
+
+                if (!this.context.tenantAware) return;
+
+                if (this.configOptions.tenantAwareEntities === undefined) {
+                    this.configOptions.tenantAwareEntities = [];
+                }
+                this.configOptions.tenantAwareEntities.push(this.context.entityClass);
             }
         };
     }
@@ -241,10 +209,18 @@ module.exports = class extends EntityGenerator {
     /* private methods use within generator (not exposed to modules) */
     /* ======================================================================== */
 
+    _getTenantRelationship() {
+        return mtUtils.getArrayItemWithFieldValue(this.context.relationships, 'otherEntityName', this.context.tenantName);
+    }
+
     _copy(context, dest, source) {
         if (context[dest] === context[source]) {
             this.log(`Not needed for ${jhipsterEnv.jhipsterVersion}, ${source} => ${dest}`);
         }
         context[dest] = context[source];
+    }
+
+    _assert(context, dest, source) {
+        assert.equal(context[dest], context[source], dest);
     }
 };
