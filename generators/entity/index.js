@@ -179,7 +179,7 @@ module.exports = class extends EntityGenerator {
                 this._copy(context, 'entityModelFileName', 'tenantFolderName');
                 this._copy(context, 'entityTranslationKey', 'tenantTranslationKey');
                 this._copy(context, 'entityTranslationKeyMenu', 'tenantMenuTranslationKey');
-                context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
+                this._copyValue(context, 'i18nKeyPrefix', `${context.angularAppName}.${context.entityTranslationKey}`);
 
                 this._assert(context, 'entityFileName', 'tenantFileName');
                 this._assert(context, 'entityServiceFileName', 'tenantFileName');
@@ -218,6 +218,13 @@ module.exports = class extends EntityGenerator {
             this.log(`Not needed for ${jhipsterEnv.jhipsterVersion}, ${source} => ${dest}`);
         }
         context[dest] = context[source];
+    }
+
+    _copyValue(context, dest, value) {
+        if (context[dest] === value) {
+            this.log(`Copy value not needed for ${jhipsterEnv.jhipsterVersion}, ${dest}`);
+        }
+        context[dest] = value;
     }
 
     _assert(context, dest, source) {
