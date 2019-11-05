@@ -6,41 +6,9 @@ const debug = require('debug')('tenantview:utils');
  * Utils file to hold methods common to both generator and sub generator
  */
 module.exports = {
-    validateTenant,
-    getDefaultDefinition,
     getArrayItemWithFieldValue,
     setupTenantVariables
 };
-
-function validateTenant(generator) {
-    const context = generator.context;
-    context.clientRootFolder = generator.options['tenant-root-folder'] || '';
-
-    // force tenant to be serviceClass
-    context.service = 'serviceClass';
-
-    // Add name field if doesn´t exists.
-    if (!getArrayItemWithFieldValue(context.fields, 'fieldName', 'name')) {
-        context.fields.push({
-            fieldName: 'name',
-            fieldType: 'String',
-            fieldValidateRules: ['required']
-        });
-    }
-
-    // Add users relationship if doesn´t exists.
-    if (!getArrayItemWithFieldValue(context.relationships, 'relationshipName', 'users')) {
-        context.relationships.push({
-            relationshipName: 'users',
-            otherEntityName: 'user',
-            relationshipType: 'one-to-many',
-            otherEntityField: 'login',
-            // relationshipValidateRules: 'required',
-            ownerSide: true,
-            otherEntityRelationshipName: context.tenantName
-        });
-    }
-}
 
 /**
  * Look at an array for a item with field name equal fieldName and with field value equals value.
@@ -59,43 +27,6 @@ function getArrayItemWithFieldValue(array, fieldName, value) {
         }
     });
     return found;
-}
-
-function getDefaultDefinition() {
-    const vars = setupTenantVariables.call(this);
-    return {
-        name: vars.tenantInstance,
-        fields: [
-            {
-                fieldName: 'name',
-                fieldType: 'String',
-                fieldValidateRules: ['required', 'minlength'],
-                fieldValidateRulesMinlength: 3
-            },
-            {
-                fieldName: 'idName',
-                fieldType: 'String',
-                fieldValidateRules: ['minlength'],
-                fieldValidateRulesMinlength: 3
-            }
-        ],
-        relationships: [
-            {
-                relationshipName: 'users',
-                otherEntityName: 'user',
-                relationshipType: 'one-to-many',
-                otherEntityField: 'login',
-                ownerSide: true,
-                otherEntityRelationshipName: vars.tenantNameLowerFirst
-            }
-        ],
-        changelogDate: this.dateFormatForLiquibase(),
-        entityTableName: vars.tenantNameLowerCase,
-        dto: 'no',
-        service: 'serviceClass',
-        clientRootFolder: '../admin',
-        tenantAware: false
-    };
 }
 
 // Variations in tenant name

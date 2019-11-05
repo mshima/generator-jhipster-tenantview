@@ -13,11 +13,6 @@ module.exports = class extends EntityGenerator {
         debug(`Initializing entity ${args[0]}`);
         super(args, opts);
 
-        this.option('tenant-root-folder', {
-            desc: 'Set tenant root folder',
-            type: String
-        });
-
         // current subgen
         this.isTenant = this._.lowerFirst(args[0]) === this._.lowerFirst(this.options.tenantName || this.blueprintConfig.get('tenantName'));
 
@@ -86,38 +81,40 @@ module.exports = class extends EntityGenerator {
             configureTenant() {
                 if (!this.isTenant) return;
 
+                // Initialize config to be saved to file.
+                this.storageData = this.storageData || {};
                 const context = this.context;
-
-                mtUtils.validateTenant(this);
 
                 this._copy(context, 'entityModule', 'tenantModule');
                 this._copy(context, 'clientRootFolder', 'tenantClientRootFolder');
 
                 // force tenant to be serviceClass
-                context.service = 'serviceClass';
+                context.service = this.storageData.service = 'serviceClass';
+
+                if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
+                    this._updateEntityConfig(this.context.filename, this.storageData);
+                }
             },
             configureTenantAware() {
                 if (this.isTenant) return;
 
+                // Initialize config to be saved to file.
+                this.storageData = this.storageData || {};
                 const context = this.context;
 
                 // pass to entity-* subgen
                 if (this.newTenantAware === undefined) {
                     context.tenantAware = context.fileData ? context.fileData.tenantAware : false;
                 } else {
-                    context.tenantAware = this.newTenantAware;
-
+                    context.tenantAware = this.storageData.tenantAware = this.newTenantAware;
                     // Save
                     this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
-                    if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
-                        this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
-                    } else {
-                        this.storageData = { tenantAware: this.context.tenantAware };
-                    }
                 }
 
                 if (this.context.tenantAware) {
-                    context.service = 'serviceClass';
+                    if (context.service !== 'serviceClass') {
+                        context.service = this.storageData.service = 'serviceClass';
+                    }
 
                     let otherEntityStateName = context.tenantStateName;
                     if (context.tenantModule) {
@@ -126,7 +123,7 @@ module.exports = class extends EntityGenerator {
 
                     const real = {
                         relationshipName: context.tenantName,
-                        otherEntityName: context.tenantName,
+                        otherEntityName: context.tenantNameLowerFirst,
                         relationshipType: 'many-to-one',
                         otherEntityField: 'name',
                         relationshipValidateRules: 'required',
@@ -136,28 +133,31 @@ module.exports = class extends EntityGenerator {
                         // Should be tenantFolderName, as of 6.4.1 this is wrong
                         otherEntityFolderName: context.tenantFileName,
                         otherEntityAngularName: context.tenantAngularName,
-                        otherEntityRelationshipName: context.tenantInstance
+                        otherEntityRelationshipName: context.tenantNameLowerFirst
                     };
 
                     const tenantRelationship = this._getTenantRelationship();
+                    this.storageData.relationships = context.relationships;
 
                     // if tenant relationship already exists in the entity then set options
                     if (!tenantRelationship) {
                         this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
                         context.relationships.push(real);
-                        return;
+                    } else {
+                        debug('Found relationship with tenant');
+                        // Force values
+                        tenantRelationship.ownerSide = true;
+                        tenantRelationship.relationshipValidateRules = 'required';
+
+                        // entity-management-update.component.ts.ejs:
+                        // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+                        // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
+
+                        this._.defaults(tenantRelationship, real);
                     }
-
-                    debug('Found relationship with tenant');
-                    // Force values
-                    tenantRelationship.ownerSide = true;
-                    tenantRelationship.relationshipValidateRules = 'required';
-
-                    // entity-management-update.component.ts.ejs:
-                    // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-                    // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
-
-                    this._.defaults(tenantRelationship, real);
+                }
+                if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
+                    this._updateEntityConfig(this.context.filename, this.storageData);
                 }
             },
 
@@ -192,7 +192,7 @@ module.exports = class extends EntityGenerator {
                 // Fixed for 6.3.1
                 if (this.isJhipsterVersionLessThan('6.3.1')) {
                     this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
-                    this.updateEntityConfig(this.context.filename, 'tenantAware', this.context.tenantAware);
+                    this._updateEntityConfig(this.context.filename, this.storageData);
                 }
 
                 if (!this.context.tenantAware) return;
@@ -229,5 +229,20 @@ module.exports = class extends EntityGenerator {
 
     _assert(context, dest, source) {
         assert.equal(context[dest], context[source], dest);
+    }
+
+    _updateEntityConfig(file, key, value) {
+        try {
+            const entityJson = this.fs.readJSON(file);
+            if (value === undefined && typeof key === 'object') {
+                Object.assign(entityJson, key);
+            } else {
+                entityJson[key] = value;
+            }
+            this.fs.writeJSON(file, entityJson, null, 4);
+        } catch (err) {
+            this.log(chalk.red('The JHipster entity configuration file could not be read!') + err);
+            this.debug('Error:', err);
+        }
     }
 };

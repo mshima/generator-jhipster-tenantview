@@ -132,6 +132,30 @@ module.exports = class extends jhipsterEnv.generator('common') {
                 hasChanges = true;
             }
 
+            // Add name field if doesn´t exists.
+            if (!mtUtils.getArrayItemWithFieldValue(definition.fields, 'fieldName', 'name')) {
+                definition.fields.push({
+                    fieldName: 'name',
+                    fieldType: 'String',
+                    fieldValidateRules: ['required']
+                });
+                hasChanges = true;
+            }
+
+            // Add users relationship if doesn´t exists.
+            if (!mtUtils.getArrayItemWithFieldValue(definition.relationships, 'relationshipName', 'users')) {
+                definition.relationships.push({
+                    relationshipName: 'users',
+                    otherEntityName: 'user',
+                    relationshipType: 'one-to-many',
+                    otherEntityField: 'login',
+                    // relationshipValidateRules: 'required',
+                    ownerSide: true,
+                    otherEntityRelationshipName: this.tenantNameLowerFirst
+                });
+                hasChanges = true;
+            }
+
             if (hasChanges) {
                 // Save to disc and to buffer
                 fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4));
@@ -139,7 +163,7 @@ module.exports = class extends jhipsterEnv.generator('common') {
             }
         } else {
             debug("Don't exists");
-            const definition = mtUtils.getDefaultDefinition.call(this);
+            const definition = this._getDefaultDefinition();
             if (!fs.existsSync('.jhipster')) {
                 fs.mkdirSync('.jhipster');
             }
@@ -160,5 +184,44 @@ module.exports = class extends jhipsterEnv.generator('common') {
                 });
             }
         }
+    }
+
+    _getDefaultDefinition() {
+        const vars = mtUtils.setupTenantVariables.call(this);
+        const tenantModule = this.options.tenantModule || 'admin';
+        return {
+            name: vars.tenantInstance,
+            fields: [
+                {
+                    fieldName: 'name',
+                    fieldType: 'String',
+                    fieldValidateRules: ['required', 'minlength'],
+                    fieldValidateRulesMinlength: 3
+                },
+                {
+                    fieldName: 'idName',
+                    fieldType: 'String',
+                    fieldValidateRules: ['minlength'],
+                    fieldValidateRulesMinlength: 3
+                }
+            ],
+            relationships: [
+                {
+                    relationshipName: 'users',
+                    otherEntityName: 'user',
+                    relationshipType: 'one-to-many',
+                    otherEntityField: 'login',
+                    ownerSide: true,
+                    otherEntityRelationshipName: vars.tenantNameLowerFirst
+                }
+            ],
+            changelogDate: this.dateFormatForLiquibase(),
+            entityTableName: vars.tenantNameLowerCase,
+            dto: 'no',
+            service: 'serviceClass',
+            clientRootFolder: `../${tenantModule}`,
+            tenantModule,
+            tenantAware: false
+        };
     }
 };
