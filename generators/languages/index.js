@@ -24,11 +24,10 @@ module.exports = class extends LanguagesGenerator {
 
             addTenantAdminMenuTranslation() {
                 this.CLIENT_MAIN_SRC_DIR = jhipsterConstants.CLIENT_MAIN_SRC_DIR;
-                this.languages.forEach(language => {
-                    this.lang = language;
-                    this.patcher.patch();
-                });
-            }
+            },
+
+            // Apply patcher
+            applyPatcher: this.applyPatcher
         };
     }
 };
