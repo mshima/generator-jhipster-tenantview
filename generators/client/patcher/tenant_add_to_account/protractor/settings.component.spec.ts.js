@@ -1,4 +1,4 @@
-const jhipsterEnv = require('../../../../lib/jhipster-environment');
+const jhipsterEnv = require('../../../../../lib/jhipster-environment');
 
 const jhipsterConstants = jhipsterEnv.constants;
 
@@ -14,6 +14,7 @@ $2${context.tenantNameLowerFirst}: 'MockCompany'$3`
 ];
 
 module.exports = {
+    condition: context => context.testFrameworks.indexOf('protractor') !== -1,
     version: '^6.4.0',
     file,
     tmpls
