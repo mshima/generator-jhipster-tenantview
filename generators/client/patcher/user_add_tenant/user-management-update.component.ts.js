@@ -60,16 +60,18 @@ $3`
         target: /(\n(\s*)this.authorities = \[\];)/,
         tmpl: context => `
 
-$2this.${context.tenantNameLowerFirst}Service.query()
-$2.pipe(
-$2    filter((mayBeOk: HttpResponse<I${context.tenantNameUpperFirst}[]>) => mayBeOk.ok),
-$2        map((response: HttpResponse<I${context.tenantNameUpperFirst}[]>) => response.body)
-$2)
-$2.subscribe(
-$2    (res: I${context.tenantNameUpperFirst}[]) => (this.${
+$2if (this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
+$2    this.${context.tenantNameLowerFirst}Service.query()
+$2    .pipe(
+$2        filter((mayBeOk: HttpResponse<I${context.tenantNameUpperFirst}[]>) => mayBeOk.ok),
+$2            map((response: HttpResponse<I${context.tenantNameUpperFirst}[]>) => response.body)
+$2    )
+$2    .subscribe(
+$2        (res: I${context.tenantNameUpperFirst}[]) => (this.${
             context.tenantNamePluralLowerFirst
         } = res), (res: HttpErrorResponse) => this.onError(res.message)
-$2);
+$2    );
+$2}
 
 $1`
     },
