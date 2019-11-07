@@ -101,7 +101,7 @@ module.exports = class extends jhipsterEnv.generator('common') {
                     entity.definition.changelogDate = self.dateFormatForLiquibase();
 
                     const filePath = path.join('.jhipster', `${entity.name}.json`);
-                    fs.writeFileSync(filePath, JSON.stringify(entity.definition, null, 4));
+                    fs.writeFileSync(filePath, JSON.stringify(entity.definition, null, 4).concat('\n'));
                     self.fs.writeJSON(filePath, entity.definition, null, 4);
                 });
             }
@@ -158,7 +158,7 @@ module.exports = class extends jhipsterEnv.generator('common') {
 
             if (hasChanges) {
                 // Save to disc and to buffer
-                fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4));
+                fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4).concat('\n'));
                 this.fs.writeJSON(tenantPath, definition, null, 4);
             }
         } else {
@@ -168,7 +168,7 @@ module.exports = class extends jhipsterEnv.generator('common') {
                 fs.mkdirSync('.jhipster');
             }
             // getExistingEntities with Entities.useConfigurationFile uses wrote files.
-            fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4));
+            fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4).concat('\n'));
             // loadEntityJson uses this.fs (mem-fs-editor) files.
             this.fs.writeJSON(tenantPath, definition, null, 4);
 
