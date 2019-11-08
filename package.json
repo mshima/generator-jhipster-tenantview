@@ -5,6 +5,8 @@
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
+    "generator-jhipster-multitenancy",
+    "generator-jhipster-multitenancy2",
     "jhipster-5"
   ],
   "homepage": "https://github.com/mshima/generator-jhipster-tenantview",
