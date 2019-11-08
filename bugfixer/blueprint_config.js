@@ -13,18 +13,7 @@ function extend(Superclass) {
             if (this.fromBlueprint) {
                 this.blueprintConfig = this.config;
                 this.config = this._getStorage('generator-jhipster');
-                this.removeConfigDuplicates();
             }
-        }
-
-        removeConfigDuplicates() {
-            Object.keys(this.config.getAll()).forEach(key => {
-                const value = this.blueprintConfig.get(key);
-                if (value !== undefined) {
-                    this.config.set(key, value);
-                    this.blueprintConfig.delete(key);
-                }
-            });
         }
     };
 }
