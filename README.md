@@ -4,25 +4,11 @@
 
 # Introduction
 
-This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
+This is a multitenancy/tenancy customization [JHipster](https://www.jhipster.tech/) blueprint.
 
-# Prerequisites
+It's a rewrite of https://github.com/sonalake/generator-jhipster-multitenancy module (1.x) as a blueprint.
 
-As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
-
-## With NPM
-
-```bash
-npm install -g generator-jhipster
-```
-
-## With Yarn
-
-To install this blueprint:
-
-```bash
-yarn global add generator-jhipster
-```
+https://github.com/sonalake/generator-jhipster-multitenancy blueprint (2.x) is a fork of an old version of this blueprint.
 
 # Installation
 
@@ -31,6 +17,7 @@ yarn global add generator-jhipster
 To install this blueprint:
 
 ```bash
+npm install -g generator-jhipster
 npm install -g generator-jhipster-tenantview
 ```
 
@@ -45,6 +32,7 @@ npm update -g generator-jhipster-tenantview
 To install this blueprint:
 
 ```bash
+yarn global add generator-jhipster
 yarn global add generator-jhipster-tenantview
 ```
 
@@ -62,9 +50,11 @@ To use this blueprint, run the below command
 jhipster --blueprints tenantview
 ```
 
+For detailed use of this blueprint, take a look at the [JHipster Documentation](https://www.jhipster.tech/creating-an-app/)
+
 # License
 
-Apache-2.0 © [Marcelo Boveto Shima]()
+Apache-2.0
 
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-tenantview.svg
