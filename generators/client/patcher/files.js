@@ -12,10 +12,6 @@ module.exports = {
                         file: 'tenant-admin/_tenant-admin-routing.module.ts',
                         renameTo: generator =>
                             `${generator.tenantNameLowerFirst}-admin/${generator.tenantNameLowerFirst}-admin-routing.module.ts`
-                    },
-                    {
-                        file: 'layouts/navbar/navbar.component.html',
-                        renameTo: () => 'layouts/navbar/navbar.component.html'
                     }
                 ]
             }
