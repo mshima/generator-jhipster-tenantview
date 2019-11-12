@@ -3,11 +3,11 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 // const fse = require('fs-extra');
 
+const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
+
 const getFilesForOptions = require('./jhipster_utils/utils').getFilesForOptions;
 const expectedFiles = require('./jhipster_utils/expected-files');
 const mtExpectedFiles = require('./multitenancy_utils/expected-files');
-
-const generatorsPath = require('../lib/jhipster-environment').generatorsPath;
 
 const angularFiles = require(`${generatorsPath}/client/files-angular`).files;
 

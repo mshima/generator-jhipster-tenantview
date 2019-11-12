@@ -1,13 +1,15 @@
 /* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:entity');
+const path = require('path');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
-const jhipsterEnv = require('../../lib/jhipster-environment');
-
-const ClientGenerator = jhipsterEnv.generator('client');
-
-module.exports = class extends ClientGenerator {
+module.exports = class extends jhipsterEnv.generator('client', {
+    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    applyPatcher: true,
+    patcherPath: path.resolve(__dirname, 'patcher')
+}) {
     constructor(args, opts) {
         debug('Initializing client blueprint');
         super(args, opts); // fromBlueprint variable is important
@@ -23,9 +25,6 @@ module.exports = class extends ClientGenerator {
             ...super._writing(),
 
             setupTenantVariables,
-
-            // Apply patcher
-            applyPatcher: this.applyPatcher,
 
             patchFiles() {
                 this.addVendorSCSSStyle(

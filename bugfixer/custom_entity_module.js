@@ -7,7 +7,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const debug = require('debug')('bugfixer:custom-entity-module');
 
-const jhipsterEnv = require('../lib/jhipster-environment');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 const NeedleClientAngular = require(`${jhipsterEnv.generatorsPath}/client/needle-api/needle-client-angular`);
 

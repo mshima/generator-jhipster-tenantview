@@ -1,16 +1,19 @@
 const debug = require('debug')('tenantview:entity:client');
+const path = require('path');
 
-const jhipsterEnv = require('../../lib/jhipster-environment');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
-const EntityClientGenerator = jhipsterEnv.generator('entity-client');
-
-module.exports = class extends EntityClientGenerator {
+module.exports = class extends jhipsterEnv.generator('entity-client', {
+    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    applyPatcher: true,
+    patcherPath: path.resolve(__dirname, 'patcher')
+}) {
     constructor(args, opts) {
         debug(`Initializing entity-client ${opts.context.name}`);
         super(args, opts);
     }
 
     get writing() {
-        return { ...super._writing(), applyPatcher: this.applyPatcher };
+        return { ...super._writing() };
     }
 };

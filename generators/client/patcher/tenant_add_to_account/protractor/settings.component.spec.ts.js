@@ -1,4 +1,4 @@
-const jhipsterEnv = require('../../../../../lib/jhipster-environment');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 const jhipsterConstants = jhipsterEnv.constants;
 

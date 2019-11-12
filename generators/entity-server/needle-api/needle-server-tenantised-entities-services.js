@@ -19,10 +19,10 @@
 const chalk = require('chalk');
 const debug = require('debug')('tenantview:server');
 
-const generatorsPath = require('../../../lib/jhipster-environment').generatorsPath;
+const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
 
 const needleServer = require(`${generatorsPath}/server/needle-api/needle-server`);
-const jhipsterEnv = require('../../../lib/jhipster-environment');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 const constants = jhipsterEnv.constants;
 

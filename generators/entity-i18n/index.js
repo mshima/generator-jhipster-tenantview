@@ -1,10 +1,14 @@
 /* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:entity:i18n');
-
-const jhipsterEnv = require('../../lib/jhipster-environment');
+const path = require('path');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 // Needed for updated addEntityTranslationKey
-module.exports = class extends jhipsterEnv.generator('entity-i18n') {
+module.exports = class extends jhipsterEnv.generator('entity-i18n', {
+    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    applyPatcher: false,
+    patcherPath: path.resolve(__dirname, 'patcher')
+}) {
     constructor(args, opts) {
         debug(`Initializing entity-i18n ${opts.name}`);
         super(args, opts);

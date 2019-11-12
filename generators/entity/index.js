@@ -2,13 +2,16 @@
 const assert = require('assert');
 const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity');
+const path = require('path');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 const mtUtils = require('../multitenancy-utils');
-const jhipsterEnv = require('../../lib/jhipster-environment');
 
-const EntityGenerator = jhipsterEnv.generator('entity');
-
-module.exports = class extends EntityGenerator {
+module.exports = class extends jhipsterEnv.generator('entity', {
+    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    applyPatcher: true,
+    patcherPath: path.resolve(__dirname, 'patcher')
+}) {
     constructor(args, opts) {
         debug(`Initializing entity ${args[0]}`);
         super(args, opts);

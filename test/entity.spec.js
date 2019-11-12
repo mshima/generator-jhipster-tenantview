@@ -3,7 +3,7 @@ const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
-const generatorsPath = require('../lib/jhipster-environment').generatorsPath;
+const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
 
 describe('Subgenerator entity of tenantview JHipster blueprint', () => {
     describe('Sample test', () => {

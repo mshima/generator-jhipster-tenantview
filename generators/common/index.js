@@ -4,10 +4,14 @@ const path = require('path');
 const fs = require('fs');
 const debug = require('debug')('tenantview:common');
 
-const jhipsterEnv = require('../../lib/jhipster-environment');
+const jhipsterEnv = require('generator-jhipster-customizer');
 const mtUtils = require('../multitenancy-utils');
 
-module.exports = class extends jhipsterEnv.generator('common') {
+module.exports = class extends jhipsterEnv.generator('common', {
+    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    applyPatcher: false,
+    patcherPath: path.resolve(__dirname, 'patcher')
+}) {
     constructor(args, opts) {
         debug('Initializing common blueprint');
         super(args, opts);

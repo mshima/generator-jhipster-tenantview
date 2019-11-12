@@ -1,17 +1,19 @@
 /* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:entity:server');
+const path = require('path');
+const jhipsterEnv = require('generator-jhipster-customizer');
 
 const TenantisedNeedle = require('./needle-api/needle-server-tenantised-entities-services');
 
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
-const jhipsterEnv = require('../../lib/jhipster-environment');
-
-const EntityServerGenerator = jhipsterEnv.generator('entity-server');
-
 const jhipsterConstants = jhipsterEnv.constants;
 
-module.exports = class extends EntityServerGenerator {
+module.exports = class extends jhipsterEnv.generator('entity-server', {
+    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    applyPatcher: true,
+    patcherPath: path.resolve(__dirname, 'patcher')
+}) {
     constructor(args, opts) {
         debug(`Initializing entity-server ${opts.context.name}`);
         super(args, opts);
@@ -30,9 +32,6 @@ module.exports = class extends EntityServerGenerator {
             /* tenant variables */
             setupTenantVariables,
 
-            // Apply patcher
-            applyPatcher: this.applyPatcher,
-
             // make the necessary server code changes
             customServerCode() {
                 const tenantisedNeedle = new TenantisedNeedle(this);
@@ -44,10 +43,17 @@ module.exports = class extends EntityServerGenerator {
 
                     debug('Adding already tenantised entities');
                     if (this.configOptions.tenantAwareEntities) {
-                        this.configOptions.tenantAwareEntities.forEach(tenantAwareEntity => {
-                            debug(`Adding entity ${tenantAwareEntity}`);
-                            tenantisedNeedle.addEntityToTenantAspect(this, tenantAwareEntity);
-                        });
+                        this.queueMethod(
+                            function() {
+                                // Run after patcher
+                                this.configOptions.tenantAwareEntities.forEach(tenantAwareEntity => {
+                                    debug(`Adding entity ${tenantAwareEntity}`);
+                                    tenantisedNeedle.addEntityToTenantAspect(this, tenantAwareEntity);
+                                });
+                            },
+                            'tenantisedNeedle',
+                            'writing'
+                        );
                     }
                 }
             }
