@@ -4,7 +4,7 @@
 
 # Introduction
 
-This is a multitenancy/tenancy customization [JHipster](https://www.jhipster.tech/) blueprint.
+This is a multitenancy/tenancy customization [JHipster](https://www.jhipster.tech/) blueprint with support for generator-jhispter >= 6.3.0.
 
 It's a rewrite of https://github.com/sonalake/generator-jhipster-multitenancy module (1.x) as a blueprint.
 
