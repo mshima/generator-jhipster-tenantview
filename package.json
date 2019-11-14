@@ -18,7 +18,7 @@
   "files": [
     "generators",
     "lib",
-    "bugfixer"
+    "improver"
   ],
   "main": "lib",
   "repository": {

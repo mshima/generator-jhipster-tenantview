@@ -5,7 +5,7 @@
  */
 const chalk = require('chalk');
 const _ = require('lodash');
-const debug = require('debug')('bugfixer:custom-entity-module');
+const debug = require('debug')('improver:custom-entity-module');
 
 const jhipsterEnv = require('generator-jhipster-customizer');
 

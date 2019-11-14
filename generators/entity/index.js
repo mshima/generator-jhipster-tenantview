@@ -8,7 +8,7 @@ const jhipsterEnv = require('generator-jhipster-customizer');
 const mtUtils = require('../multitenancy-utils');
 
 module.exports = class extends jhipsterEnv.generator('entity', {
-    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    improverPaths: path.resolve(__dirname, '../../improver'),
     applyPatcher: true,
     patcherPath: path.resolve(__dirname, 'patcher')
 }) {

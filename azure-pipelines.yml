@@ -50,7 +50,7 @@ jobs:
           BLUEPRINT_REGENERATE: false
 
           JHI_GEN_VERSION: latest
-          # DEBUG: 'jhipster-environment,patcher,bugfixer,tenantview:*'
+          # DEBUG: 'jhipster-environment,patcher,improver,tenantview:*'
 
       strategy:
           matrix:

@@ -5,7 +5,7 @@ const jhipsterEnv = require('generator-jhipster-customizer');
 
 // Needed for updated addEntityTranslationKey
 module.exports = class extends jhipsterEnv.generator('entity-i18n', {
-    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    improverPaths: path.resolve(__dirname, '../../improver'),
     applyPatcher: false,
     patcherPath: path.resolve(__dirname, 'patcher')
 }) {

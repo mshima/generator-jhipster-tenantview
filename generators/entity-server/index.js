@@ -10,7 +10,7 @@ const setupTenantVariables = require('../multitenancy-utils').setupTenantVariabl
 const jhipsterConstants = jhipsterEnv.constants;
 
 module.exports = class extends jhipsterEnv.generator('entity-server', {
-    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    improverPaths: path.resolve(__dirname, '../../improver'),
     applyPatcher: true,
     patcherPath: path.resolve(__dirname, 'patcher')
 }) {

@@ -4,7 +4,7 @@ const path = require('path');
 const jhipsterEnv = require('generator-jhipster-customizer');
 
 module.exports = class extends jhipsterEnv.generator('entity-client', {
-    bugfixerPaths: path.resolve(__dirname, '../../bugfixer'),
+    improverPaths: path.resolve(__dirname, '../../improver'),
     applyPatcher: true,
     patcherPath: path.resolve(__dirname, 'patcher')
 }) {
