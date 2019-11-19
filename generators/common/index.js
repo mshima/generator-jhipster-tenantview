@@ -93,22 +93,7 @@ module.exports = class extends jhipsterEnv.generator('common', {
                 this.blueprintConfig.set('tenantName', this.tenantName);
             },
 
-            generateTenant: this._generateTenant,
-
-            recreateChangelog() {
-                if (!this.options.recreateDate) return;
-                // Reset counter;
-                delete this.configOptions.lastChangelogDate;
-                const self = this;
-                this.getExistingEntities().forEach(entity => {
-                    // Recreate changelog
-                    entity.definition.changelogDate = self.dateFormatForLiquibase();
-
-                    const filePath = path.join('.jhipster', `${entity.name}.json`);
-                    fs.writeFileSync(filePath, JSON.stringify(entity.definition, null, 4).concat('\n'));
-                    self.fs.writeJSON(filePath, entity.definition, null, 4);
-                });
-            }
+            generateTenant: this._generateTenant
         };
     }
 
@@ -119,7 +104,7 @@ module.exports = class extends jhipsterEnv.generator('common', {
     _generateTenant() {
         const tenantPath = path.join('.jhipster', `${this.tenantName}.json`);
         if (this.fs.exists(tenantPath)) {
-            debug('Exists');
+            debug('Tenant exists');
             const definition = this.fs.readJSON(tenantPath);
 
             let hasChanges = false;
@@ -166,7 +151,7 @@ module.exports = class extends jhipsterEnv.generator('common', {
                 this.fs.writeJSON(tenantPath, definition, null, 4);
             }
         } else {
-            debug("Don't exists");
+            debug("Tenant doesn't exists");
             const definition = this._getDefaultDefinition();
             if (!fs.existsSync('.jhipster')) {
                 fs.mkdirSync('.jhipster');

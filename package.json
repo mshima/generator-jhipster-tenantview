@@ -28,11 +28,9 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "debug": "^3.2.6",
-    "faker": "^4.1.0",
     "generator-jhipster-customizer": "github:mshima/generator-jhipster-customizer#dev",
     "lodash": "^4.17.13",
     "pluralize": "^7.0.0",
-    "randexp": "^0.5.3",
     "semver": "^5.6.0"
   },
   "peerDependencies": {
