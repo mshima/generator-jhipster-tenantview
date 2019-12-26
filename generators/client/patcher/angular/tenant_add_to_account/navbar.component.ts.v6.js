@@ -12,6 +12,7 @@ const tmpls = [
 ];
 
 module.exports = {
+    version: '6.3.0 - 6.5.1',
     file,
     tmpls
 };
