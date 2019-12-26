@@ -102,7 +102,7 @@ $1`
 ];
 
 module.exports = {
-    version: '^6.4.0',
+    version: '>=6.4.0',
     file,
     tmpls
 };
