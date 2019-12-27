@@ -23,12 +23,12 @@ const tmpls = [
     },
     {
         type: 'replaceContent',
-        target: /(\n(\s*)ngOnInit\(\) {\n(\s*)this.loadAll\(\);)/,
+        target: /(\n(\s*)ngOnInit\(\)(: void)? {\n(\s*)this.loadAll\(\);)/,
         tmpl: context => `$1
-$3this.accountService.identity().subscribe((account) => {
-$2$3this.currentAccount = account;
-$3});
-$3`
+$4this.accountService.identity().subscribe((account) => {
+$2$4this.currentAccount = account;
+$4});
+$4`
     }
 ];
 
