@@ -221,7 +221,6 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/AuditEventService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/MailService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/UserService.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/util/RandomUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/UserDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/PasswordChangeDTO.java`,
@@ -239,7 +238,6 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
 
