@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "chalk": "3.0.0",
-    "debug": "3.2.6",
+    "debug": "4.1.1",
     "generator-jhipster-customizer": "0.2.0",
     "lodash": "4.17.13",
     "pluralize": "8.0.0",
