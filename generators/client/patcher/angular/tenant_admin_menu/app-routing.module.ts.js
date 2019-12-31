@@ -10,9 +10,7 @@ const tmpls = [
               authorities: ['ROLE_${context.tenantNameUpperCase}_ADMIN']
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./${context.tenantNameLowerFirst}-admin/${
-            context.tenantNameLowerFirst
-        }-admin-routing.module').then(m => m.${context.tenantNameUpperFirst}AdminRoutingModule)
+          loadChildren: () => import('./${context.tenantNameLowerFirst}-admin/${context.tenantNameLowerFirst}-admin-routing.module').then(m => m.${context.tenantNameUpperFirst}AdminRoutingModule)
         },`
     }
 ];

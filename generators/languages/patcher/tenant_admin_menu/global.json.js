@@ -7,9 +7,7 @@ const tmpls = [
         tmpl: context => `     "${context.tenantNameLowerFirst}Admin": {
         "main": "${context.tenantNameUpperFirst}",
         "userManagement": "User management",
-        "jhipster-needle-menu-add-${
-            context.tenantNameLowerFirst
-        }Admin-element": "JHipster will add additional menu entries here (do not translate!)"
+        "jhipster-needle-menu-add-${context.tenantNameLowerFirst}Admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
 `
     }

@@ -16,9 +16,7 @@ $1`;
         regex: true,
         target: /((\s*)<td>(\s*)<div \*ngFor="let authority of user.authorities">)/,
         tmpl: context =>
-            `$2<td *ngIf="!currentAccount || !currentAccount.${context.tenantNameLowerFirst}">{{user.${
-                context.tenantNameLowerFirst
-            }?.name}}</td>$1`
+            `$2<td *ngIf="!currentAccount || !currentAccount.${context.tenantNameLowerFirst}">{{user.${context.tenantNameLowerFirst}?.name}}</td>$1`
     }
 ];
 

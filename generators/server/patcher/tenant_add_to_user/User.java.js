@@ -16,12 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;`
         type: 'replaceContent',
         regex: true,
         target: context => '(public class User)',
-        tmpl: context => `@FilterDef(name = "${context.tenantNameUpperCase}_FILTER", parameters = {@ParamDef(name = "${
-            context.tenantNameSpinalCased
-        }Id", type = "long")})
-@Filter(name = "${context.tenantNameUpperCase}_FILTER", condition = "${context.tenantNameSpinalCased}_id = :${
-            context.tenantNameSpinalCased
-        }Id")
+        tmpl: context => `@FilterDef(name = "${context.tenantNameUpperCase}_FILTER", parameters = {@ParamDef(name = "${context.tenantNameSpinalCased}Id", type = "long")})
+@Filter(name = "${context.tenantNameUpperCase}_FILTER", condition = "${context.tenantNameSpinalCased}_id = :${context.tenantNameSpinalCased}Id")
 $1`
     },
     {
