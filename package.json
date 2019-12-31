@@ -30,7 +30,7 @@
     "debug": "3.2.6",
     "generator-jhipster-customizer": "0.2.0",
     "lodash": "4.17.13",
-    "pluralize": "7.0.0",
+    "pluralize": "8.0.0",
     "semver": "5.6.0"
   },
   "peerDependencies": {
