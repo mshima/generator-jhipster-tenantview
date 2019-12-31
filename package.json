@@ -30,8 +30,7 @@
     "debug": "4.1.1",
     "generator-jhipster-customizer": "github:mshima/generator-jhipster-customizer#master",
     "lodash": "4.17.15",
-    "pluralize": "8.0.0",
-    "semver": "5.6.0"
+    "pluralize": "8.0.0"
   },
   "peerDependencies": {
     "generator-jhipster": "^6.3.0"
