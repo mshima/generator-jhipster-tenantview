@@ -40,6 +40,11 @@ module.exports = class extends jhipsterEnv.generator('common', {
             ...super._initializing(),
 
             loadConf() {
+                // Migrate config from 'generator-jhipster' namespace to 'generator-jhipster-tenantview' namespace
+                if (this.config.get('tenantName') !== undefined) {
+                    this.blueprintConfig.set('tenantName', this.config.get('tenantName'));
+                    this.config.delete('tenantName');
+                }
                 this.tenantName = this.options.tenantName || this.blueprintConfig.get('tenantName');
                 this.configOptions.baseName = this.baseName;
 
@@ -102,6 +107,11 @@ module.exports = class extends jhipsterEnv.generator('common', {
     /* ======================================================================== */
 
     _generateTenant() {
+        if (_.toLower(this.tenantName) === 'user' && !this.configOptions.skipUserManagement) {
+            this.tenantName = _.toLower(this.tenantName);
+            // Use built-in user.
+            return;
+        }
         const tenantPath = path.join('.jhipster', `${this.tenantName}.json`);
         if (this.fs.exists(tenantPath)) {
             debug('Tenant exists');

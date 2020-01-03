@@ -11,7 +11,7 @@ const tmpls = [
     },
     {
         // Hide if currentAccount has a tenant
-        condition: context => context.tenantAware,
+        condition: context => context.tenantAware && (context.tenantNameLowerFirst !== 'user' || context.configOptions.skipUserManagement),
         type: 'replaceContent',
         regex: true,
         target: context => `<td>\n(\\s*)(<div \\*ngIf="${context.entityInstance}.${context.tenantNameLowerFirst}">)`,
