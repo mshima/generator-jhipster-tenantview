@@ -28,7 +28,7 @@
   "dependencies": {
     "chalk": "3.0.0",
     "debug": "4.1.1",
-    "generator-jhipster-customizer": "github:mshima/generator-jhipster-customizer#master",
+    "generator-jhipster-customizer": "^0.2.1",
     "lodash": "4.17.15",
     "pluralize": "8.0.0"
   },
