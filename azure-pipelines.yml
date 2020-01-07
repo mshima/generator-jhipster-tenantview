@@ -85,7 +85,7 @@ jobs:
                   JHI_PROTRACTOR: 1
                   JHI_GEN_VERSION: 6.6.0
                   BLUEPRINT_ENTITY: jdl
-              jdl-relation-6.6.0:
+              jdl-user-6.6.0:
                   JHI_APP: jdl-user
                   JHI_ENTITY: other
                   JHI_PROFILE: prod
