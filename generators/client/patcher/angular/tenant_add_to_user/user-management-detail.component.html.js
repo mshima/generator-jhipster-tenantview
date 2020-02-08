@@ -6,9 +6,8 @@ const tmpls = [
         regex: true,
         target: context => '((.*)<dt>.*>Created By<)',
         tmpl: context => {
-            let trans = '';
-            if (context.enableTranslation) trans = ` jhiTranslate="userManagement.${context.tenantNameLowerFirst}"`;
-            return `$2<dt><span${trans}>${context.tenantNameUpperFirst}</span></dt>
+            const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenantNameLowerFirst}"` : '';
+            return `$2<dt><span${jhiTranslate}>${context.tenantNameUpperFirst}</span></dt>
 $2<dd>{{user.${context.tenantNameLowerFirst}?.name}}</dd>
 $1`;
         }

@@ -4,10 +4,11 @@ const tmpls = [
     {
         type: 'replaceContent',
         regex: true,
-        target: context => '((.*)<th(.*)>\\s*<span jhiTranslate="userManagement.profiles">)',
+        target: context => '((.*)<th(.*)>\\s*<span(.*)>Profiles)',
         tmpl: context => {
+            const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenantNameLowerFirst}"` : '';
             // eslint-disable-next-line prettier/prettier
-            return `$2<th$3 jhiSortBy="${context.tenantNameLowerFirst}" *ngIf="!currentAccount || !currentAccount.${context.tenantNameLowerFirst}"><span jhiTranslate="userManagement.${context.tenantNameLowerFirst}">${context.tenantNameUpperFirst}</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            return `$2<th$3 jhiSortBy="${context.tenantNameLowerFirst}" *ngIf="!currentAccount || !currentAccount.${context.tenantNameLowerFirst}"><span${jhiTranslate}>${context.tenantNameUpperFirst}</span> <fa-icon [icon]="'sort'"></fa-icon></th>
 $1`;
         }
     },

@@ -9,7 +9,7 @@ application {
     searchEngine false,
     testFrameworks [protractor],
     clientFramework angularX,
-    enableTranslation true,
+    enableTranslation false,
     nativeLanguage en,
     languages [ en, fr ]
   }
