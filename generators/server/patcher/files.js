@@ -17,7 +17,7 @@ module.exports = {
                 ]
             },
             {
-                condition: context => context.tenantNameLowerFirst === 'user',
+                condition: context => context.tenantNameLowerFirst === 'user' && false,
                 templates: [
                     {
                         file: `../../entity-server/templates/${jhipsterConstants.SERVER_MAIN_SRC_DIR}/package/aop/_tenant/_TenantAspect.java`,
