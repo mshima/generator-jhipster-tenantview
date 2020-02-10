@@ -6,7 +6,7 @@ module.exports = {
     files: {
         tenant_base: [
             {
-                condition: context => context.tenantAware && content.tenantNameLowerCase !== 'user',
+                condition: context => context.tenantAware && context.tenantNameLowerCase !== 'user',
                 path: jhipsterConstants.SERVER_MAIN_SRC_DIR,
                 templates: [
                     {
