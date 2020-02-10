@@ -1,3 +1,3 @@
 module.exports = {
-    condition: gen => gen.tenantLowerCase !== 'user'
+    condition: gen => gen.tenantNameLowerCase !== 'user'
 };
