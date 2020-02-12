@@ -14,7 +14,6 @@ $2${context.tenantNameLowerFirst}: 'MockCompany'$3`
 ];
 
 module.exports = {
-    condition: context => context.testFrameworks.indexOf('protractor') !== -1,
     version: '6.4.0 - 6.5.1',
     file,
     tmpls

@@ -28,7 +28,6 @@ $1`
 
 module.exports = {
     version: '6.3.0 - 6.5.1',
-    condition: context => context.testFrameworks.indexOf('protractor') !== -1,
     file,
     tmpls
 };
