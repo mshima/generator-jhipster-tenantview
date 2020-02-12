@@ -12,8 +12,8 @@ const tmpls = [
     },
     {
         type: 'replaceContent',
-        target: /((\n\s*)this.setIdentitySpy)/,
-        tmpl: '$2this.setHasAnyAuthority(true);$1'
+        target: /((\n\s*)this.getAuthenticationStateSpy = )/,
+        tmpl: "$2this.hasAnyAuthoritySpy = this.spy('hasAnyAuthority').andReturn(of(true));$1"
     },
     {
         type: 'replaceContent',
@@ -27,8 +27,7 @@ $1`
 ];
 
 module.exports = {
-    version: '6.3.0 - 6.5.1',
-    condition: context => context.testFrameworks.indexOf('protractor') !== -1,
+    version: '>=6.6.0',
     file,
     tmpls
 };
