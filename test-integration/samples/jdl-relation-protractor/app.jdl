@@ -7,6 +7,7 @@ application {
     prodDatabaseType postgresql,
     buildTool maven,
     searchEngine false,
+    testFrameworks [protractor],
     clientFramework angularX,
     enableTranslation false,
     nativeLanguage en,
