@@ -5,8 +5,7 @@ const tmpls = [
         condition: context => context.protractorTests,
         type: 'replaceContent',
         target: /("webdriver-manager": )"[\w.]*"/,
-        tmpl: '$1"latest"',
-        ignorePatchErrors: true
+        tmpl: '$1"latest"'
     }
 ];
 
