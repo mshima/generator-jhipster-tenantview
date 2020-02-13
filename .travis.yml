@@ -7,6 +7,8 @@ env:
     #global:
     #    - DEBUG=jhipster:*
     matrix:
+        - JHI_GEN_VERSION='generator-jhipster@6.7.1'
+        - JHI_GEN_VERSION='generator-jhipster@6.7.0'
         - JHI_GEN_VERSION='generator-jhipster@6.6.0'
         - JHI_GEN_VERSION='generator-jhipster@6.5.1'
         - JHI_GEN_VERSION='generator-jhipster@6.5.0'
