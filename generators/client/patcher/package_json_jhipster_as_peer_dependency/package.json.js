@@ -24,8 +24,8 @@ const tmpls = [
         // Move blueprints and modules to peerDependencies
         condition: context => !context.protractorTests,
         type: 'replaceContent',
-        target: /("typescript": "[\w.]*",)(.*),(\n\s*"webpack": "[\w.]*".*"generator-jhipster": "[\w.]*")/s,
-        tmpl: '$1$3,$2'
+        target: /("typescript": "[\w.]*")(.*)(,\n\s*"webpack": "[\w.]*".*"generator-jhipster": "[\w.]*")/s,
+        tmpl: '$1$3$2'
     }
 ];
 
