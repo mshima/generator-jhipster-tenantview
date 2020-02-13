@@ -35,7 +35,6 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
