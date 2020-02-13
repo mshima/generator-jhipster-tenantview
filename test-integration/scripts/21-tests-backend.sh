@@ -33,10 +33,12 @@ fi
 #-------------------------------------------------------------------------------
 # Check no-http
 #-------------------------------------------------------------------------------
-if [ -f "mvnw" ]; then
-    ./mvnw -ntp checkstyle:check --batch-mode
-elif [ -f "gradlew" ]; then
-    ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
+if [ $BLUEPRINT_CHECKSTYLE != '0' ]; then
+    if [ -f "mvnw" ]; then
+        ./mvnw -ntp checkstyle:check --batch-mode
+    elif [ -f "gradlew" ]; then
+        ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
+    fi
 fi
 
 #-------------------------------------------------------------------------------

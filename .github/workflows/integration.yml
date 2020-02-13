@@ -44,6 +44,7 @@ env:
     BLUEPRINT_LINK: false
     BLUEPRINT_REGENERATE: false
 
+    BLUEPRINT_CHECKSTYLE: 1
     JHI_GEN_VERSION: latest
 
 jobs:
@@ -72,6 +73,14 @@ jobs:
                     - 6.7.0
                     - 6.7.1
                 include:
+                    - jhi-gen-version: 6.3.0
+                      checkstyle: 0
+                    - jhi-gen-version: 6.3.1
+                      checkstyle: 0
+                    - jhi-gen-version: 6.4.0
+                      checkstyle: 0
+                    - jhi-gen-version: 6.4.1
+                      checkstyle: 0
                     - app-type: jdl-company
                       entity: other
                       profile: prod
@@ -95,6 +104,7 @@ jobs:
             JHI_PROTRACTOR: ${{ matrix.protractor }}
             BLUEPRINT_ENTITY: ${{ matrix.blueprint-entity }}
             JHI_GEN_VERSION: ${{ matrix.jhi-gen-version }}
+            BLUEPRINT_CHECKSTYLE: ${{ matrix.checkstyle }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
