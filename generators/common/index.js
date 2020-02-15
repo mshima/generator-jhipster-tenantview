@@ -166,7 +166,7 @@ module.exports = class extends jhipsterEnv.generator('common', {
                 this.composeWith(require.resolve('../entity'), {
                     ...this.options,
                     configOptions,
-                    regenerate: false,
+                    regenerate: true,
                     'skip-install': false,
                     debug: this.isDebugEnabled,
                     arguments: [this.tenantName]
