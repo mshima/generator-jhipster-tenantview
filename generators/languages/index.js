@@ -5,8 +5,6 @@ const jhipsterEnv = require('generator-jhipster-customizer');
 
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
-const jhipsterConstants = jhipsterEnv.constants;
-
 module.exports = class extends jhipsterEnv.generator('languages', {
     improverPaths: path.resolve(__dirname, '../../improver'),
     applyPatcher: true,
@@ -22,11 +20,7 @@ module.exports = class extends jhipsterEnv.generator('languages', {
             ...super._writing(),
 
             /* tenant variables */
-            setupTenantVariables,
-
-            addTenantAdminMenuTranslation() {
-                this.CLIENT_MAIN_SRC_DIR = jhipsterConstants.CLIENT_MAIN_SRC_DIR;
-            }
+            setupTenantVariables
         };
     }
 };
