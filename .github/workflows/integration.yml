@@ -72,6 +72,7 @@ jobs:
                     - 6.6.0
                     - 6.7.0
                     - 6.7.1
+                    - 6.8.0
                 include:
                     - jhi-gen-version: 6.3.0
                       checkstyle: 0
