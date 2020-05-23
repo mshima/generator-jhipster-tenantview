@@ -1,4 +1,4 @@
-const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
+const generatorsPath = require('../jhipster_utils/utils').generatorsPath;
 
 const constants = require(`${generatorsPath}/generator-constants`);
 

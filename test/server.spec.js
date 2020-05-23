@@ -6,13 +6,15 @@ const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
 
 describe('Subgenerator server of tenantview JHipster blueprint', () => {
   describe('Sample test', () => {
-    before(done => {
+    before(function () {
+      this.timeout(15000);
       helpers
-        .run(`${generatorsPath}/server`)
+        .create('jhipster:server')
+        .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}])
         .withOptions({
           'from-cli': true,
           skipInstall: true,
-          blueprint: 'tenantview',
+          blueprints: 'tenantview',
           tenantName: 'Company',
           skipChecks: true
         })
@@ -38,7 +40,7 @@ describe('Subgenerator server of tenantview JHipster blueprint', () => {
           buildTool: 'maven',
           rememberMeKey: '2bb60a80889aa6e6767e9ccd8714982681152aa5'
         })
-        .on('end', done);
+        .run();
     });
 
     it('it works', () => {

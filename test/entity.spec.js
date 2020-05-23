@@ -7,16 +7,18 @@ const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
 
 describe('Subgenerator entity of tenantview JHipster blueprint', () => {
   describe('Sample test', () => {
-    before(done => {
-      helpers
-        .run(`${generatorsPath}/entity`)
+    before(function () {
+      this.timeout(15000);
+      return helpers
+        .create('jhipster:entity')
+        .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}])
         .inTmpDir(dir => {
           fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
         })
         .withOptions({
           'from-cli': true,
           skipInstall: true,
-          blueprint: 'tenantview',
+          blueprints: 'tenantview',
           tenantName: 'Company',
           skipChecks: true
         })
@@ -35,7 +37,7 @@ describe('Subgenerator entity of tenantview JHipster blueprint', () => {
           service: 'no',
           pagination: 'infinite-scroll'
         })
-        .on('end', done);
+        .run();
     });
 
     it('it works', () => {

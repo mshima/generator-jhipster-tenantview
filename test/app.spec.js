@@ -1,22 +1,23 @@
-// Const path = require('path');
+/* eslint-disable max-nested-callbacks */
+const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-// Const fse = require('fs-extra');
-
-const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
 
 const getFilesForOptions = require('./jhipster_utils/utils').getFilesForOptions;
 const expectedFiles = require('./jhipster_utils/expected-files');
 
-const angularFiles = require(`${generatorsPath}/client/files-angular`).files;
-
 describe('JHipster generator', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
-      before(done => {
-        helpers
-          .run(`${generatorsPath}/app`)
-          .withOptions({'from-cli': true, skipInstall: true, skipChecks: true, jhiPrefix: 'test'})
+      let env;
+      before(function () {
+        this.timeout(20000);
+        return helpers
+          .create('jhipster:app')
+          .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}, {packagePaths: path.join(__dirname, '..')}])
+          .withEnvironment(ctxEnv => {
+            env = ctxEnv;
+          })
           .withPrompts({
             baseName: 'jhipster',
             clientFramework: 'angularX',
@@ -38,7 +39,7 @@ describe('JHipster generator', () => {
             skipUserManagement: false,
             serverSideOptions: []
           })
-          .on('end', done);
+          .run();
       });
 
       it('creates expected default files for angularX', () => {
@@ -50,6 +51,11 @@ describe('JHipster generator', () => {
         assert.file(expectedFiles.dockerServices);
         assert.file(expectedFiles.mysql);
         assert.file(expectedFiles.hibernateTimeZoneConfig);
+
+        const packagePath = env.getPackagePath('jhipster:app');
+        // eslint-disable-next-line import/no-dynamic-require,global-require
+        const angularFiles = require(`${packagePath}/generators/client/files-angular`).files;
+
         assert.file(
           getFilesForOptions(angularFiles, {
             enableTranslation: true,
