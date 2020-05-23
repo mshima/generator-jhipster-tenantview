@@ -1,68 +1,32 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-// Const fse = require('fs-extra');
-
-const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
 
 const getFilesForOptions = require('./jhipster_utils/utils').getFilesForOptions;
 const expectedFiles = require('./jhipster_utils/expected-files');
 const mtExpectedFiles = require('./multitenancy_utils/expected-files');
 
-const angularFiles = require(`${generatorsPath}/client/files-angular`).files;
-
 describe('JHipster generator with tenantview blueprint', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
-      before(done => {
-        helpers
-          .run(`${generatorsPath}/app`)
+      let env;
+      before(function () {
+        this.timeout(20000);
+        return helpers
+          .create('jhipster:app')
+          .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}, {packagePaths: path.join(__dirname, '..')}])
+          .withEnvironment(ctxEnv => {
+            env = ctxEnv;
+          })
           .withOptions({
             'from-cli': true,
             skipInstall: true,
-            blueprint: 'tenantview',
+            blueprints: 'tenantview',
             creationTimestamp: '2019-09-07',
             defaultTenantAware: true,
             'abort-on-patch-error': true,
             skipChecks: true
           })
-          .withGenerators([
-            [
-              require('../generators/common'), // eslint-disable-line global-require
-              'jhipster-tenantview:common',
-              path.join(__dirname, '../generators/common/index.js')
-            ],
-            [
-              require('../generators/server'), // eslint-disable-line global-require
-              'jhipster-tenantview:server',
-              path.join(__dirname, '../generators/server/index.js')
-            ],
-            [
-              require('../generators/client'), // eslint-disable-line global-require
-              'jhipster-tenantview:client',
-              path.join(__dirname, '../generators/client/index.js')
-            ],
-            [
-              require('../generators/entity'), // eslint-disable-line global-require
-              'jhipster-tenantview:entity',
-              path.join(__dirname, '../generators/entity/index.js')
-            ],
-            [
-              require('../generators/entity-client'), // eslint-disable-line global-require
-              'jhipster-tenantview:entity-client',
-              path.join(__dirname, '../generators/entity-client/index.js')
-            ],
-            [
-              require('../generators/entity-server'), // eslint-disable-line global-require
-              'jhipster-tenantview:entity-server',
-              path.join(__dirname, '../generators/entity-server/index.js')
-            ],
-            [
-              require('../generators/entity-i18n'), // eslint-disable-line global-require
-              'jhipster-tenantview:entity-i18n',
-              path.join(__dirname, '../generators/entity-i18n/index.js')
-            ]
-          ])
           .withPrompts({
             tenantName: 'Company',
             baseName: 'jhipster',
@@ -83,7 +47,7 @@ describe('JHipster generator with tenantview blueprint', () => {
             skipUserManagement: false,
             serverSideOptions: []
           })
-          .on('end', done);
+          .run();
       });
 
       /*
@@ -98,6 +62,10 @@ describe('JHipster generator with tenantview blueprint', () => {
         });
       });
 
+      it('writes tenant configuration', () => {
+        assert.file('.jhipster/Company.json');
+      });
+
       it('creates expected default files with tenant files for angularX', () => {
         assert.file(expectedFiles.common);
         assert.file(expectedFiles.server);
@@ -107,6 +75,11 @@ describe('JHipster generator with tenantview blueprint', () => {
         assert.file(expectedFiles.dockerServices);
         assert.file(expectedFiles.mysql);
         assert.file(expectedFiles.hibernateTimeZoneConfig);
+
+        const packagePath = env.getPackagePath('jhipster:app');
+        // eslint-disable-next-line import/no-dynamic-require,global-require
+        const angularFiles = require(`${packagePath}/generators/client/files-angular`).files;
+
         assert.file(
           getFilesForOptions(angularFiles, {
             enableTranslation: false,

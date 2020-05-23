@@ -2,15 +2,13 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 
-const generatorsPath = require('generator-jhipster-customizer').generatorsPath;
-
 describe('Subgenerator server of tenantview JHipster blueprint', () => {
   describe('Sample test', () => {
     before(function () {
       this.timeout(15000);
       helpers
         .create('jhipster:server')
-        .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}])
+        .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}, {packagePaths: path.join(__dirname, '..')}])
         .withOptions({
           'from-cli': true,
           skipInstall: true,
@@ -18,13 +16,6 @@ describe('Subgenerator server of tenantview JHipster blueprint', () => {
           tenantName: 'Company',
           skipChecks: true
         })
-        .withGenerators([
-          [
-            require('../generators/server'), // eslint-disable-line global-require
-            'jhipster-tenantview:server',
-            path.join(__dirname, '../generators/server/index.js')
-          ]
-        ])
         .withPrompts({
           baseName: 'sampleMysql',
           packageName: 'com.mycompany.myapp',

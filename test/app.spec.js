@@ -68,9 +68,6 @@ describe('JHipster generator', () => {
       it('contains clientFramework with angularX value', () => {
         assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
       });
-      it('contains correct custom prefix when specified', () => {
-        assert.fileContent('angular.json', /"prefix": "test"/);
-      });
       it('generates a README with no undefined value', () => {
         assert.noFileContent('README.md', /undefined/);
       });
