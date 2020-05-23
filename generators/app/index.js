@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
 const path = require('path');
-const fs = require('fs');
 const debug = require('debug')('tenantview:common');
 
 const customizer = require('generator-jhipster-customizer');
@@ -160,19 +159,12 @@ module.exports = {
           }
 
           if (hasChanges) {
-            // Save to disc and to buffer
-            fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4).concat('\n'));
             this.fs.writeJSON(tenantPath, definition, null, 4);
           }
         } else {
           debug("Tenant doesn't exists");
           const definition = this._getDefaultDefinition();
-          if (!fs.existsSync('.jhipster')) {
-            fs.mkdirSync('.jhipster');
-          }
 
-          // GetExistingEntities with Entities.useConfigurationFile uses wrote files.
-          fs.writeFileSync(tenantPath, JSON.stringify(definition, null, 4).concat('\n'));
           // LoadEntityJson uses this.fs (mem-fs-editor) files.
           this.fs.writeJSON(tenantPath, definition, null, 4);
 
