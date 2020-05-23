@@ -34,7 +34,6 @@ function setupTenantVariables() {
   const generator = this;
   const tenantName =
     generator.tenantName ||
-    (generator.configOptions && generator.configOptions.tenantName) ||
     (generator.options && generator.options.tenantName) ||
     (generator.blueprintConfig && generator.blueprintConfig.get('tenantName'));
   if (tenantName === undefined) {

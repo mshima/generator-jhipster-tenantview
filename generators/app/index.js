@@ -43,7 +43,9 @@ module.exports = {
           ...super._initializing(),
 
           loadConf() {
-            this.tenantName = this.options.tenantName || this.blueprintConfig.get('tenantName');
+            if (this.options.tenantName) {
+              this.blueprintConfig.set('tenantName', _.upperFirst(this.options.tenantName));
+            }
             this.configOptions.baseName = this.baseName;
 
             // This will be used by entity-server to crate "@Before" annotation in TenantAspect
@@ -63,6 +65,7 @@ module.exports = {
                 name: 'tenantName',
                 message: 'What is the alias given tenants in your application?',
                 default: 'Company',
+                filter: tenantName => _.upperFirst(tenantName),
                 validate: input => {
                   if (_.toLower(input) === 'account') {
                     return `${input} is a reserved word.`;
@@ -72,15 +75,8 @@ module.exports = {
                 }
               }
             ];
-            const done = this.async();
-            const self = this;
-            this.prompt(prompts).then(props => {
-              if (props.tenantName) {
-                self.tenantName = props.tenantName;
-              }
 
-              done();
-            });
+            return this.prompt(prompts, this.blueprintConfig);
           }
         };
       }
@@ -90,20 +86,16 @@ module.exports = {
       }
 
       get default() {
-        return super._default();
+        return {
+          loadConfig() {
+            this.tenantName = this.blueprintConfig.get('tenantName');
+          },
+          ...super._default()
+        };
       }
 
       get writing() {
         return {
-          // ConfiguringCustomPhaseSteps should be run after configuring, otherwise tenantName will be overridden
-          saveConf() {
-            if (!this.tenantName) return;
-            this.alreadySaved = this.blueprintConfig.get('tenantName') !== undefined;
-
-            this.tenantName = this.configOptions.tenantName = _.upperFirst(this.tenantName);
-            this.blueprintConfig.set('tenantName', this.tenantName);
-          },
-
           generateTenant: this._generateTenant,
 
           ...super._writing()
@@ -115,38 +107,32 @@ module.exports = {
       /* ======================================================================== */
 
       _generateTenant() {
-        const tenantPath = path.join('.jhipster', `${this.tenantName}.json`);
-        if (this.fs.exists(tenantPath)) {
+        const tenantPath = this.destinationPath(path.join('.jhipster', `${this.tenantName}.json`));
+        const tenantStorage = this.createStorage(tenantPath);
+        if (tenantStorage.existed) {
           debug('Tenant exists');
-          const definition = this.fs.readJSON(tenantPath);
-
-          let hasChanges = false;
-          if (this.options.recreateDate) {
-            definition.changelogDate = this.dateFormatForLiquibase();
-            hasChanges = true;
-          }
-
-          // Force some defaults
-          definition.service = 'serviceClass';
-          if (!definition.tenantModule || this.options.tenantModule || !definition.clientRootFolder) {
-            definition.tenantModule = definition.tenantModule || this.options.tenantModule || 'admin';
-            definition.clientRootFolder = `../${definition.tenantModule}`;
-            hasChanges = true;
-          }
+          const tenantModule = this.options.tenantModule || tenantStorage.get('tenantModule') || 'admin';
+          tenantStorage.set({
+            service: 'serviceClass',
+            tenantModule,
+            clientRootFolder: `../${tenantModule}`
+          });
 
           // Add name field if doesn´t exists.
-          if (!mtUtils.getArrayItemWithFieldValue(definition.fields, 'fieldName', 'name')) {
-            definition.fields.push({
+          const fields = tenantStorage.get('fields') || [];
+          if (!mtUtils.getArrayItemWithFieldValue(fields, 'fieldName', 'name')) {
+            fields.push({
               fieldName: 'name',
               fieldType: 'String',
               fieldValidateRules: ['required']
             });
-            hasChanges = true;
+            tenantStore.set('fields', fields);
           }
 
           // Add users relationship if doesn´t exists.
-          if (!mtUtils.getArrayItemWithFieldValue(definition.relationships, 'relationshipName', 'users')) {
-            definition.relationships.push({
+          const relationships = tenantStorage.get('relationships') || [];
+          if (!mtUtils.getArrayItemWithFieldValue(relationships, 'relationshipName', 'users')) {
+            relationships.push({
               relationshipName: 'users',
               otherEntityName: 'user',
               relationshipType: 'one-to-many',
@@ -155,18 +141,13 @@ module.exports = {
               ownerSide: true,
               otherEntityRelationshipName: this.tenantNameLowerFirst
             });
-            hasChanges = true;
-          }
-
-          if (hasChanges) {
-            this.fs.writeJSON(tenantPath, definition, null, 4);
+            tenantStore.set('relationships', relationships);
           }
         } else {
           debug("Tenant doesn't exists");
           const definition = this._getDefaultDefinition();
 
-          // LoadEntityJson uses this.fs (mem-fs-editor) files.
-          this.fs.writeJSON(tenantPath, definition, null, 4);
+          tenantStorage.set(definition);
 
           if (!this.options.withEntities) {
             const configOptions = this.configOptions;
