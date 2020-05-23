@@ -1,10 +1,40 @@
 {
+  "@mshima/generator-author": {
+    "email": "marceloshima@gmail.com",
+    "name": "Marcelo Shima",
+    "url": "https://github.com/mshima"
+  },
+  "@mshima/generator-generator": {
+    ":generator": {
+      "#app": {
+        "name": "app",
+        "yeomanEnvironmentVersion": "2.10.2"
+      }
+    },
+    "packageNamespace": "jhipster-tenantview",
+    "yeomanEnvironmentVersion": "2.10.2",
+    "yeomanTestVersion": "2.5.0"
+  },
+  "@mshima/generator-license": {
+    "license": "MIT"
+  },
+  "@mshima/generator-node-package": {
+    "enableGenerator": true,
+    "enableMocha": true
+  },
+  "@mshima/generator-package-json": {
+    "description": "",
+    "homepage": "",
+    "keywords": null,
+    "name": "generator-jhipster-tenantview",
+    "scope": ""
+  },
   "generator-jhipster-blueprint": {
     "promptValues": {
-      "githubName": "mshima",
-      "authorName": "Marcelo Shima",
       "authorEmail": "marceloshima@gmail.com",
-      "authorUrl": ""
+      "authorName": "Marcelo Shima",
+      "authorUrl": "",
+      "githubName": "mshima"
     }
   }
 }
