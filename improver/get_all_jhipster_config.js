@@ -1,4 +1,4 @@
-// const debug = require('debug')('tenantview:generator-extender:add-return-rewrite-replace');
+// Const debug = require('debug')('tenantview:generator-extender:add-return-rewrite-replace');
 
 /*
  * =======================
@@ -7,22 +7,23 @@
  * Workaround jhipster 6 workflow problem.
  */
 function extend(Superclass) {
-    return class GeneratorExtender extends Superclass {
-        getAllJhipsterConfig(generator = this, force) {
-            const configuration = Superclass.prototype.getAllJhipsterConfig.call(this, generator, force);
-            const options = generator.options || {};
-            const configOptions = generator.configOptions || {};
-            configuration._get = configuration.get;
-            configuration.get = function(key) {
-                const ret = options[key] || configOptions[key] || configuration._get(key);
-                // debug(`${key} = ${ret}`);
-                return ret;
-            };
-            return configuration;
-        }
-    };
+  return class GeneratorExtender extends Superclass {
+    getAllJhipsterConfig(generator = this, force) {
+      const configuration = Superclass.prototype.getAllJhipsterConfig.call(this, generator, force);
+      const options = generator.options || {};
+      const configOptions = generator.configOptions || {};
+      configuration._get = configuration.get;
+      configuration.get = function (key) {
+        const returnValue = options[key] || configOptions[key] || configuration._get(key);
+        // Debug(`${key} = ${ret}`);
+        return returnValue;
+      };
+
+      return configuration;
+    }
+  };
 }
 
 module.exports = {
-    extend
+  extend
 };

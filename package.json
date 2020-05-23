@@ -7,7 +7,8 @@
     "jhipster-blueprint",
     "generator-jhipster-multitenancy",
     "generator-jhipster-multitenancy2",
-    "jhipster-5"
+    "jhipster-5",
+    "jhipster-6"
   ],
   "homepage": "https://github.com/mshima/generator-jhipster-tenantview",
   "license": "MIT",
@@ -29,7 +30,7 @@
   "dependencies": {
     "chalk": "3.0.0",
     "debug": "4.1.1",
-    "generator-jhipster-customizer": "^0.2.3",
+    "generator-jhipster-customizer": "github:mshima/generator-jhipster-customizer#master",
     "lodash": "4.17.15",
     "pluralize": "8.0.0"
   },
@@ -37,36 +38,17 @@
     "generator-jhipster": ">=6.9.0"
   },
   "devDependencies": {
-    "chai": "4.2.0",
-    "ejs-lint": "0.3.0",
-    "eslint": "5.16.0",
-    "eslint-config-airbnb-base": "14.0.0",
-    "eslint-config-prettier": "6.9.0",
-    "eslint-plugin-import": "2.19.1",
-    "eslint-plugin-prettier": "3.1.2",
     "fs-extra": "8.1.0",
     "generator-jhipster": "^6.9.0",
-    "jsdoc": "3.6.3",
     "mocha": "^7.1.2",
-    "prettier": "1.19.1",
-    "shelljs": "0.8.3",
-    "sinon": "8.0.2",
     "xo": "^0.30.0",
     "yeoman-assert": "^3.1.1",
     "yeoman-environment": "^2.10.2",
     "yeoman-test": "^2.5.0"
   },
   "scripts": {
-    "lint": "eslint .",
-    "lint-fix": "npm run lint -- --fix",
     "pretest": "xo",
     "test": "mocha",
-    "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
-    "jsdoc": "jsdoc --configure jsdoc-conf.json",
-    "release": "git push && git push --tags && npm publish",
-    "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
-    "release:major": "npm version major -a -m \"Update to %s\" && npm run release",
     "fix": "xo --fix"
   },
   "bugs": {

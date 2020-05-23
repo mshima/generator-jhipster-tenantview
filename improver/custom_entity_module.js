@@ -19,49 +19,49 @@ const jhipsterUtils = jhipsterEnv.utils;
 const isNot63 = !jhipsterEnv.jhipsterVersion.startsWith('6.3');
 const adminRouteFile = isNot63 ? 'admin-routing.module.ts' : 'admin.route.ts';
 const aditionalRouteOptions = isNot63
-    ? ''
-    : `data: {
+  ? ''
+  : `data: {
     |            authorities: ['ROLE_ADMIN']
     |        },
     |        canActivate: [UserRouteAccessService],
     |        `;
 
 class NeedleClientAngularExtend extends NeedleClientAngular {
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
-        this.addEntityToAnyModule(
-            entityInstance,
-            entityClass,
-            entityAngularName,
-            entityFolderName,
-            entityFileName,
-            entityUrl,
-            microServiceName,
-            {
-                entityModulePath: `${jhipsterConstants.CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
-                needleName: 'jhipster-needle-add-entity-route'
-            }
-        );
-    }
+  addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
+    this.addEntityToAnyModule(
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      microServiceName,
+      {
+        entityModulePath: `${jhipsterConstants.CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
+        needleName: 'jhipster-needle-add-entity-route'
+      }
+    );
+  }
 
-    addEntityToAdminModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
-        this.addEntityToAnyModule(
-            entityInstance,
-            entityClass,
-            entityAngularName,
-            entityFolderName,
-            entityFileName,
-            entityUrl,
-            microServiceName,
-            {
-                entityModulePath: `${jhipsterConstants.CLIENT_MAIN_SRC_DIR}app/admin/${adminRouteFile}`,
-                needleName: 'jhipster-needle-add-admin-route',
-                aditionalRouteOptions,
-                addComma: true
-            }
-        );
-    }
+  addEntityToAdminModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
+    this.addEntityToAnyModule(
+      entityInstance,
+      entityClass,
+      entityAngularName,
+      entityFolderName,
+      entityFileName,
+      entityUrl,
+      microServiceName,
+      {
+        entityModulePath: `${jhipsterConstants.CLIENT_MAIN_SRC_DIR}app/admin/${adminRouteFile}`,
+        needleName: 'jhipster-needle-add-admin-route',
+        aditionalRouteOptions,
+        addComma: true
+      }
+    );
+  }
 
-    /* eslint-disable */
+  /* eslint-disable */
     addEntityToAnyModule(
         entityInstance,
         entityClass,

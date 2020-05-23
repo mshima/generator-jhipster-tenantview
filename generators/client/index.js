@@ -6,29 +6,29 @@ const jhipsterEnv = require('generator-jhipster-customizer');
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
 module.exports = class extends jhipsterEnv.generator('client', {
-    improverPaths: path.resolve(__dirname, '../../improver'),
-    applyPatcher: true,
-    patcherPath: path.resolve(__dirname, 'patcher')
+  improverPaths: path.resolve(__dirname, '../../improver'),
+  applyPatcher: true,
+  patcherPath: path.resolve(__dirname, 'patcher')
 }) {
-    constructor(args, opts) {
-        debug('Initializing client blueprint');
-        super(args, opts); // fromBlueprint variable is important
+  constructor(args, options) {
+    debug('Initializing client blueprint');
+    super(args, options); // FromBlueprint variable is important
 
-        this.option('tenant-root-folder', {
-            desc: 'Set tenant root folder',
-            type: String
-        });
-    }
+    this.option('tenant-root-folder', {
+      desc: 'Set tenant root folder',
+      type: String
+    });
+  }
 
-    get writing() {
-        return {
-            ...super._writing(),
+  get writing() {
+    return {
+      ...super._writing(),
 
-            setupTenantVariables,
+      setupTenantVariables,
 
-            patchFiles() {
-                this.addVendorSCSSStyle(
-                    `
+      patchFiles() {
+        this.addVendorSCSSStyle(
+          `
 #home-menu-container {@extend .order-0;}
 #entity-menu-container {@extend .order-1;}
 #${this.tenantNameLowerCase}-admin-menu-container {@extend .order-3;}
@@ -36,9 +36,9 @@ module.exports = class extends jhipsterEnv.generator('client', {
 #languages-menu-container {@extend .order-11;}
 #account-menu-container {@extend .order-12;}
 `,
-                    'Apply order to menu'
-                );
-            }
-        };
-    }
+          'Apply order to menu'
+        );
+      }
+    };
+  }
 };

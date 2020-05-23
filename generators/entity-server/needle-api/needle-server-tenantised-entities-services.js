@@ -29,13 +29,13 @@ const constants = jhipsterEnv.constants;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 module.exports = class extends needleServer {
-    addEntityToTenantAspect(generator, tenantAwareEntity) {
-        debug(`addEntityToTenantAspect ${tenantAwareEntity}`);
-        const errorMessage = `${chalk.yellow('Reference to ') + tenantAwareEntity} ${chalk.yellow('not added.\n')}`;
-        // eslint-disable-next-line prettier/prettier
+  addEntityToTenantAspect(generator, tenantAwareEntity) {
+    debug(`addEntityToTenantAspect ${tenantAwareEntity}`);
+    const errorMessage = `${chalk.yellow('Reference to ') + tenantAwareEntity} ${chalk.yellow('not added.\n')}`;
+    // eslint-disable-next-line prettier/prettier
         const tenantAspectPath = `${SERVER_MAIN_SRC_DIR}${generator.packageFolder}/aop/${generator.tenantNameLowerFirst}/${generator.tenantNameUpperFirst}Aspect.java`;
-        const content = `+ "|| execution(* ${generator.packageName}.service.${tenantAwareEntity}Service.*(..))"`;
-        const rewriteFileModel = this.generateFileModel(tenantAspectPath, 'jhipster-needle-add-entity-to-tenant-aspect', content);
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    const content = `+ "|| execution(* ${generator.packageName}.service.${tenantAwareEntity}Service.*(..))"`;
+    const rewriteFileModel = this.generateFileModel(tenantAspectPath, 'jhipster-needle-add-entity-to-tenant-aspect', content);
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 };

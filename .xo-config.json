@@ -4,8 +4,6 @@
     "prettier": true,
     "rules": {
       "global-require": "error",
-      "import/no-dynamic-require": "error",
-      "no-console": "error",
       "unicorn/filename-case": "off",
       "no-console": "warn",
       "eslint-comments/no-unused-disable": "warn",

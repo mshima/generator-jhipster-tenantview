@@ -1,14 +1,14 @@
 const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.html`;
 
 const tmpls = [
-    {
-        type: 'replaceContent',
-        regex: true,
-        // eslint-disable-next-line prettier/prettier
+  {
+    type: 'replaceContent',
+    regex: true,
+    // eslint-disable-next-line prettier/prettier
         target: context => /((.*)<div class="form-group">\n(\s*)<label(.*)>Profiles<\/label>)/g,
-        tmpl: context => {
-            const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenantNameLowerFirst}"` : '';
-            return `$2<div class="form-group" *ngIf="(!currentAccount || !currentAccount.${context.tenantNameLowerFirst}) && ${context.tenantInstancePlural} && ${context.tenantInstancePlural}.length > 0">
+    tmpl: context => {
+      const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenantNameLowerFirst}"` : '';
+      return `$2<div class="form-group" *ngIf="(!currentAccount || !currentAccount.${context.tenantNameLowerFirst}) && ${context.tenantInstancePlural} && ${context.tenantInstancePlural}.length > 0">
 $3<label class="form-control-label"${jhiTranslate}>${context.tenantNameUpperFirst}</label>
 $3<select class="form-control" id="field_${context.tenantNameLowerFirst}" name="${context.tenantNameLowerFirst}" formControlName="${context.tenantNameLowerFirst}">
 $3    <option *ngIf="!editForm.get('${context.tenantNameLowerFirst}')!.value" [ngValue]="null" selected></option>
@@ -16,11 +16,11 @@ $3    <option [ngValue]="${context.tenantNameLowerFirst}Option.id === editForm.g
 $3</select>
 $2</div>
 $1`;
-        }
     }
+  }
 ];
 
 module.exports = {
-    file,
-    tmpls
+  file,
+  tmpls
 };
