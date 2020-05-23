@@ -37,7 +37,8 @@ module.exports = {
       get writing() {
         return {
           /* Tenant variables */
-          setupTenantVariables
+          setupTenantVariables,
+          ...super._writing()
         };
       }
 

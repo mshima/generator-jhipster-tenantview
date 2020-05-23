@@ -6,7 +6,7 @@ const tmpls = [
     condition: context => context.isTenant,
     type: 'replaceContent',
     regex: false,
-    target: context => new RegExp(`<li>\n(\\s*)(<a class="dropdown-item" routerLink="${context.tenantUrl}")`),
+    target: context => new RegExp(`<li>\n(\\s*)(<a class="dropdown-item" routerLink="${context.entityStateName}")`),
     tmpl: context => `<li [hidden]="has${context.tenantNameUpperFirst}()">\n$1$2`
   }
 ];

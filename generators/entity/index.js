@@ -24,8 +24,6 @@ module.exports = {
 
         // Pass to entity-* subgen
         this.context.isTenant = this.isTenant;
-
-        console.log(this.context);
       }
 
       get initializing() {
