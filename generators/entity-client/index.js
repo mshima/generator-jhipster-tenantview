@@ -16,8 +16,28 @@ module.exports = {
         super(args, options);
       }
 
+      get initializing() {
+        return super._initializing();
+      }
+
+      get prompting() {
+        return super._prompting();
+      }
+
+      get configuring() {
+        return super._configuring();
+      }
+
+      get default() {
+        return super._default();
+      }
+
       get writing() {
-        return {...super._writing()};
+        return super._writing();
+      }
+
+      get end() {
+        return super._end();
       }
     };
   }

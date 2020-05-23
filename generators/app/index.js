@@ -7,7 +7,7 @@ const debug = require('debug')('tenantview:common');
 const customizer = require('generator-jhipster-customizer');
 const mtUtils = require('../multitenancy-utils');
 
-const generator = 'common';
+const generator = 'app';
 
 module.exports = {
   createGenerator: env => {
@@ -87,9 +87,15 @@ module.exports = {
       }
 
       get configuring() {
-        return {
-          ...super._configuring(),
+        return super._configuring();
+      }
 
+      get default() {
+        return super._default();
+      }
+
+      get writing() {
+        return {
           // ConfiguringCustomPhaseSteps should be run after configuring, otherwise tenantName will be overridden
           saveConf() {
             if (!this.tenantName) return;
@@ -99,7 +105,9 @@ module.exports = {
             this.blueprintConfig.set('tenantName', this.tenantName);
           },
 
-          generateTenant: this._generateTenant
+          generateTenant: this._generateTenant,
+
+          ...super._writing()
         };
       }
 
@@ -219,6 +227,10 @@ module.exports = {
           tenantModule,
           tenantAware: false
         };
+      }
+
+      get end() {
+        return super._end();
       }
     };
   }

@@ -6,8 +6,8 @@ const tmpls = [
     condition: context => context.isTenant,
     type: 'replaceContent',
     regex: true,
-    target: context => "authorities: \\['ROLE_USER'\\]",
-    tmpl: context => "authorities: ['ROLE_ADMIN']"
+    target: () => 'authorities: \\[Authority.USER\\]',
+    tmpl: () => 'authorities: [Authority.ADMIN]'
   }
 ];
 

@@ -216,6 +216,18 @@ module.exports = {
         };
       }
 
+      get default() {
+        return super._default();
+      }
+
+      get writing() {
+        return super._writing();
+      }
+
+      get end() {
+        return super._end();
+      }
+
       /* ======================================================================== */
       /* private methods use within generator (not exposed to modules) */
       /* ======================================================================== */

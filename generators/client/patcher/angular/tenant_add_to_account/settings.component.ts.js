@@ -1,8 +1,4 @@
-const jhipsterEnv = require('generator-jhipster-customizer');
-
-const jhipsterConstants = jhipsterEnv.constants;
-
-const file = context => `${jhipsterConstants.CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`;
+const file = context => `${context.constants.CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`;
 
 const tmpls = [
   {

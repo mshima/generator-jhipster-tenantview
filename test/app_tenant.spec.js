@@ -64,6 +64,10 @@ describe('JHipster generator with tenantview blueprint', () => {
         });
       });
 
+      it('writes tenant configuration', () => {
+        assert.file('.jhipster/Company.json');
+      });
+
       it('creates expected default files with tenant files for angularX', () => {
         assert.file(expectedFiles.common);
         assert.file(expectedFiles.server);

@@ -48,7 +48,6 @@ const expectedFiles = {
 
   tenantManagementServer: [
     `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_authority.csv`,
-    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_authority.csv`,
     `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_user_authority.csv`,
     `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_user.csv`
   ],

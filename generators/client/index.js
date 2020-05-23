@@ -23,6 +23,22 @@ module.exports = {
         });
       }
 
+      get initializing() {
+        return super._initializing();
+      }
+
+      get prompting() {
+        return super._prompting();
+      }
+
+      get configuring() {
+        return super._configuring();
+      }
+
+      get default() {
+        return super._default();
+      }
+
       get writing() {
         return {
           ...super._writing(),
@@ -43,6 +59,10 @@ module.exports = {
             );
           }
         };
+      }
+
+      get end() {
+        return super._end();
       }
     };
   }
