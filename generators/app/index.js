@@ -36,12 +36,12 @@ module.exports = {
           type: Boolean,
           defaults: false
         });
+
+        this.sbsBlueprint = true;
       }
 
       get initializing() {
         return {
-          ...super._initializing(),
-
           loadConf() {
             if (this.options.tenantName) {
               this.blueprintConfig.set('tenantName', _.upperFirst(this.options.tenantName));
@@ -56,8 +56,6 @@ module.exports = {
 
       get prompting() {
         return {
-          ...super._prompting(),
-
           askTenantAware() {
             const prompts = [
               {
@@ -81,24 +79,17 @@ module.exports = {
         };
       }
 
-      get configuring() {
-        return super._configuring();
-      }
-
       get default() {
         return {
           loadConfig() {
             this.tenantName = this.blueprintConfig.get('tenantName');
-          },
-          ...super._default()
+          }
         };
       }
 
       get writing() {
         return {
-          generateTenant: this._generateTenant,
-
-          ...super._writing()
+          generateTenant: this._generateTenant
         };
       }
 
@@ -200,10 +191,6 @@ module.exports = {
           tenantModule,
           tenantAware: false
         };
-      }
-
-      get end() {
-        return super._end();
       }
     };
   }

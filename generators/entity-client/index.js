@@ -14,31 +14,12 @@ module.exports = {
       constructor(args, options) {
         debug(`Initializing ${generator} ${options.context.name}`);
         super(args, options);
+
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
       }
 
-      get initializing() {
-        return super._initializing();
-      }
-
-      get prompting() {
-        return super._prompting();
-      }
-
-      get configuring() {
-        return super._configuring();
-      }
-
-      get default() {
-        return super._default();
-      }
-
-      get writing() {
-        return super._writing();
-      }
-
-      get end() {
-        return super._end();
-      }
+      emptyFun() {}
     };
   }
 };

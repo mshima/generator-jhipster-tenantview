@@ -16,38 +16,19 @@ module.exports = {
       constructor(args, options) {
         debug(`Initializing ${generator} ${options.name}`);
         super(args, options);
-      }
 
-      get initializing() {
-        return super._initializing();
-      }
-
-      get prompting() {
-        return super._prompting();
-      }
-
-      get configuring() {
-        return super._configuring();
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
       }
 
       get default() {
         return {
-          ...super._default(),
-
           updateLanguages() {
             // Load updated configurations.
             this.enableTranslation = this.config.get('enableTranslation');
             this.languages = this.config.get('languages');
           }
         };
-      }
-
-      get writing() {
-        return super._writing();
-      }
-
-      get end() {
-        return super._end();
       }
     };
   }

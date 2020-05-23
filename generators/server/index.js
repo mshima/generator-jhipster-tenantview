@@ -16,28 +16,13 @@ module.exports = {
       constructor(args, options) {
         debug(`Initializing ${generator} blueprint`);
         super(args, options);
-      }
 
-      get initializing() {
-        return super._initializing();
-      }
-
-      get prompting() {
-        return super._prompting();
-      }
-
-      get configuring() {
-        return super._configuring();
-      }
-
-      get default() {
-        return super._default();
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
       }
 
       get writing() {
         return {
-          ...super._writing(),
-
           /* Tenant variables */
           setupTenantVariables,
 
@@ -46,10 +31,6 @@ module.exports = {
             // References to the various directories we'll be copying files to
           }
         };
-      }
-
-      get end() {
-        return super._end();
       }
     };
   }

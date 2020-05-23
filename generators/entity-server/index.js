@@ -40,28 +40,13 @@ module.exports = {
         super(args, options);
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
-      }
 
-      get initializing() {
-        return super._initializing();
-      }
-
-      get prompting() {
-        return super._prompting();
-      }
-
-      get configuring() {
-        return super._configuring();
-      }
-
-      get default() {
-        return super._default();
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
       }
 
       get writing() {
         return {
-          ...super._writing(),
-
           // Sets up all the variables we'll need for the templating
           setUpVariables() {
             this.SERVER_MAIN_SRC_DIR = this.constants.SERVER_MAIN_SRC_DIR;
@@ -95,10 +80,6 @@ module.exports = {
             }
           }
         };
-      }
-
-      get end() {
-        return super._end();
       }
     };
   }

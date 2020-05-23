@@ -21,28 +21,12 @@ module.exports = {
           desc: 'Set tenant root folder',
           type: String
         });
-      }
 
-      get initializing() {
-        return super._initializing();
-      }
-
-      get prompting() {
-        return super._prompting();
-      }
-
-      get configuring() {
-        return super._configuring();
-      }
-
-      get default() {
-        return super._default();
+        this.sbsBlueprint = true;
       }
 
       get writing() {
         return {
-          ...super._writing(),
-
           setupTenantVariables,
 
           patchFiles() {
@@ -59,10 +43,6 @@ module.exports = {
             );
           }
         };
-      }
-
-      get end() {
-        return super._end();
       }
     };
   }

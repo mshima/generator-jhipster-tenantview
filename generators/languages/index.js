@@ -16,34 +16,16 @@ module.exports = {
       constructor(args, options) {
         debug(`Initializing ${generator} blueprint`);
         super(args, options);
-      }
 
-      get initializing() {
-        return super._initializing();
-      }
-
-      get prompting() {
-        return super._prompting();
-      }
-
-      get configuring() {
-        return super._configuring();
-      }
-
-      get default() {
-        return super._default();
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
       }
 
       get writing() {
         return {
           /* Tenant variables */
-          setupTenantVariables,
-          ...super._writing()
+          setupTenantVariables
         };
-      }
-
-      get end() {
-        return super._end();
       }
     };
   }
