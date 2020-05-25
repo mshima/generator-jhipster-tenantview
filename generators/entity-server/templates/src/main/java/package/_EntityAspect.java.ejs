@@ -1,10 +1,10 @@
-package <%=packageName%>.aop.<%= tenantNameLowerFirst %>;
+package <%=storage.packageName%>.aop.<%= tenantNameLowerFirst %>;
 
-import <%=packageName%>.repository.<%= entityClass %>Repository;
-import <%=packageName%>.security.SecurityUtils;
-import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=storage.packageName%>.repository.<%= entity.entityClass %>Repository;
+import <%=storage.packageName%>.security.SecurityUtils;
+import <%=storage.packageName%>.repository.UserRepository;
+import <%=storage.packageName%>.domain.User;
+import <%=storage.packageName%>.domain.<%= entity.entityClass %>;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -27,20 +27,20 @@ import org.aspectj.lang.annotation.AfterReturning;
 
 @Aspect
 @Component
-public class <%= entityClass %>Aspect {
+public class <%= entity.entityClass %>Aspect {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    private <%= entity.entityClass %>Repository <%= entityInstance %>Repository;
 
     /**
-     * Run method if <%= entityClass %> repository save is hit.
+     * Run method if <%= entity.entityClass %> repository save is hit.
      * Adds tenant information to entity.
      */
-    @Before(value = "execution(* <%=packageName%>.repository.<%= entityClass %>Repository.save(..)) && args(<%= entityInstance %>, ..)")
-    public void onSave(JoinPoint joinPoint, <%= entityClass %> <%= entityInstance %>) {
+    @Before(value = "execution(* <%=storage.packageName%>.repository.<%= entity.entityClass %>Repository.save(..)) && args(<%= entityInstance %>, ..)")
+    public void onSave(JoinPoint joinPoint, <%= entity.entityClass %> <%= entityInstance %>) {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
         if(login.isPresent()) {
@@ -53,10 +53,10 @@ public class <%= entityClass %>Aspect {
     }
 
     /**
-     * Run method if <%= entityClass %> repository deleteById is hit.
+     * Run method if <%= entity.entityClass %> repository deleteById is hit.
      * Verify if tenant owns the <%= entityInstance %> before delete.
      */
-    @Before(value = "execution(* <%=packageName%>.repository.<%= entityClass %>Repository.deleteById(..)) && args(id, ..)")
+    @Before(value = "execution(* <%=storage.packageName%>.repository.<%= entity.entityClass %>Repository.deleteById(..)) && args(id, ..)")
     public void onDelete(JoinPoint joinPoint, Long id) {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
@@ -64,7 +64,7 @@ public class <%= entityClass %>Aspect {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
             if (loggedInUser.get<%= tenantNameUpperFirst %>() != null) {
-                <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findById(id).get();
+                <%= entity.entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findById(id).get();
                 if(<%= entityInstance %>.get<%= tenantNameUpperFirst %>() != loggedInUser.get<%= tenantNameUpperFirst %>()){
                     throw new NoSuchElementException();
                 }
@@ -73,14 +73,14 @@ public class <%= entityClass %>Aspect {
     }
 
     /**
-     * Run method if <%= entityClass %> repository findById is returning.
+     * Run method if <%= entity.entityClass %> repository findById is returning.
      * Adds filtering to prevent display of information from another tenant.
      */
-    @Around("execution(* <%=packageName%>.repository.<%= entityClass %>Repository.findById(..)) && args(id, ..)")
+    @Around("execution(* <%=storage.packageName%>.repository.<%= entity.entityClass %>Repository.findById(..)) && args(id, ..)")
     public Object onFindById(ProceedingJoinPoint pjp, Long id) throws Throwable {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
-        Optional<<%= entityClass %>> optional = (Optional<<%= entityClass %>>) pjp.proceed();
+        Optional<<%= entity.entityClass %>> optional = (Optional<<%= entity.entityClass %>>) pjp.proceed();
         if(login.isPresent())
         {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
@@ -95,10 +95,10 @@ public class <%= entityClass %>Aspect {
     }
 
     /**
-     * Run method around <%= entityClass %> service findAll.
+     * Run method around <%= entity.entityClass %> service findAll.
      * Adds filtering to prevent display of information from another tenant before database query (less performance hit).
      */
-    @Around("execution(* <%=packageName%>.service.<%= entityClass %>Service.findAll())")
+    @Around("execution(* <%=storage.packageName%>.service.<%= entity.entityClass %>Service.findAll())")
     public Object onFindAll(ProceedingJoinPoint pjp) throws Throwable {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
@@ -107,10 +107,10 @@ public class <%= entityClass %>Aspect {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
             if (loggedInUser.get<%= tenantNameUpperFirst %>() != null) {
-                <%= entityClass %> example = new <%= entityClass %>();
+                <%= entity.entityClass %> example = new <%= entity.entityClass %>();
                 example.set<%= tenantNameUpperFirst %>(loggedInUser.get<%= tenantNameUpperFirst %>());
-                List<<%= entityClass %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.findAll(Example.of(example));
-                return <%= entityInstancePlural %>;
+                List<<%= entity.entityClass %>> <%= entity.entityInstancePlural %> = <%= entityInstance %>Repository.findAll(Example.of(example));
+                return <%= entity.entityInstancePlural %>;
             }
         }
         return pjp.proceed();

@@ -43,7 +43,7 @@ const tmpls = [
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
                     <li>
                         <a class="dropdown-item" routerLink="${context.tenantNameLowerFirst}-admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon icon="user" fixedWidth="true"></fa-icon>
+                            <fa-icon icon="user" [fixedWidth]="true"></fa-icon>
                             <span${jhiTranslate2}>User management</span>
                         </a>
                     </li>

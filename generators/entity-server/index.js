@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity:server');
 const path = require('path');
 const customizer = require('generator-jhipster-customizer');
+const JHipsterEntity = require('generator-jhipster-customizer/lib/jhipster-entity');
 
 const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 
@@ -20,11 +21,12 @@ module.exports = {
 
     const TenantisedNeedle = class extends needleServer {
       addEntityToTenantAspect(generator, tenantAwareEntity) {
+        const packageName = generator.config.get('packageName');
         debug(`addEntityToTenantAspect ${tenantAwareEntity}`);
         const errorMessage = `${chalk.yellow('Reference to ') + tenantAwareEntity} ${chalk.yellow('not added.\n')}`;
         // eslint-disable-next-line prettier/prettier
-            const tenantAspectPath = `${SERVER_MAIN_SRC_DIR}${generator.packageFolder}/aop/${generator.tenantNameLowerFirst}/${generator.tenantNameUpperFirst}Aspect.java`;
-        const content = `+ "|| execution(* ${generator.packageName}.service.${tenantAwareEntity}Service.*(..))"`;
+            const tenantAspectPath = `${generator.constants.SERVER_MAIN_SRC_DIR}${packageFolder}/aop/${generator.tenantNameLowerFirst}/${generator.tenantNameUpperFirst}Aspect.java`;
+        const content = `+ "|| execution(* ${generator.constants.packageName}.service.${tenantAwareEntity}Service.*(..))"`;
         const rewriteFileModel = this.generateFileModel(tenantAspectPath, 'jhipster-needle-add-entity-to-tenant-aspect', content);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
       }
@@ -38,23 +40,20 @@ module.exports = {
       constructor(args, options) {
         super(args, options);
 
-        const tenantName = this._.upperFirst(args[0]);
-        debug(`Initializing ${generator} ${tenantName}`);
+        const entityName = this._.upperFirst(args[0]);
+        debug(`Initializing ${generator} ${entityName}`);
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
 
         // Set side-by-side blueprint
         this.sbsBlueprint = true;
 
-        this.entityConfig = this.createStorage(`.jhipster/${tenantName}.json`);
+        this.entityConfig = this.createStorage(`.jhipster/${entityName}.json`);
+        this.entityConfig.set('name', entityName);
       }
 
       get writing() {
         return {
-          // Sets up all the variables we'll need for the templating
-          setUpVariables() {
-            this.SERVER_MAIN_SRC_DIR = this.constants.SERVER_MAIN_SRC_DIR;
-          },
           /* Tenant variables */
           setupTenantVariables,
 
@@ -87,11 +86,16 @@ module.exports = {
       }
 
       _templateData() {
-        const {entityClass, entityInstance, entityInstancePlural} = this.options.jhipsterContext;
+        const entity = new JHipsterEntity(this.entityConfig.getAll(), this);
+        console.log(this.entityConfig);
+        console.log(this.entityConfig.getAll());
+        const {entityClass, entityInstance, entityInstancePlural} = entity;
+        console.log({entityClass, entityInstance, entityInstancePlural});
         return {
           ...this.config.getAll(),
           ...setupTenantVariables.call(this),
           ...this.entityConfig.getAll(),
+          entity,
           entityClass,
           entityInstance,
           entityInstancePlural

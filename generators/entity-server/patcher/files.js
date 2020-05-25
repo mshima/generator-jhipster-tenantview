@@ -1,100 +1,100 @@
 module.exports = {
-  files: context => {
+  files: gen => {
     return {
       tenant_base: [
         {
-          condition: context => context.tenantAware,
-          path: context.constants.SERVER_MAIN_SRC_DIR,
+          condition: gen => gen.tenantAware,
+          path: gen.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'package/_EntityAspect.java',
-              renameTo: context => `${context.packageFolder}/aop/${context.tenantNameLowerFirst}/${context.entityClass}Aspect.java`
+              renameTo: gen => `${gen.storage.packageFolder}/aop/${gen.tenantNameLowerFirst}/${gen.entityClass}Aspect.java`
             }
           ]
         },
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_SRC_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'package/domain/_TenantParameter.java',
-              renameTo: context => `${context.packageFolder}/domain/${context.tenantNameUpperFirst}Parameter.java`
+              renameTo: gen => `${gen.storage.packageFolder}/domain/${gen.tenantNameUpperFirst}Parameter.java`
             },
             {
               method: 'patcherTemplate',
               file: 'package/aop/_tenant/_TenantAspect.java',
-              renameTo: context => `${context.packageFolder}/aop/${context.tenantNameLowerFirst}/${context.tenantNameUpperFirst}Aspect.java`
+              renameTo: gen => `${gen.storage.packageFolder}/aop/${gen.tenantNameLowerFirst}/${gen.tenantNameUpperFirst}Aspect.java`
             }
           ]
         },
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_RES_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_user_tenant_constraints.xml',
-              renameTo: context =>
-                `config/liquibase/changelog/${context.changelogDate}-1__user_${context.tenantNameUpperFirst}_constraints.xml`
+              renameTo: gen =>
+                `config/liquibase/changelog/${gen.changelogDate}-1__user_${gen.tenantNameUpperFirst}_constraints.xml`
             }
           ]
         }
       ],
       liquibase_data: [
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_RES_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_tenant_user_data.xml',
-              renameTo: context => `config/liquibase/changelog/${context.changelogDate}-2__${context.tenantNameLowerCase}_user_data.xml`
+              renameTo: gen => `config/liquibase/changelog/${gen.changelogDate}-2__${gen.tenantNameLowerCase}_user_data.xml`
             }
           ]
         },
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_RES_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant.csv',
-              renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}.csv`
+              renameTo: gen => `config/liquibase/data/${gen.tenantNameLowerCase}.csv`
             }
           ]
         },
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_RES_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant_user.csv',
-              renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_user.csv`
+              renameTo: gen => `config/liquibase/data/${gen.tenantNameLowerCase}_user.csv`
             }
           ]
         },
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_RES_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant_authority.csv',
-              renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_authority.csv`
+              renameTo: gen => `config/liquibase/data/${gen.tenantNameLowerCase}_authority.csv`
             }
           ]
         },
         {
-          condition: context => context.isTenant,
-          path: context.constants.SERVER_MAIN_RES_DIR,
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant_user_authority.csv',
-              renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_user_authority.csv`
+              renameTo: gen => `config/liquibase/data/${gen.tenantNameLowerCase}_user_authority.csv`
             }
           ]
         }
