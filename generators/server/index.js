@@ -28,9 +28,14 @@ module.exports = {
 
           writeAdditionalFile() {
             this.packageFolder = this.config.get('packageFolder');
+            this.packageName = this.config.get('packageName');
             // References to the various directories we'll be copying files to
           }
         };
+      }
+
+      _templateData() {
+        return {...setupTenantVariables.call(this)};
       }
     };
   }

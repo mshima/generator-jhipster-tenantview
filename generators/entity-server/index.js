@@ -43,6 +43,8 @@ module.exports = {
 
         // Set side-by-side blueprint
         this.sbsBlueprint = true;
+
+        this.entityConfig = this.createStorage(`.jhipster/${options.context.name}.json`);
       }
 
       get writing() {
@@ -79,6 +81,18 @@ module.exports = {
               }
             }
           }
+        };
+      }
+
+      _templateData() {
+        const {entityClass, entityInstance, entityInstancePlural} = this.options.jhipsterContext;
+        return {
+          ...this.config.getAll(),
+          ...setupTenantVariables.call(this),
+          ...this.entityConfig.getAll(),
+          entityClass,
+          entityInstance,
+          entityInstancePlural
         };
       }
     };

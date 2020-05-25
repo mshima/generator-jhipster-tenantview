@@ -44,6 +44,16 @@ module.exports = {
           }
         };
       }
+
+      _templateData() {
+        const {angularXAppName, skipUserManagement} = this.options.jhipsterContext;
+        return {
+          ...this.storage,
+          ...setupTenantVariables.call(this),
+          angularXAppName,
+          skipUserManagement
+        };
+      }
     };
   }
 };

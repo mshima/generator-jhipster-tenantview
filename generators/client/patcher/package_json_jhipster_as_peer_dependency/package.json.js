@@ -30,6 +30,7 @@ const tmpls = [
 ];
 
 module.exports = {
+  disabled: true,
   file,
   tmpls
 };

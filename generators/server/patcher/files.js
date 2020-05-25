@@ -1,15 +1,15 @@
 module.exports = {
-  files: context => {
+  files: gen => {
     return {
       tenant_base: [
         // Copy over aspect
         {
-          path: context.constants.SERVER_MAIN_SRC_DIR,
+          path: gen.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'package/aop/_tenant/_UserAspect.java',
-              renameTo: generator => `${generator.packageFolder}/aop/${generator.tenantNameLowerFirst}/UserAspect.java`
+              renameTo: () => `${gen.storage.packageFolder}/aop/${gen.tenantNameLowerFirst}/UserAspect.java`
             }
           ]
         }

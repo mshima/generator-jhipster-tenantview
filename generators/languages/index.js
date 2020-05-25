@@ -21,6 +21,10 @@ module.exports = {
         this.sbsBlueprint = true;
       }
 
+      get initializing() {
+        return super._initializing();
+      }
+
       get writing() {
         return {
           /* Tenant variables */

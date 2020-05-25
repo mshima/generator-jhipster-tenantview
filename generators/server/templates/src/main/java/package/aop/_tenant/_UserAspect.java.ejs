@@ -1,10 +1,10 @@
-package <%=packageName%>.aop.<%= tenantNameLowerFirst %>;
+package <%=storage.packageName%>.aop.<%= tenantNameLowerFirst %>;
 
-import <%=packageName%>.security.SecurityUtils;
-import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.service.dto.UserDTO;
-import <%=packageName%>.domain.<%= tenantNameUpperFirst %>Parameter;
+import <%=storage.packageName%>.security.SecurityUtils;
+import <%=storage.packageName%>.repository.UserRepository;
+import <%=storage.packageName%>.domain.User;
+import <%=storage.packageName%>.service.dto.UserDTO;
+import <%=storage.packageName%>.domain.<%= tenantNameUpperFirst %>Parameter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -40,7 +40,7 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
      * Run method if User service createUser is hit.
      * Stores tenant information from DTO.
      */
-    @Before(value = "execution(* <%=packageName%>.service.UserService.createUser(..)) && args(userDTO, ..)")
+    @Before(value = "execution(* <%=storage.packageName%>.service.UserService.createUser(..)) && args(userDTO, ..)")
     public void onCreateUser(JoinPoint joinPoint, UserDTO userDTO) throws Throwable {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
@@ -60,7 +60,7 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
      * Run method if User service updateUser is hit.
      * Adds tenant information to DTO.
      */
-    @Before(value = "execution(*  <%=packageName%>.service.UserService.updateUser(..)) && args(userDTO, ..)")
+    @Before(value = "execution(*  <%=storage.packageName%>.service.UserService.updateUser(..)) && args(userDTO, ..)")
     public void onUpdateUser(JoinPoint joinPoint, UserDTO userDTO)
     {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
@@ -87,7 +87,7 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
      * Run method if User repository save is hit.
      * Adds tenant information to DTO.
      */
-    @Before(value = "execution(* <%=packageName%>.repository.UserRepository.save(..)) && args(user, ..)")
+    @Before(value = "execution(* <%=storage.packageName%>.repository.UserRepository.save(..)) && args(user, ..)")
     public void onSave(JoinPoint joinPoint, User user) {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
@@ -100,7 +100,7 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
      * Run method if User service getUserWithAuthoritiesByLogin is hit.
      * Adds filtering to prevent display of information from another tenant
      */
-    @Before(value = "execution(* <%=packageName%>.service.UserService.getUserWithAuthoritiesByLogin(..)) && args(login, ..)")
+    @Before(value = "execution(* <%=storage.packageName%>.service.UserService.getUserWithAuthoritiesByLogin(..)) && args(login, ..)")
     public void onGetUserWithAuthoritiesByLogin(JoinPoint joinPoint, String login) throws Exception {
         Optional<String> currentLogin = SecurityUtils.getCurrentUserLogin();
 
@@ -121,7 +121,7 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
      * Run method if User service getUserWithAuthorities is hit.
      * Adds filtering to prevent display of information from another tenant
      */
-    @Before(value = "execution(* <%=packageName%>.service.UserService.getUserWithAuthorities(..)) && args(id, ..)")
+    @Before(value = "execution(* <%=storage.packageName%>.service.UserService.getUserWithAuthorities(..)) && args(id, ..)")
     public void onGetUserWithAuthorities(JoinPoint joinPoint, Long id) throws Exception {
         Optional<String> currentLogin = SecurityUtils.getCurrentUserLogin();
 
