@@ -7,6 +7,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'package/_EntityAspect.java',
               renameTo: context => `${context.packageFolder}/aop/${context.tenantNameLowerFirst}/${context.entityClass}Aspect.java`
             }
@@ -17,10 +18,12 @@ module.exports = {
           path: context.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'package/domain/_TenantParameter.java',
               renameTo: context => `${context.packageFolder}/domain/${context.tenantNameUpperFirst}Parameter.java`
             },
             {
+              method: 'patcherTemplate',
               file: 'package/aop/_tenant/_TenantAspect.java',
               renameTo: context => `${context.packageFolder}/aop/${context.tenantNameLowerFirst}/${context.tenantNameUpperFirst}Aspect.java`
             }
@@ -31,6 +34,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_user_tenant_constraints.xml',
               renameTo: context =>
                 `config/liquibase/changelog/${context.changelogDate}-1__user_${context.tenantNameUpperFirst}_constraints.xml`
@@ -44,6 +48,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_tenant_user_data.xml',
               renameTo: context => `config/liquibase/changelog/${context.changelogDate}-2__${context.tenantNameLowerCase}_user_data.xml`
             }
@@ -54,6 +59,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant.csv',
               renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}.csv`
             }
@@ -64,6 +70,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant_user.csv',
               renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_user.csv`
             }
@@ -74,6 +81,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant_authority.csv',
               renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_authority.csv`
             }
@@ -84,6 +92,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'config/liquibase/data/_tenant_user_authority.csv',
               renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_user_authority.csv`
             }

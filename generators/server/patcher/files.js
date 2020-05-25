@@ -7,6 +7,7 @@ module.exports = {
           path: context.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'package/aop/_tenant/_UserAspect.java',
               renameTo: generator => `${generator.packageFolder}/aop/${generator.tenantNameLowerFirst}/UserAspect.java`
             }

@@ -6,6 +6,7 @@ module.exports = {
           path: context.constants.ANGULAR_DIR,
           templates: [
             {
+              method: 'patcherTemplate',
               file: 'tenant-admin/_tenant-admin-routing.module.ts',
               renameTo: generator => `${generator.tenantNameLowerFirst}-admin/${generator.tenantNameLowerFirst}-admin-routing.module.ts`
             }
