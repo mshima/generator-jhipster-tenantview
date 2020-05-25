@@ -1,4 +1,4 @@
-const file = context => `${context.SERVER_MAIN_SRC_DIR}${context.packageFolder}/web/rest/UserResource.java`;
+const file = gen => `${gen.constants.SERVER_MAIN_SRC_DIR}${gen.storage.packageFolder}/web/rest/UserResource.java`;
 
 const tmpls = [
   {

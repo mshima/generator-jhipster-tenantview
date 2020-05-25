@@ -1,18 +1,18 @@
 // Add jpa filter to the entity to remove entries from another tenant
-const file = context => `${context.SERVER_MAIN_SRC_DIR}${context.packageFolder}/service/dto/UserDTO.java`;
+const file = gen => `${gen.constants.SERVER_MAIN_SRC_DIR}${gen.storage.packageFolder}/service/dto/UserDTO.java`;
 
 const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
-    target: context => `(import ${context.packageName}\\.domain\\.User;)`,
-    tmpl: context => `$1
-import ${context.packageName}.domain.${context.tenantNameUpperFirst};`
+    target: gen => `(import ${gen.storage.packageName}\\.domain\\.User;)`,
+    tmpl: gen => `$1
+import ${gen.storage.packageName}.domain.${gen.tenantNameUpperFirst};`
   },
   {
     type: 'rewriteFile',
-    target: context => 'public UserDTO() {',
-    tmpl: context => `private ${context.tenantNameUpperFirst} ${context.tenantNameLowerFirst};
+    target: 'public UserDTO() {',
+    tmpl: gen => `private ${gen.tenantNameUpperFirst} ${gen.tenantNameLowerFirst};
 `
   },
   {

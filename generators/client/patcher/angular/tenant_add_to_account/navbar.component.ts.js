@@ -1,4 +1,4 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.ts`;
+const file = gen => `${gen.constants.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.ts`;
 
 const tmpls = [
   {

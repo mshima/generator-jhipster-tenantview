@@ -1,5 +1,5 @@
 // Ignore tests with account
-const file = context => `${context.SERVER_TEST_SRC_DIR}${context.packageFolder}/web/rest/AccountResourceIT.java`;
+const file = gen => `${gen.constants.SERVER_TEST_SRC_DIR}${gen.storage.packageFolder}/web/rest/AccountResourceIT.java`;
 
 const tmpls = [
   {

@@ -1,3 +1,3 @@
 module.exports = {
-  condition: gen => gen.clientFramework === 'angularX'
+  condition: gen => gen.storage.clientFramework === 'angularX'
 };
