@@ -36,15 +36,17 @@ module.exports = {
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
       constructor(args, options) {
-        debug(`Initializing ${generator} ${options.context.name}`);
         super(args, options);
+
+        const tenantName = this._.upperFirst(args[0]);
+        debug(`Initializing ${generator} ${tenantName}`);
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
 
         // Set side-by-side blueprint
         this.sbsBlueprint = true;
 
-        this.entityConfig = this.createStorage(`.jhipster/${options.context.name}.json`);
+        this.entityConfig = this.createStorage(`.jhipster/${tenantName}.json`);
       }
 
       get writing() {

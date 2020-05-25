@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
 const path = require('path');
-const debug = require('debug')('tenantview:common');
+const debug = require('debug')('tenantview:app');
 
 const customizer = require('generator-jhipster-customizer');
 const mtUtils = require('../multitenancy-utils');
@@ -99,6 +99,7 @@ module.exports = {
       /* ======================================================================== */
 
       _generateTenant() {
+        debug(`Generating tenant ${this.tenantName}`);
         const tenantPath = this.destinationPath(path.join('.jhipster', `${this.tenantName}.json`));
         const tenantStorage = this.createStorage(tenantPath);
         if (tenantStorage.existed) {
@@ -133,7 +134,7 @@ module.exports = {
               ownerSide: true,
               otherEntityRelationshipName: this.tenantNameLowerFirst
             });
-            tenantStore.set('relationships', relationships);
+            tenantStorage.set('relationships', relationships);
           }
         } else {
           debug("Tenant doesn't exists");
