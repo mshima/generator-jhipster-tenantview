@@ -90,7 +90,35 @@ module.exports = {
 
       get writing() {
         return {
-          generateTenant: this._generateTenant
+          entities() {
+            const composeTenant = this._generateTenant();
+            const composeTenantUser = this._generateTenantUser();
+            if (!this.options.withEntities) {
+              const configOptions = this.configOptions;
+              if (composeTenant) {
+                this.composeWith('jhipster-tenantview:entity', {
+                  ...this.options,
+                  configOptions,
+                  regenerate: true,
+                  'skip-install': false,
+                  debug: this.isDebugEnabled,
+                  arguments: [this.tenantName]
+                });
+              }
+
+              if (composeTenantUser) {
+                const tenantUserName = `${_.upperFirst(this.tenantName)}User`;
+                this.composeWith('jhipster-tenantview:entity', {
+                  ...this.options,
+                  configOptions,
+                  regenerate: true,
+                  'skip-install': false,
+                  debug: this.isDebugEnabled,
+                  arguments: [tenantUserName]
+                });
+              }
+            }
+          }
         };
       }
 
@@ -125,37 +153,66 @@ module.exports = {
           const relationships = tenantStorage.get('relationships') || [];
           if (!mtUtils.getArrayItemWithFieldValue(relationships, 'relationshipName', 'users')) {
             relationships.push({
-              relationshipName: 'users',
-              otherEntityName: 'user',
+              relationshipName: `${this.tenantNameLowerFirst}Users`,
+              otherEntityName: `${this.tenantNameLowerFirst}User`,
               relationshipType: 'one-to-many',
               otherEntityField: 'login',
               // RelationshipValidateRules: 'required',
               ownerSide: true,
               otherEntityRelationshipName: this.tenantNameLowerFirst
             });
-            tenantStore.set('relationships', relationships);
+            tenantStorage.set('relationships', relationships);
           }
-        } else {
-          debug("Tenant doesn't exists");
-          const definition = this._getDefaultDefinition();
 
-          tenantStorage.set(definition);
-
-          if (!this.options.withEntities) {
-            const configOptions = this.configOptions;
-            this.composeWith('jhipster-tenantview:entity', {
-              ...this.options,
-              configOptions,
-              regenerate: true,
-              'skip-install': false,
-              debug: this.isDebugEnabled,
-              arguments: [this.tenantName]
-            });
-          }
+          return false;
         }
+
+        debug("Tenant doesn't exists");
+        const definition = this._defaultTenantDefinition();
+
+        tenantStorage.set(definition);
+        return true;
       }
 
-      _getDefaultDefinition() {
+      _generateTenantUser() {
+        const tenantUserName = `${_.upperFirst(this.tenantName)}User`;
+        const tenantUserPath = this.destinationPath(path.join('.jhipster', `${tenantUserName}.json`));
+        const tenantUserStorage = this.createStorage(tenantUserPath);
+        if (tenantUserStorage.existed) {
+          const tenantModule = tenantUserStorage.get('tenantModule') || this.blueprintConfig.get('tenantModule');
+          debug('Tenant user exists');
+          tenantUserStorage.set({
+            service: 'serviceClass',
+            tenantModule,
+            clientRootFolder: `../${tenantModule}`,
+            tenantAware: true
+          });
+
+          const relationships = tenantUserStorage.get('relationships') || [];
+          if (!mtUtils.getArrayItemWithFieldValue(relationships, 'relationshipName', 'user')) {
+            relationships.push({
+              relationshipName: `${this.tenantNameLowerFirst}Users`,
+              otherEntityName: `${this.tenantNameLowerFirst}User`,
+              relationshipType: 'one-to-many',
+              otherEntityField: 'login',
+              // RelationshipValidateRules: 'required',
+              ownerSide: true,
+              otherEntityRelationshipName: this.tenantNameLowerFirst
+            });
+            tenantUserStorage.set('relationships', relationships);
+          }
+
+          return false;
+        }
+
+        debug("Tenant user doesn't exists");
+        const definition = this._defaultTenantUserDefinition(tenantUserName);
+
+        tenantUserStorage.set(definition);
+        return true;
+      }
+
+      _defaultTenantDefinition() {
         const vars = mtUtils.setupTenantVariables.call(this);
         const tenantModule = this.blueprintConfig.get('tenantModule');
         return {
@@ -176,8 +233,8 @@ module.exports = {
           ],
           relationships: [
             {
-              relationshipName: 'users',
-              otherEntityName: 'user',
+              relationshipName: `${this.tenantNameLowerFirst}Users`,
+              otherEntityName: `${this.tenantNameLowerFirst}User`,
               relationshipType: 'one-to-many',
               otherEntityField: 'login',
               ownerSide: true,
@@ -191,6 +248,41 @@ module.exports = {
           clientRootFolder: `../${tenantModule}`,
           tenantModule,
           tenantAware: false
+        };
+      }
+
+      _defaultTenantUserDefinition(tenantUserName) {
+        const vars = mtUtils.setupTenantVariables.call(this);
+        const tenantModule = this.blueprintConfig.get('tenantModule');
+        return {
+          name: _.upperFirst(tenantUserName),
+          relationships: [
+            {
+              relationshipName: 'user',
+              otherEntityName: 'user',
+              relationshipType: 'one-to-one',
+              otherEntityField: 'login',
+              ownerSide: true,
+              useJPADerivedIdentifier: true,
+              otherEntityRelationshipName: _.lowerFirst(tenantUserName)
+            },
+            {
+              relationshipName: vars.tenantNameLowerFirst,
+              otherEntityName: vars.tenantNameLowerFirst,
+              relationshipType: 'many-to-one',
+              ownerSide: true,
+              relationshipValidateRules: ['require'],
+              otherEntityField: 'name',
+              useJPADerivedIdentifier: true,
+              otherEntityRelationshipName: _.lowerFirst(tenantUserName)
+            }
+          ],
+          changelogDate: this.dateFormatForLiquibase(),
+          dto: 'no',
+          service: 'serviceClass',
+          clientRootFolder: `../${tenantModule}`,
+          tenantModule,
+          tenantAware: true
         };
       }
     };
