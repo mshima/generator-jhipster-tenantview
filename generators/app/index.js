@@ -12,7 +12,6 @@ module.exports = {
   createGenerator: env => {
     return class extends customizer.createJHipsterGenerator(generator, env, {
       improverPaths: path.resolve(__dirname, '../../improver'),
-      applyPatcher: true,
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
       constructor(args, options) {
@@ -46,7 +45,9 @@ module.exports = {
             if (this.options.tenantName) {
               this.blueprintConfig.set('tenantName', _.upperFirst(this.options.tenantName));
             }
-            this.configOptions.baseName = this.baseName;
+
+            const tenantModule = this.options.tenantModule || this.blueprintConfig.get('tenantModule') || 'admin';
+            this.blueprintConfig.set('tenantModule', _.lowerFirst(tenantModule));
 
             // This will be used by entity-server to crate "@Before" annotation in TenantAspect
             this.configOptions.tenantAwareEntities = [];
@@ -102,7 +103,7 @@ module.exports = {
         const tenantStorage = this.createStorage(tenantPath);
         if (tenantStorage.existed) {
           debug('Tenant exists');
-          const tenantModule = this.options.tenantModule || tenantStorage.get('tenantModule') || 'admin';
+          const tenantModule = tenantStorage.get('tenantModule');
           tenantStorage.set({
             service: 'serviceClass',
             tenantModule,
@@ -117,7 +118,7 @@ module.exports = {
               fieldType: 'String',
               fieldValidateRules: ['required']
             });
-            tenantStore.set('fields', fields);
+            tenantStorage.set('fields', fields);
           }
 
           // Add users relationship if doesn´t exists.
@@ -156,9 +157,9 @@ module.exports = {
 
       _getDefaultDefinition() {
         const vars = mtUtils.setupTenantVariables.call(this);
-        const tenantModule = this.options.tenantModule || 'admin';
+        const tenantModule = this.blueprintConfig.get('tenantModule');
         return {
-          name: vars.tenantInstance,
+          name: vars.tenantNameCapitalized,
           fields: [
             {
               fieldName: 'name',
