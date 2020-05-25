@@ -63,24 +63,8 @@ jobs:
                     - jdl-relation
                     - jdl-relation-protractor
                 jhi-gen-version:
-                    - 6.3.0
-                    - 6.3.1
-                    - 6.4.0
-                    - 6.4.1
-                    - 6.5.0
-                    - 6.5.1
-                    - 6.6.0
-                    - 6.7.0
-                    - 6.7.1
+                    - 6.9.0
                 include:
-                    - jhi-gen-version: 6.3.0
-                      checkstyle: 0
-                    - jhi-gen-version: 6.3.1
-                      checkstyle: 0
-                    - jhi-gen-version: 6.4.0
-                      checkstyle: 0
-                    - jhi-gen-version: 6.4.1
-                      checkstyle: 0
                     - app-type: jdl-company
                       entity: other
                       profile: prod
