@@ -4,17 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <!--
-        Added the constraints for entity <%= tenantNameLowerCase %>.
+        Added the constraints for entity <%= tenant.entityLowerCase %>.
     -->
     <changeSet id="<%= entity.changelogDate %>-1" author="jhipster">
         <addColumn tableName="jhi_user">
-            <column name="<%= tenantNameLowerCase %>_id" type="bigint"/>
+            <column name="<%= tenant.entityLowerCase %>_id" type="bigint"/>
         </addColumn>
 
-        <addForeignKeyConstraint baseColumnNames="<%= tenantNameLowerCase %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= tenant.entityLowerCase %>_id"
                                  baseTableName="jhi_user"
-                                 constraintName="fk_jhi_user_<%= tenantNameLowerCase %>_id"
+                                 constraintName="fk_jhi_user_<%= tenant.entityLowerCase %>_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= tenantNameLowerCase %>"/>
+                                 referencedTableName="<%= tenant.entityLowerCase %>"/>
     </changeSet>
 </databaseChangeLog>

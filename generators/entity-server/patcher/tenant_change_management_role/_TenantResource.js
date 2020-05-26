@@ -1,10 +1,10 @@
-const file = context => `${context.constants.SERVER_MAIN_SRC_DIR}${context.storage.packageFolder}/web/rest/${context.tenantNameUpperFirst}Resource.java`;
+const file = context => `${context.constants.SERVER_MAIN_SRC_DIR}${context.storage.packageFolder}/web/rest/${context.tenant.entityClass}Resource.java`;
 
 const tmpls = [
   {
     condition: context => context.isTenant,
     type: 'rewriteFile',
-    target: context => `public class ${context.tenantNameUpperFirst}Resource {`,
+    target: context => `public class ${context.tenant.entityClass}Resource {`,
     tmpl: context => '@PreAuthorize("hasRole(\\"" + AuthoritiesConstants.ADMIN + "\\")")'
   },
   {

@@ -26,7 +26,7 @@ module.exports = {
         debug(`addEntityToTenantAspect ${tenantAwareEntity}`);
         const errorMessage = `${chalk.yellow('Reference to ') + tenantAwareEntity} ${chalk.yellow('not added.\n')}`;
         // eslint-disable-next-line prettier/prettier
-            const tenantAspectPath = `${generator.constants.SERVER_MAIN_SRC_DIR}${packageFolder}/aop/${generator.tenantNameLowerFirst}/${generator.tenantNameUpperFirst}Aspect.java`;
+            const tenantAspectPath = `${generator.constants.SERVER_MAIN_SRC_DIR}${packageFolder}/aop/${generator.tenant.entityInstance}/${generator.tenant.entityClass}Aspect.java`;
         const content = `+ "|| execution(* ${packageName}.service.${tenantAwareEntity}Service.*(..))"`;
         const rewriteFileModel = this.generateFileModel(tenantAspectPath, 'jhipster-needle-add-entity-to-tenant-aspect', content);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
@@ -57,6 +57,11 @@ module.exports = {
 
       get writing() {
         return {
+          tenant() {
+            const tenantName = this.blueprintConfig.get('tenantName');
+            this.tenant = this.jhipsterFs.getEntity(tenantName);
+          },
+
           /* Tenant variables */
           setupTenantVariables,
 
@@ -66,8 +71,8 @@ module.exports = {
             if (this.tenantAware) {
               tenantisedNeedle.addEntityToTenantAspect(this, this.name);
             } else if (this.isTenant) {
-              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenantNameUpperFirst}_constraints`);
-              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenantNameLowerCase}_user_data`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenant.entityClass}_constraints`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
 
               debug('Adding already tenantised entities');
               if (this.configOptions.tenantAwareEntities) {
@@ -89,12 +94,9 @@ module.exports = {
       }
 
       _templateData() {
-        const tenantName = this.blueprintConfig.get('tenantName');
-        const tenant = this.jhipsterFs.getEntity(tenantName);
         return {
-          ...setupTenantVariables.call(this),
           entity: this.entity,
-          tenant
+          tenant: this.tenant
         };
       }
     };

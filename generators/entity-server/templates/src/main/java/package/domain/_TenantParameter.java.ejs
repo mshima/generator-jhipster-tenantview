@@ -8,16 +8,16 @@ import java.io.Serializable;
 
 @Component
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class <%= tenantNameUpperFirst %>Parameter implements Serializable
+public class <%= tenant.entityClass %>Parameter implements Serializable
 {
 
-    private <%= tenantNameUpperFirst %> <%= tenantNameLowerFirst %>;
+    private <%= tenant.entityClass %> <%= tenant.entityInstance %>;
 
-    public <%= tenantNameUpperFirst %> get<%= tenantNameUpperFirst %>() {
-        return <%= tenantNameLowerFirst %>;
+    public <%= tenant.entityClass %> get<%= tenant.entityClass %>() {
+        return <%= tenant.entityInstance %>;
     }
 
-    public void set<%= tenantNameUpperFirst %>(<%= tenantNameUpperFirst %> <%= tenantNameLowerFirst %>) {
-        this.<%= tenantNameLowerFirst %> = <%= tenantNameLowerFirst %>;
+    public void set<%= tenant.entityClass %>(<%= tenant.entityClass %> <%= tenant.entityInstance %>) {
+        this.<%= tenant.entityInstance %> = <%= tenant.entityInstance %>;
     }
 }
