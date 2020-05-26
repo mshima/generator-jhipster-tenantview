@@ -153,16 +153,31 @@ module.exports = {
             if (!this.isTenant) return;
 
             const context = this.context;
-            this._copy(context, 'entityFolderName', 'tenantFolderName');
-            this._copy(context, 'entityUrl', 'tenantUrl');
-            this._copy(context, 'entityModelFileName', 'tenantFolderName');
-            this._copy(context, 'entityTranslationKey', 'tenantTranslationKey');
-            this._copy(context, 'entityTranslationKeyMenu', 'tenantMenuTranslationKey');
-            this._copyValue(context, 'i18nKeyPrefix', `${context.angularAppName}.${context.entityTranslationKey}`);
 
-            this._assert(context, 'entityFileName', 'tenantFileName');
-            this._assert(context, 'entityServiceFileName', 'tenantFileName');
-            this._assert(context, 'entityStateName', 'tenantStateName');
+            const copy = (dest, source) => {
+              if (context[dest] === context[source]) {
+                this.log(`Not needed for ${this.jhipsterInfo.jhipsterVersion}, ${source} => ${dest}`);
+              }
+
+              context[dest] = context[source];
+            };
+
+            const copyValue = (dest, value) => {
+              if (context[dest] === value) {
+                this.log(`Copy value not needed for ${this.jhipsterInfo.jhipsterVersion}, ${dest}`);
+              }
+
+              context[dest] = value;
+            };
+
+            copy('entityUrl', 'tenantUrl');
+            copy('entityTranslationKey', 'tenantTranslationKey');
+            copy('entityTranslationKeyMenu', 'tenantMenuTranslationKey');
+            copyValue('i18nKeyPrefix', `${context.angularAppName}.${context.entityTranslationKey}`);
+
+            assert.equal(context.entityFileName, this.tenant.entityFileName);
+            assert.equal(context.entityServiceFileName, this.tenant.entityFileName);
+            assert.equal(context.entityStateName, this.tenant.entityStateName);
           }
         };
       }
@@ -185,42 +200,6 @@ module.exports = {
 
       _getTenantRelationship() {
         return mtUtils.getArrayItemWithFieldValue(this.context.relationships, 'otherEntityName', this.context.tenantName);
-      }
-
-      _copy(context, dest, source) {
-        if (context[dest] === context[source]) {
-          this.log(`Not needed for ${this.jhipsterInfo.jhipsterVersion}, ${source} => ${dest}`);
-        }
-
-        context[dest] = context[source];
-      }
-
-      _copyValue(context, dest, value) {
-        if (context[dest] === value) {
-          this.log(`Copy value not needed for ${this.jhipsterInfo.jhipsterVersion}, ${dest}`);
-        }
-
-        context[dest] = value;
-      }
-
-      _assert(context, dest, source) {
-        assert.equal(context[dest], context[source], dest);
-      }
-
-      _updateEntityConfig(file, key, value) {
-        try {
-          const entityJson = this.fs.readJSON(file);
-          if (value === undefined && typeof key === 'object') {
-            Object.assign(entityJson, key);
-          } else {
-            entityJson[key] = value;
-          }
-
-          this.fs.writeJSON(file, entityJson, null, 4);
-        } catch (error) {
-          this.log(chalk.red('The JHipster entity configuration file could not be read!') + error);
-          this.debug('Error:', error);
-        }
       }
     };
   }
