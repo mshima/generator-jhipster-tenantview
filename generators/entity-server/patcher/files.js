@@ -3,7 +3,7 @@ module.exports = {
     return {
       tenant_base: [
         {
-          condition: gen => gen.tenantAware,
+          condition: gen => gen.entity.definitions.tenantAware,
           path: gen.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {

@@ -3,7 +3,7 @@ const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/entities/${context.en
 const tmpls = [
   {
     // Hide if currentAccount has a tenant
-    condition: context => context.tenantAware,
+    condition: context => context.entity.definitions.tenantAware,
     type: 'replaceContent',
     regex: true,
     target: context => `<th(.*)><span(.*)>${context.tenant.entityClass}</span>`,
@@ -11,7 +11,7 @@ const tmpls = [
   },
   {
     // Hide if currentAccount has a tenant
-    condition: context => context.tenantAware,
+    condition: context => context.entity.definitions.tenantAware,
     type: 'replaceContent',
     regex: true,
     target: context => `<td>\n(\\s*)(<div \\*ngIf="${context.entityInstance}.${context.tenant.entityInstance}">)`,

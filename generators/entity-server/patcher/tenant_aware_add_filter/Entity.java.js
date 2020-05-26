@@ -4,7 +4,7 @@ const file = context =>
 
 const tmpls = [
   {
-    condition: context => context.tenantAware,
+    condition: context => context.entity.definitions.tenantAware,
     type: 'rewriteFile',
     target: 'import javax.persistence.*;',
     tmpl: generator => `import org.hibernate.annotations.Filter;
@@ -13,7 +13,7 @@ import org.hibernate.annotations.ParamDef;
 `
   },
   {
-    condition: context => context.tenantAware,
+    condition: context => context.entity.definitions.tenantAware,
     type: 'rewriteFile',
     target: context => `public class ${context.entity.entityClass}`,
     tmpl: context => `@FilterDef(name = "TENANT_FILTER", parameters = {@ParamDef(name = "${context.tenant.entityInstance}Id", type = "long")})

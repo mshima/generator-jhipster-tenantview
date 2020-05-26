@@ -1,7 +1,7 @@
 const file = context =>
   `${context.CLIENT_MAIN_SRC_DIR}app/entities/${context.entityFolderName}/${context.entityFileName}-update.component.html`;
 
-const condition = context => context.tenantAware;
+const condition = context => context.entity.definitions.tenantAware;
 
 const tmpls = [
   {
