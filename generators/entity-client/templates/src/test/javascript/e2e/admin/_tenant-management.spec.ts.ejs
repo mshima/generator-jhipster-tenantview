@@ -19,7 +19,7 @@
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
-import { <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>ComponentsPage, <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>UpdatePage } from './<%= tenantFileName %>.page-object';
+import { <%= tenant.entityClass %><%= angularTenantComponentSuffix %>ComponentsPage, <%= tenant.entityClass %><%= angularTenantComponentSuffix %>UpdatePage } from './<%= tenantFileName %>.page-object';
 
 const expect = chai.expect;
 
@@ -27,8 +27,8 @@ describe('<%= tenantFileName %> e2e test', () => {
 
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
-    let <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage: <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>UpdatePage;
-    let <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage: <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>ComponentsPage;
+    let <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage: <%= tenant.entityClass %><%= angularTenantComponentSuffix %>UpdatePage;
+    let <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage: <%= tenant.entityClass %><%= angularTenantComponentSuffix %>ComponentsPage;
 
     before(async () => {
         await browser.get('/');
@@ -38,31 +38,31 @@ describe('<%= tenantFileName %> e2e test', () => {
         await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
     });
 
-    it('should load <%= tenantNameLowerFirst %> management', async () => {
+    it('should load <%= tenant.entityInstance %> management', async () => {
         await navBarPage.clickOnAdminMenu();
         await navBarPage.clickOnAdmin('<%= tenantFileName %>');
-        <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage = new <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>ComponentsPage();
-        await browser.wait(ec.visibilityOf(<%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.title), 5000);
-        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.getTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.title');
+        <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage = new <%= tenant.entityClass %><%= angularTenantComponentSuffix %>ComponentsPage();
+        await browser.wait(ec.visibilityOf(<%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.title), 5000);
+        expect(await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.getTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.title');
     });
 
-    it('should load create <%= tenantNameLowerFirst %> management page', async () => {
-        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
-        <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage = new <%= tenantNameUpperFirst %><%= angularTenantComponentSuffix %>UpdatePage();
-        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.getPageTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel');
+    it('should load create <%= tenant.entityInstance %> management page', async () => {
+        await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
+        <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage = new <%= tenant.entityClass %><%= angularTenantComponentSuffix %>UpdatePage();
+        expect(await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.getPageTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel');
         expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenantStateName %>/new'));
-        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.cancel();
+        await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.cancel();
     });
 
-    it('should create and save <%= tenantNameLowerFirst %> management', async () => {
-        const nbButtonsBeforeCreate = await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons();
+    it('should create and save <%= tenant.entityInstance %> management', async () => {
+        const nbButtonsBeforeCreate = await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons();
 
-        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
-        await promise.all([<%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.setNameInput('new <%= tenantNameLowerFirst %>')]);
-        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.getNameInput()).to.eq('new <%= tenantNameLowerFirst %>', 'Expected Name value to be equals to name');
-        await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>UpdatePage.save();
+        await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
+        await promise.all([<%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.setNameInput('new <%= tenant.entityInstance %>')]);
+        expect(await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.getNameInput()).to.eq('new <%= tenant.entityInstance %>', 'Expected Name value to be equals to name');
+        await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.save();
 
-        expect(await <%= tenantNameLowerFirst %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+        expect(await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
         expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenantStateName %>'));
     });
 

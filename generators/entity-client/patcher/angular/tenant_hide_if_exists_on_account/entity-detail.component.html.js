@@ -9,8 +9,8 @@ const tmpls = [
     type: 'replaceContent',
     condition: context => context.tenantAware,
     regex: true,
-    target: context => `<dt>(<span(.*)>${context.tenantNameUpperFirst}</span></dt>(\\s*)<dd>)`,
-    tmpl: context => `<dt *ngIf="${context.entityInstance}.${context.tenantNameLowerFirst}">$1`
+    target: context => `<dt>(<span(.*)>${context.tenant.entityClass}</span></dt>(\\s*)<dd>)`,
+    tmpl: context => `<dt *ngIf="${context.entityInstance}.${context.tenant.entityInstance}">$1`
   }
 ];
 

@@ -36,8 +36,8 @@ $3`
     type: 'rewriteFile',
     regex: true,
     target: 'this.updateForm',
-    tmpl: context => `      if (this.currentAccount.${context.tenantNameLowerFirst}) {
-        ${context.entityInstance}.${context.tenantNameLowerFirst} = this.currentAccount.${context.tenantNameLowerFirst};
+    tmpl: context => `      if (this.currentAccount.${context.tenant.entityInstance}) {
+        ${context.entityInstance}.${context.tenant.entityInstance} = this.currentAccount.${context.tenant.entityInstance};
       }`
   }
 ];
