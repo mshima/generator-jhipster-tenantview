@@ -27,7 +27,7 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
     /* jhipster-needle-add-<%= tenant.entityLowerCase %>-admin-module - JHipster will add <%= tenant.entityClass %> admin modules here */
     RouterModule.forChild(
       [
-        <%_ if (!skipUserManagement) { _%>
+        <%_ if (!storage.skipUserManagement) { _%>
         {
           path: 'user-management',
           loadChildren: () => import('app/admin/user-management/user-management.module').then(m => m.UserManagementModule)

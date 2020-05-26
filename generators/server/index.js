@@ -3,7 +3,6 @@ const debug = require('debug')('tenantview:server');
 const path = require('path');
 const customizer = require('generator-jhipster-customizer');
 
-const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 const generator = 'server';
 
 module.exports = {

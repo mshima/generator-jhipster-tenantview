@@ -101,8 +101,6 @@ function setupTenantVariables() {
   context.angularTenantComponentSuffix = '';
   context.angularTenantSelectorSuffix = '';
 
-  // Relative to app root
-  context.tenantModelPath = 'shared/admin';
   Object.assign(dest, context);
   return context;
 }

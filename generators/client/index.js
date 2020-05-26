@@ -3,7 +3,6 @@ const debug = require('debug')('tenantview:entity');
 const path = require('path');
 const customizer = require('generator-jhipster-customizer');
 
-const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
 const generator = 'client';
 
 module.exports = {
@@ -46,11 +45,9 @@ module.exports = {
       }
 
       _templateData() {
-        const {angularXAppName, skipUserManagement} = this.options.jhipsterContext;
+        const angularXAppName = this.getAngularXAppName();
         return {
-          ...this.storage,
           angularXAppName,
-          skipUserManagement,
           tenant: this.tenant
         };
       }
