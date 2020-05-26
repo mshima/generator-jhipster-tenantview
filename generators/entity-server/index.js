@@ -21,12 +21,13 @@ module.exports = {
 
     const TenantisedNeedle = class extends needleServer {
       addEntityToTenantAspect(generator, tenantAwareEntity) {
+        const packageFolder = generator.config.get('packageFolder');
         const packageName = generator.config.get('packageName');
         debug(`addEntityToTenantAspect ${tenantAwareEntity}`);
         const errorMessage = `${chalk.yellow('Reference to ') + tenantAwareEntity} ${chalk.yellow('not added.\n')}`;
         // eslint-disable-next-line prettier/prettier
             const tenantAspectPath = `${generator.constants.SERVER_MAIN_SRC_DIR}${packageFolder}/aop/${generator.tenantNameLowerFirst}/${generator.tenantNameUpperFirst}Aspect.java`;
-        const content = `+ "|| execution(* ${generator.constants.packageName}.service.${tenantAwareEntity}Service.*(..))"`;
+        const content = `+ "|| execution(* ${packageName}.service.${tenantAwareEntity}Service.*(..))"`;
         const rewriteFileModel = this.generateFileModel(tenantAspectPath, 'jhipster-needle-add-entity-to-tenant-aspect', content);
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
       }
@@ -50,6 +51,8 @@ module.exports = {
 
         this.entityConfig = this.createStorage(`.jhipster/${entityName}.json`);
         this.entityConfig.set('name', entityName);
+
+        this.entity = this.jhipsterFs.getEntity(entityName);
       }
 
       get writing() {
@@ -86,16 +89,15 @@ module.exports = {
       }
 
       _templateData() {
-        const entity = new JHipsterEntity(this.entityConfig.getAll(), this);
-        console.log(this.entityConfig);
-        console.log(this.entityConfig.getAll());
-        const {entityClass, entityInstance, entityInstancePlural} = entity;
-        console.log({entityClass, entityInstance, entityInstancePlural});
+        const tenantName = this.blueprintConfig.get('tenantName');
+        const tenant = this.jhipsterFs.getEntity(tenantName);
+        const {entityClass, entityInstance, entityInstancePlural} = this.entity;
         return {
           ...this.config.getAll(),
           ...setupTenantVariables.call(this),
           ...this.entityConfig.getAll(),
-          entity,
+          entity: this.entity,
+          tenant,
           entityClass,
           entityInstance,
           entityInstancePlural
