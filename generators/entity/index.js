@@ -19,11 +19,16 @@ module.exports = {
         debug(`Initializing ${generator} ${args[0]}`);
         super(args, options);
 
-        // Current subgen
-        this.isTenant = this._.lowerFirst(args[0]) === this._.lowerFirst(this.options.tenantName || this.blueprintConfig.get('tenantName'));
+        this.entityName = this._.upperFirst(args[0]);
 
-        // Pass to entity-* subgen
-        this.context.isTenant = this.isTenant;
+        this.entityConfig = this.jhipsterFs.getEntityConfig(this.entityName);
+        this.entityConfig.set('name', this.entityName);
+
+        this.entity = this.jhipsterFs.getEntity(this.entityName);
+
+        const tenantName = this.blueprintConfig.get('tenantName');
+        this.tenant = this.jhipsterFs.getEntity(tenantName);
+        this.isTenant = this.entityName === tenantName;
       }
 
       get initializing() {
@@ -45,40 +50,32 @@ module.exports = {
             const context = this.context;
 
             // TenantAware is already defined
-            if (context.fileData !== undefined && context.fileData.tenantAware !== undefined) {
+            this.tenantAwareDefined = this.entity.definitions.tenantAware !== undefined;
+            if (this.tenantAwareDefined) {
               return;
             }
 
-            let defaultValue = false;
-
             if (this.options.defaultTenantAware !== undefined) {
-              this.newTenantAware = this.options.defaultTenantAware;
-            } else if (this.options.relationTenantAware) {
-              // Look for tenantAware entities
-              // eslint-disable-next-line prettier/prettier
-                    this.newTenantAware = this._getTenantRelationship() !== undefined;
-            } else {
-              // eslint-disable-next-line prettier/prettier
-                    defaultValue = this._getTenantRelationship() !== undefined;
+              this.entity.definitions.tenantAware = this.options.defaultTenantAware;
+              return;
             }
 
-            const prompts = [
+            if (this.options.relationTenantAware) {
+              // Look for tenantAware entities
+              // eslint-disable-next-line prettier/prettier
+              this.entity.definitions.tenantAware = this._getTenantRelationship() !== undefined;
+              return;
+            }
+
+            return this.prompt(
               {
-                when: this.newTenantAware === undefined,
                 type: 'confirm',
                 name: 'tenantAware',
                 message: `Do you want to make ${context.name} tenant aware?`,
-                default: defaultValue
-              }
-            ];
-            const done = this.async();
-            this.prompt(prompts).then(props => {
-              if (!this.isTenant && props.tenantAware !== undefined) {
-                this.newTenantAware = props.tenantAware;
-              }
-
-              done();
-            });
+                default: this._getTenantRelationship() !== undefined
+              },
+              this.entityConfig
+            );
           }
         };
       }
@@ -87,40 +84,18 @@ module.exports = {
         return {
           configureTenant() {
             if (!this.isTenant) return;
-
-            // Initialize config to be saved to file.
-            this.storageData = this.storageData || {};
-            const context = this.context;
-
-            this._copy(context, 'entityModule', 'tenantModule');
-            this._copy(context, 'clientRootFolder', 'tenantClientRootFolder');
-
             // Force tenant to be serviceClass
-            context.service = this.storageData.service = 'serviceClass';
-
-            if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
-              this._updateEntityConfig(this.context.filename, this.storageData);
-            }
+            this.entityConfig.set('service', 'serviceClass');
           },
           configureTenantAware() {
             if (this.isTenant) return;
 
             // Initialize config to be saved to file.
-            this.storageData = this.storageData || {};
             const context = this.context;
 
-            // Pass to entity-* subgen
-            if (this.newTenantAware === undefined) {
-              context.tenantAware = context.fileData ? context.fileData.tenantAware : false;
-            } else {
-              context.tenantAware = this.storageData.tenantAware = this.newTenantAware;
-              // Save
-              this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
-            }
-
-            if (this.context.tenantAware) {
+            if (this.entity.definitions.tenantAware) {
               if (context.service !== 'serviceClass') {
-                context.service = this.storageData.service = 'serviceClass';
+                this.entity.definitions.service = 'serviceClass';
               }
 
               let otherEntityStateName = context.tenantStateName;
@@ -144,7 +119,7 @@ module.exports = {
               };
 
               const tenantRelationship = this._getTenantRelationship();
-              this.storageData.relationships = context.relationships;
+              this.entityConfig.set('relationships', context.relationships);
 
               // If tenant relationship already exists in the entity then set options
               if (!tenantRelationship) {
@@ -162,10 +137,6 @@ module.exports = {
 
                 this._.defaults(tenantRelationship, real);
               }
-            }
-
-            if (context.useConfigurationFile && context.updateEntity === 'regenerate') {
-              this._updateEntityConfig(this.context.filename, this.storageData);
             }
           },
 
@@ -192,24 +163,6 @@ module.exports = {
             this._assert(context, 'entityFileName', 'tenantFileName');
             this._assert(context, 'entityServiceFileName', 'tenantFileName');
             this._assert(context, 'entityStateName', 'tenantStateName');
-          },
-          postJson() {
-            if (this.isTenant) return;
-
-            // Super class creates a new file without tenantAware (6.1.2), so add tenantAware to it.
-            // Fixed for 6.3.1
-            if (this.isJhipsterVersionLessThan('6.3.1')) {
-              this.log(chalk.white(`Saving ${chalk.bold(this.options.name)} tenantAware`));
-              this._updateEntityConfig(this.context.filename, this.storageData);
-            }
-
-            if (!this.context.tenantAware) return;
-
-            if (this.configOptions.tenantAwareEntities === undefined) {
-              this.configOptions.tenantAwareEntities = [];
-            }
-
-            this.configOptions.tenantAwareEntities.push(this.context.entityClass);
           }
         };
       }
