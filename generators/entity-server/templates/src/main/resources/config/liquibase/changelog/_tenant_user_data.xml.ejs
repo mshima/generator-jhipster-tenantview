@@ -8,14 +8,14 @@
         Dev context uses faker-data so this will conflict with it.
         Apply to prod only.
     -->
-    <changeSet id="<%= changelogDate %>-2" author="jhipster" context="prod, test">
+    <changeSet id="<%= entity.changelogDate %>-2" author="jhipster" context="prod, test">
         <loadData file="config/liquibase/data/<%= tenantNameLowerCase %>.csv"
                   separator=";"
                   tableName="<%= tenantNameLowerCase %>">
         </loadData>
     </changeSet>
 
-    <changeSet id="<%= changelogDate %>-2.1" author="jhipster">
+    <changeSet id="<%= entity.changelogDate %>-2.1" author="jhipster">
         <loadData file="config/liquibase/data/<%= tenantNameLowerCase %>_user.csv"
                   separator=";"
                   tableName="jhi_user">

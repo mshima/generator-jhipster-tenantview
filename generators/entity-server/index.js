@@ -66,8 +66,8 @@ module.exports = {
             if (this.tenantAware) {
               tenantisedNeedle.addEntityToTenantAspect(this, this.name);
             } else if (this.isTenant) {
-              this.addConstraintsChangelogToLiquibase(`${this.changelogDate}-1__user_${this.tenantNameUpperFirst}_constraints`);
-              this.addConstraintsChangelogToLiquibase(`${this.changelogDate}-2__${this.tenantNameLowerCase}_user_data`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenantNameUpperFirst}_constraints`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenantNameLowerCase}_user_data`);
 
               debug('Adding already tenantised entities');
               if (this.configOptions.tenantAwareEntities) {
@@ -91,16 +91,10 @@ module.exports = {
       _templateData() {
         const tenantName = this.blueprintConfig.get('tenantName');
         const tenant = this.jhipsterFs.getEntity(tenantName);
-        const {entityClass, entityInstance, entityInstancePlural} = this.entity;
         return {
-          ...this.config.getAll(),
           ...setupTenantVariables.call(this),
-          ...this.entityConfig.getAll(),
           entity: this.entity,
-          tenant,
-          entityClass,
-          entityInstance,
-          entityInstancePlural
+          tenant
         };
       }
     };

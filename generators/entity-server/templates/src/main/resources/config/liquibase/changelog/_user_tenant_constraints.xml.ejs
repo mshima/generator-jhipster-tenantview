@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity <%= tenantNameLowerCase %>.
     -->
-    <changeSet id="<%= changelogDate %>-1" author="jhipster">
+    <changeSet id="<%= entity.changelogDate %>-1" author="jhipster">
         <addColumn tableName="jhi_user">
             <column name="<%= tenantNameLowerCase %>_id" type="bigint"/>
         </addColumn>

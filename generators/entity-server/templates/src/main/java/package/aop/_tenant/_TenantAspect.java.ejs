@@ -1,9 +1,9 @@
-package <%=packageName%>.aop.<%= tenantNameLowerFirst %>;
+package <%=storage.packageName%>.aop.<%= tenantNameLowerFirst %>;
 
-import <%=packageName%>.web.rest.errors.BadRequestAlertException;
-import <%=packageName%>.security.SecurityUtils;
-import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.domain.User;
+import <%=storage.packageName%>.web.rest.errors.BadRequestAlertException;
+import <%=storage.packageName%>.security.SecurityUtils;
+import <%=storage.packageName%>.repository.UserRepository;
+import <%=storage.packageName%>.domain.User;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -38,7 +38,7 @@ public class <%= tenantNameUpperFirst %>Aspect {
      * Filter users based on which <%= tenantNameLowerCase %> the user is associated with.
      * Skip filter if user has no <%= tenantNameLowerCase %>
      */
-    @Before("execution(* <%= packageName %>.service.UserService.*(..)) "
+    @Before("execution(* <%= storage.packageName %>.service.UserService.*(..)) "
             // jhipster-needle-add-entity-to-tenant-aspect - Multitenancy will roles here
         )
     public void beforeExecution() throws Throwable {
