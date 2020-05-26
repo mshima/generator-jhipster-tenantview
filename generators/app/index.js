@@ -157,10 +157,9 @@ module.exports = {
       }
 
       _getDefaultDefinition() {
-        const vars = mtUtils.setupTenantVariables.call(this);
         const tenantModule = this.blueprintConfig.get('tenantModule');
         return {
-          name: vars.tenantNameCapitalized,
+          name: this.tenantName,
           fields: [
             {
               fieldName: 'name',
@@ -182,11 +181,10 @@ module.exports = {
               relationshipType: 'one-to-many',
               otherEntityField: 'login',
               ownerSide: true,
-              otherEntityRelationshipName: vars.tenantNameLowerFirst
+              otherEntityRelationshipName: _.lowerFirst(this.tenantName)
             }
           ],
           changelogDate: this.dateFormatForLiquibase(),
-          entityTableName: vars.tenantNameLowerCase,
           dto: 'no',
           service: 'serviceClass',
           clientRootFolder: `../${tenantModule}`,
