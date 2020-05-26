@@ -8,7 +8,7 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'tenant-admin/_tenant-admin-routing.module.ts',
-              renameTo: generator => `${generator.tenantNameLowerFirst}-admin/${generator.tenantNameLowerFirst}-admin-routing.module.ts`
+              renameTo: generator => `${generator.tenant.entityInstance}-admin/${generator.tenant.entityInstance}-admin-routing.module.ts`
             }
           ]
         }

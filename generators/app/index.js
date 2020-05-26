@@ -47,7 +47,10 @@ module.exports = {
             }
 
             const tenantModule = this.options.tenantModule || this.blueprintConfig.get('tenantModule') || 'admin';
-            this.blueprintConfig.set('tenantModule', _.lowerFirst(tenantModule));
+            this.blueprintConfig.set({
+              tenantModule: tenantModule,
+              tenantModelPath: `shared/${tenantModule}`
+            });
           }
         };
       }

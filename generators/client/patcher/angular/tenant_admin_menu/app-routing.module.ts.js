@@ -5,12 +5,12 @@ const tmpls = [
     type: 'rewriteFile',
     target: context => '...LAYOUT_ROUTES',
     tmpl: context => `        {
-          path: '${context.tenantNameLowerFirst}-admin',
+          path: '${context.tenant.entityInstance}-admin',
           data: {
-              authorities: ['ROLE_${context.tenantNameUpperCase}_ADMIN']
+              authorities: ['ROLE_${context.tenant.entityUpperCase}_ADMIN']
           },
           canActivate: [UserRouteAccessService],
-          loadChildren: () => import('./${context.tenantNameLowerFirst}-admin/${context.tenantNameLowerFirst}-admin-routing.module').then(m => m.${context.tenantNameUpperFirst}AdminRoutingModule)
+          loadChildren: () => import('./${context.tenant.entityInstance}-admin/${context.tenant.entityInstance}-admin-routing.module').then(m => m.${context.tenant.entityClass}AdminRoutingModule)
         },`
   }
 ];

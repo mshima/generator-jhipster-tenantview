@@ -10,7 +10,6 @@ module.exports = {
   createGenerator: env => {
     return class extends customizer.createJHipsterGenerator(generator, env, {
       improverPaths: path.resolve(__dirname, '../../improver'),
-      applyPatcher: true,
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
       constructor(args, options) {
@@ -23,18 +22,19 @@ module.exports = {
         });
 
         this.sbsBlueprint = true;
+
+        const tenantName = this.blueprintConfig.get('tenantName');
+        this.tenant = this.jhipsterFs.getEntity(tenantName);
       }
 
       get writing() {
         return {
-          setupTenantVariables,
-
           patchFiles() {
             this.addVendorSCSSStyle(
               `
 #home-menu-container {@extend .order-0;}
 #entity-menu-container {@extend .order-1;}
-#${this.tenantNameLowerCase}-admin-menu-container {@extend .order-3;}
+#${this.tenant.entityLowerCase}-admin-menu-container {@extend .order-3;}
 #admin-menu-container {@extend .order-10;}
 #languages-menu-container {@extend .order-11;}
 #account-menu-container {@extend .order-12;}
@@ -49,9 +49,9 @@ module.exports = {
         const {angularXAppName, skipUserManagement} = this.options.jhipsterContext;
         return {
           ...this.storage,
-          ...setupTenantVariables.call(this),
           angularXAppName,
-          skipUserManagement
+          skipUserManagement,
+          tenant: this.tenant
         };
       }
     };

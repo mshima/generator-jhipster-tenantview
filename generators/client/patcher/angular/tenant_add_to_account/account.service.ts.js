@@ -6,8 +6,8 @@ const tmpls = [
     type: 'rewriteFile',
     regex: true,
     target: context => 'getImageUrl(): string {',
-    tmpl: context => `get${context.tenantNameUpperFirst}(): String {
-    return this.isAuthenticated() ? this.userIdentity!.${context.tenantNameLowerFirst} : '';
+    tmpl: context => `get${context.tenant.entityClass}(): String {
+    return this.isAuthenticated() ? this.userIdentity!.${context.tenant.entityInstance} : '';
   }\n`
   }
 ];

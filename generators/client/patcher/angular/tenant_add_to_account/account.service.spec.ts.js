@@ -5,7 +5,7 @@ const tmpls = [
     type: 'replaceContent',
     target: /(\n(\s*)imageUrl: '')(,?)/,
     tmpl: context => `$1,
-$2${context.tenantNameLowerFirst}: ''$3`
+$2${context.tenant.entityInstance}: ''$3`
   }
 ];
 

@@ -5,13 +5,13 @@ const tmpls = [
     type: 'replaceContent',
     target: /(\n(\s*)imageUrl: '')(,?)/,
     tmpl: context => `$1,
-$2${context.tenantNameLowerFirst}: 'MockCompany'$3`
+$2${context.tenant.entityInstance}: 'MockCompany'$3`
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)const settingsFormValues = {)/,
     tmpl: context => `$1
-$2    ${context.tenantNameLowerFirst}: 'MockCompany',`
+$2    ${context.tenant.entityInstance}: 'MockCompany',`
   }
 ];
 

@@ -5,19 +5,19 @@ const tmpls = [
     type: 'replaceContent',
     target: /(\n(\s*)email: \[.*]])(,?)/,
     tmpl: context => `$1,
-$2${context.tenantNameLowerFirst}: [ undefined ]$3`
+$2${context.tenant.entityInstance}: [ undefined ]$3`
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)this.account.email = this.settingsForm.get\('email'\)!.value;)/,
     tmpl: context => `$1
-$2this.account.${context.tenantNameLowerFirst} = this.settingsForm.get('${context.tenantNameLowerFirst}')!.value;`
+$2this.account.${context.tenant.entityInstance} = this.settingsForm.get('${context.tenant.entityInstance}')!.value;`
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)email: account.email)(,?)/,
     tmpl: context => `$1,
-$2${context.tenantNameLowerFirst}: account.${context.tenantNameLowerFirst}$3`
+$2${context.tenant.entityInstance}: account.${context.tenant.entityInstance}$3`
   }
 ];
 

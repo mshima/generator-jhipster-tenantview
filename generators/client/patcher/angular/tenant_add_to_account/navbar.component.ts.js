@@ -4,8 +4,8 @@ const tmpls = [
   {
     type: 'rewriteFile',
     target: context => 'getImageUrl(): string {',
-    tmpl: context => `has${context.tenantNameUpperFirst}(): boolean {
-    return this.isAuthenticated() && this.accountService.get${context.tenantNameUpperFirst}() ? true : false;
+    tmpl: context => `has${context.tenant.entityClass}(): boolean {
+    return this.isAuthenticated() && this.accountService.get${context.tenant.entityClass}() ? true : false;
   }
 `
   }

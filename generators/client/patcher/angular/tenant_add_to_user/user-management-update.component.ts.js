@@ -13,8 +13,8 @@ import { HttpResponse } from '@angular/common/http';
     type: 'replaceContent',
     target: /(@Component\({)/,
     tmpl: context => `import { AccountService } from 'app/core/auth/account.service';
-import { I${context.tenantNameUpperFirst} } from '../../${context.tenantModelPath}/${context.tenantNameLowerFirst}.model';
-import { ${context.tenantNameUpperFirst}Service } from '../${context.tenantFolderName}/${context.tenantServiceFileName}.service';
+import { I${context.tenant.entityClass} } from '../../${context.blueprintStorage.tenantModelPath}/${context.tenant.entityInstance}.model';
+import { ${context.tenant.entityClass}Service } from '../${context.tenant.entityFolderName}/${context.tenant.entityFileName}.service';
 
 $1`
   },
@@ -23,14 +23,14 @@ $1`
     target: /(\n(\s*)isSaving = false;)/,
     tmpl: context => `$1
 $2currentAccount: any;
-$2${context.tenantNamePluralLowerFirst}: I${context.tenantNameUpperFirst}[] = [];
+$2${context.tenant.entityInstancePlural}: I${context.tenant.entityClass}[] = [];
 `
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)authorities: \[](,?))/,
     tmpl: context => `$1,
-$2${context.tenantNameLowerFirst}: []$3
+$2${context.tenant.entityInstance}: []$3
 `
   },
   {
@@ -38,7 +38,7 @@ $2${context.tenantNameLowerFirst}: []$3
     target: /(\n(\s*)private fb: FormBuilder)/,
     tmpl: context => `$1,
 $2private accountService: AccountService,
-$2private ${context.tenantNameLowerFirst}Service: ${context.tenantNameUpperFirst}Service
+$2private ${context.tenant.entityInstance}Service: ${context.tenant.entityClass}Service
 `
   },
   {
@@ -50,8 +50,8 @@ $2$3this.currentAccount = account;
 $3});
 
 $3if (this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
-$3    this.${context.tenantNameLowerFirst}Service.query().subscribe(
-$3        (res: HttpResponse<I${context.tenantNameUpperFirst}[]>) => this.${context.tenantNamePluralLowerFirst} = res.body || []
+$3    this.${context.tenant.entityInstance}Service.query().subscribe(
+$3        (res: HttpResponse<I${context.tenant.entityClass}[]>) => this.${context.tenant.entityInstancePlural} = res.body || []
 $3    );
 $3}
 
@@ -61,18 +61,18 @@ $3`
     type: 'replaceContent',
     target: /(\n(\s*)authorities: user.authorities)(,?)/,
     tmpl: context => `$1,
-$2${context.tenantNameLowerFirst}: user.${context.tenantNameLowerFirst}$3`
+$2${context.tenant.entityInstance}: user.${context.tenant.entityInstance}$3`
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)user.authorities = this.editForm.get\(\['authorities']\)!.value;)/,
     tmpl: context => `$1
-$2user.${context.tenantNameLowerFirst} = this.editForm.get(['${context.tenantNameLowerFirst}'])!.value;`
+$2user.${context.tenant.entityInstance} = this.editForm.get(['${context.tenant.entityInstance}'])!.value;`
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)private onSaveError\(\): void {(\s*))/,
-    tmpl: context => `$2track${context.tenantNameUpperFirst}ById(index: number, item: I${context.tenantNameUpperFirst}): any {
+    tmpl: context => `$2track${context.tenant.entityClass}ById(index: number, item: I${context.tenant.entityClass}): any {
 $3return item.id;
 $2}
 $1`

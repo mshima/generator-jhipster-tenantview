@@ -31,23 +31,23 @@ const tmpls = [
     type: 'rewriteFile',
     target: '- jhipster-needle-add-element-to-menu -',
     tmpl: context => {
-      const jhiTranslate = context.enableTranslation ? ` jhiTranslate="global.menu.${context.tenantNameLowerFirst}Admin.main"` : '';
+      const jhiTranslate = context.enableTranslation ? ` jhiTranslate="global.menu.${context.tenant.entityInstance}Admin.main"` : '';
       const jhiTranslate2 = context.enableTranslation ? ' jhiTranslate="global.menu.admin.userManagement"' : '';
-      return `<li *jhiHasAnyAuthority="'ROLE_${context.tenantNameUpperCase}_ADMIN'" ngbDropdown id="${context.tenantNameLowerCase}-admin-menu-container" class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="${context.tenantNameLowerFirst}-admin-menu">
+      return `<li *jhiHasAnyAuthority="'ROLE_${context.tenant.entityUpperCase}_ADMIN'" ngbDropdown id="${context.tenant.entityLowerCase}-admin-menu-container" class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="${context.tenant.entityInstance}-admin-menu">
                     <span>
                         <fa-icon icon="user-plus"></fa-icon>
-                        <span${jhiTranslate}>${context.tenantNameUpperFirst} Administration</span>
+                        <span${jhiTranslate}>${context.tenant.entityClass} Administration</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
                     <li>
-                        <a class="dropdown-item" routerLink="${context.tenantNameLowerFirst}-admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="${context.tenant.entityInstance}-admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="user" [fixedWidth]="true"></fa-icon>
                             <span${jhiTranslate2}>User management</span>
                         </a>
                     </li>
-                    <!-- jhipster-needle-add-element-to-${context.tenantNameLowerFirst}-admin-menu - JHipster will add entities to the ${context.tenantNameLowerFirst} admin menu here -->
+                    <!-- jhipster-needle-add-element-to-${context.tenant.entityInstance}-admin-menu - JHipster will add entities to the ${context.tenant.entityInstance} admin menu here -->
                 </ul>
             </li>
 `;
