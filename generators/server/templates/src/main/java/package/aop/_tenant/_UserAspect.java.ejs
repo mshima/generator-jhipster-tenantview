@@ -121,6 +121,7 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
      * Run method if User service getUserWithAuthorities is hit.
      * Adds filtering to prevent display of information from another tenant
      */
+    /*
     @Before(value = "execution(* <%=storage.packageName%>.service.UserService.getUserWithAuthorities(..)) && args(id, ..)")
     public void onGetUserWithAuthorities(JoinPoint joinPoint, Long id) throws Exception {
         Optional<String> currentLogin = SecurityUtils.getCurrentUserLogin();
@@ -137,6 +138,5 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
             }
         }
     }
-
-
+    */
 }
