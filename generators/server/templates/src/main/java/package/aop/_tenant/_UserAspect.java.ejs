@@ -1,10 +1,10 @@
-package <%=storage.packageName%>.aop.<%= tenantNameLowerFirst %>;
+package <%=storage.packageName%>.aop.<%= tenant.entityInstance %>;
 
 import <%=storage.packageName%>.security.SecurityUtils;
 import <%=storage.packageName%>.repository.UserRepository;
 import <%=storage.packageName%>.domain.User;
 import <%=storage.packageName%>.service.dto.UserDTO;
-import <%=storage.packageName%>.domain.<%= tenantNameUpperFirst %>Parameter;
+import <%=storage.packageName%>.domain.<%= tenant.entityClass %>Parameter;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,9 +30,9 @@ public class UserAspect {
 private UserRepository userRepository;
 
 @Autowired
-private <%= tenantNameUpperFirst %>Parameter <%= tenantNameLowerFirst %>Parameter;
+private <%= tenant.entityClass %>Parameter <%= tenant.entityInstance %>Parameter;
 
-private final String fieldName =  "<%= tenantNameSpinalCased %>Id";
+private final String fieldName =  "<%= tenant.entityNameSpinalCased %>Id";
 
 private final Logger log = LoggerFactory.getLogger(UserAspect.class);
 
@@ -47,11 +47,11 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
         if(login.isPresent()) {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
-            if (loggedInUser.get<%= tenantNameUpperFirst %>() != null) {
-                <%= tenantNameLowerFirst %>Parameter.set<%= tenantNameUpperFirst %>(loggedInUser.get<%= tenantNameUpperFirst %>());
+            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
+                <%= tenant.entityInstance %>Parameter.set<%= tenant.entityClass %>(loggedInUser.get<%= tenant.entityClass %>());
             }
             else{
-                <%= tenantNameLowerFirst %>Parameter.set<%= tenantNameUpperFirst %>(userDTO.get<%= tenantNameUpperFirst %>());
+                <%= tenant.entityInstance %>Parameter.set<%= tenant.entityClass %>(userDTO.get<%= tenant.entityClass %>());
             }
         }
     }
@@ -70,16 +70,16 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
             User user = userRepository.findById(userDTO.getId()).get();
 
-            if (loggedInUser.get<%= tenantNameUpperFirst %>() != null)
+            if (loggedInUser.get<%= tenant.entityClass %>() != null)
             {
-                user.set<%= tenantNameUpperFirst %>(loggedInUser.get<%= tenantNameUpperFirst %>());
+                user.set<%= tenant.entityClass %>(loggedInUser.get<%= tenant.entityClass %>());
             }
             else
             {
-                user.set<%= tenantNameUpperFirst %>(userDTO.get<%= tenantNameUpperFirst %>());
+                user.set<%= tenant.entityClass %>(userDTO.get<%= tenant.entityClass %>());
             }
 
-            log.debug("Changed <%= tenantNameUpperFirst %> for User: {}", user);
+            log.debug("Changed <%= tenant.entityClass %> for User: {}", user);
         }
     }
 
@@ -91,8 +91,8 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
     public void onSave(JoinPoint joinPoint, User user) {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
 
-        if(<%= tenantNameLowerFirst %>Parameter.get<%= tenantNameUpperFirst %>() != null) {
-            user.set<%= tenantNameUpperFirst %>(<%= tenantNameLowerFirst %>Parameter.get<%= tenantNameUpperFirst %>());
+        if(<%= tenant.entityInstance %>Parameter.get<%= tenant.entityClass %>() != null) {
+            user.set<%= tenant.entityClass %>(<%= tenant.entityInstance %>Parameter.get<%= tenant.entityClass %>());
         }
     }
 
@@ -107,10 +107,10 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
         if(currentLogin.isPresent()) {
             User loggedInUser = userRepository.findOneByLogin(currentLogin.get()).get();
 
-            if (loggedInUser.get<%= tenantNameUpperFirst %>() != null) {
+            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
                 User user = userRepository.findOneWithAuthoritiesByLogin(login).get();
 
-                if(!user.get<%= tenantNameUpperFirst %>().equals(loggedInUser.get<%= tenantNameUpperFirst %>())){
+                if(!user.get<%= tenant.entityClass %>().equals(loggedInUser.get<%= tenant.entityClass %>())){
                     throw new NoSuchElementException();
                 }
             }
@@ -128,10 +128,10 @@ private final Logger log = LoggerFactory.getLogger(UserAspect.class);
         if(currentLogin.isPresent()) {
             User loggedInUser = userRepository.findOneByLogin(currentLogin.get()).get();
 
-            if (loggedInUser.get<%= tenantNameUpperFirst %>() != null) {
+            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
                 User user = userRepository.findOneWithAuthoritiesById(id).get();
 
-                if(!user.get<%= tenantNameUpperFirst %>().equals(loggedInUser.get<%= tenantNameUpperFirst %>())){
+                if(!user.get<%= tenant.entityClass %>().equals(loggedInUser.get<%= tenant.entityClass %>())){
                     throw new NoSuchElementException();
                 }
             }

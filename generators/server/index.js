@@ -19,23 +19,15 @@ module.exports = {
 
         // Set side-by-side blueprint
         this.sbsBlueprint = true;
+
+        const tenantName = this.blueprintConfig.get('tenantName');
+        this.tenant = this.jhipsterFs.getEntity(tenantName);
       }
 
-      get writing() {
-        return {
-          /* Tenant variables */
-          setupTenantVariables,
-
-          writeAdditionalFile() {
-            this.packageFolder = this.config.get('packageFolder');
-            this.packageName = this.config.get('packageName');
-            // References to the various directories we'll be copying files to
-          }
-        };
-      }
+      emptyFun() {}
 
       _templateData() {
-        return {...setupTenantVariables.call(this)};
+        return {tenant: this.tenant};
       }
     };
   }

@@ -4,7 +4,7 @@ const tmpls = [
   {
     type: 'rewriteFile',
     target: context => '    public static final String USER = "ROLE_USER";',
-    tmpl: context => `public static final String ${context.tenantNameUpperCase}_ADMIN = "ROLE_${context.tenantNameUpperCase}_ADMIN";
+    tmpl: context => `public static final String ${context.tenant.entityUpperCase}_ADMIN = "ROLE_${context.tenant.entityUpperCase}_ADMIN";
 `
   }
 ];

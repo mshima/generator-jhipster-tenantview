@@ -9,7 +9,7 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'package/aop/_tenant/_UserAspect.java',
-              renameTo: () => `${gen.storage.packageFolder}/aop/${gen.tenantNameLowerFirst}/UserAspect.java`
+              renameTo: () => `${gen.storage.packageFolder}/aop/${gen.tenant.entityInstance}/UserAspect.java`
             }
           ]
         }

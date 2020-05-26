@@ -7,12 +7,12 @@ const tmpls = [
     regex: true,
     target: gen => `(import ${gen.storage.packageName}\\.domain\\.User;)`,
     tmpl: gen => `$1
-import ${gen.storage.packageName}.domain.${gen.tenantNameUpperFirst};`
+import ${gen.storage.packageName}.domain.${gen.tenant.entityClass};`
   },
   {
     type: 'rewriteFile',
     target: 'public UserDTO() {',
-    tmpl: gen => `private ${gen.tenantNameUpperFirst} ${gen.tenantNameLowerFirst};
+    tmpl: gen => `private ${gen.tenant.entityClass} ${gen.tenant.entityInstance};
 `
   },
   {
@@ -22,7 +22,7 @@ import ${gen.storage.packageName}.domain.${gen.tenantNameUpperFirst};`
 (.*)\\.map\\(Authority::getName\\)
 (.*)collect\\(Collectors.toSet\\(\\)\\);)`,
     tmpl: context => `$1
-$2this.${context.tenantNameLowerFirst} = user.get${context.tenantNameUpperFirst}();`
+$2this.${context.tenant.entityInstance} = user.get${context.tenant.entityClass}();`
   },
   {
     type: 'replaceContent',
@@ -31,12 +31,12 @@ $2this.${context.tenantNameLowerFirst} = user.get${context.tenantNameUpperFirst}
 (.*)\\})`,
     tmpl: context => `$1
 
-$3public ${context.tenantNameUpperFirst} get${context.tenantNameUpperFirst}() {
-$2return ${context.tenantNameLowerFirst};
+$3public ${context.tenant.entityClass} get${context.tenant.entityClass}() {
+$2return ${context.tenant.entityInstance};
 $3}
 
-$3public void set${context.tenantNameUpperFirst}(${context.tenantNameUpperFirst} ${context.tenantNameLowerFirst}) {
-$2this.${context.tenantNameLowerFirst} = ${context.tenantNameLowerFirst};
+$3public void set${context.tenant.entityClass}(${context.tenant.entityClass} ${context.tenant.entityInstance}) {
+$2this.${context.tenant.entityInstance} = ${context.tenant.entityInstance};
 $3}`
   },
   {
@@ -44,7 +44,7 @@ $3}`
     regex: true,
     target: context => '((.*)", authorities=" \\+ authorities \\+)',
     tmpl: context => `$1
-$2", ${context.tenantNameLowerFirst}='" + ${context.tenantNameLowerFirst} + '\\'' +`
+$2", ${context.tenant.entityInstance}='" + ${context.tenant.entityInstance} + '\\'' +`
   }
 ];
 

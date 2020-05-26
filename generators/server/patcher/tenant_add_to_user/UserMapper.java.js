@@ -5,7 +5,7 @@ const tmpls = [
   {
     type: 'rewriteFile',
     target: context => '            return user;',
-    tmpl: context => `user.set${context.tenantNameUpperFirst}(userDTO.get${context.tenantNameUpperFirst}());`
+    tmpl: context => `user.set${context.tenant.entityClass}(userDTO.get${context.tenant.entityClass}());`
   }
 ];
 
