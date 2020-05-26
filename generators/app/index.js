@@ -48,9 +48,6 @@ module.exports = {
 
             const tenantModule = this.options.tenantModule || this.blueprintConfig.get('tenantModule') || 'admin';
             this.blueprintConfig.set('tenantModule', _.lowerFirst(tenantModule));
-
-            // This will be used by entity-server to crate "@Before" annotation in TenantAspect
-            this.configOptions.tenantAwareEntities = [];
           }
         };
       }
