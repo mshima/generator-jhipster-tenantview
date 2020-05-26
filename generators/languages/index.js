@@ -10,7 +10,6 @@ module.exports = {
   createGenerator: env => {
     return class extends customizer.createJHipsterGenerator(generator, env, {
       improverPaths: path.resolve(__dirname, '../../improver'),
-      applyPatcher: true,
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
       constructor(args, options) {
@@ -19,17 +18,13 @@ module.exports = {
 
         // Set side-by-side blueprint
         this.sbsBlueprint = true;
+
+        const tenantName = this.blueprintConfig.get('tenantName');
+        this.tenant = this.jhipsterFs.getEntity(tenantName);
       }
 
       get initializing() {
         return super._initializing();
-      }
-
-      get writing() {
-        return {
-          /* Tenant variables */
-          setupTenantVariables
-        };
       }
     };
   }

@@ -28,7 +28,6 @@ module.exports = {
 
     return class extends customizer.createJHipsterGenerator(generator, env, {
       improverPaths: path.resolve(__dirname, '../../improver'),
-      applyPatcher: true,
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
       constructor(args, options) {
@@ -64,19 +63,19 @@ module.exports = {
               this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
 
               debug('Adding already tenantised entities');
-              if (this.configOptions.tenantAwareEntities) {
                 this.queueMethod(
                   function () {
                     // Run after patcher
-                    this.configOptions.tenantAwareEntities.forEach(tenantAwareEntity => {
-                      debug(`Adding entity ${tenantAwareEntity}`);
-                      tenantisedNeedle.addEntityToTenantAspect(this, tenantAwareEntity);
+                    this.getExistingEntities().forEach(entity => {
+                      if (entity.definition.tenantAware) {
+                        debug(`Adding entity ${entity.name}`);
+                        tenantisedNeedle.addEntityToTenantAspect(this, entity.name);
+                      }
                     });
                   },
                   'tenantisedNeedle',
                   'writing'
                 );
-              }
             }
           }
         };

@@ -5,7 +5,7 @@ const tmpls = [
     type: 'replaceContent',
     target: /(\n(\s*)"profiles": "([\w\s]*)",)/,
     tmpl: context => `$1
-$2"${context.tenantNameLowerFirst}": "${context.tenantNameUpperFirst}",`
+$2"${context.tenant.entityInstance}": "${context.tenant.entityClass}",`
   }
 ];
 
