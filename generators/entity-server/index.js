@@ -63,19 +63,19 @@ module.exports = {
               this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
 
               debug('Adding already tenantised entities');
-                this.queueMethod(
-                  function () {
-                    // Run after patcher
-                    this.getExistingEntities().forEach(entity => {
-                      if (entity.definition.tenantAware) {
-                        debug(`Adding entity ${entity.name}`);
-                        tenantisedNeedle.addEntityToTenantAspect(this, entity.name);
-                      }
-                    });
-                  },
-                  'tenantisedNeedle',
-                  'writing'
-                );
+              this.queueMethod(
+                function () {
+                  // Run after patcher
+                  this.getExistingEntities().forEach(entity => {
+                    if (entity.definition.tenantAware) {
+                      debug(`Adding entity ${entity.name}`);
+                      tenantisedNeedle.addEntityToTenantAspect(this, entity.name);
+                    }
+                  });
+                },
+                'tenantisedNeedle',
+                'writing'
+              );
             }
           }
         };

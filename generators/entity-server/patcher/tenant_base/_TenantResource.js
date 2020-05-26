@@ -1,4 +1,5 @@
-const file = context => `${context.constants.SERVER_MAIN_SRC_DIR}${context.storage.packageFolder}/web/rest/${context.tenant.entityClass}Resource.java`;
+const file = context =>
+  `${context.constants.SERVER_MAIN_SRC_DIR}${context.storage.packageFolder}/web/rest/${context.tenant.entityClass}Resource.java`;
 
 const tmpls = [
   {

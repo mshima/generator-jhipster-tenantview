@@ -36,8 +36,7 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_user_tenant_constraints.xml',
-              renameTo: gen =>
-                `config/liquibase/changelog/${gen.entity.changelogDate}-1__user_${gen.tenant.entityClass}_constraints.xml`
+              renameTo: gen => `config/liquibase/changelog/${gen.entity.changelogDate}-1__user_${gen.tenant.entityClass}_constraints.xml`
             }
           ]
         }
