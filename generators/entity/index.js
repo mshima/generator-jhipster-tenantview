@@ -20,11 +20,6 @@ module.exports = {
 
         this.entityName = this._.upperFirst(args[0]);
 
-        this.entityConfig = this.jhipsterFs.getEntityConfig(this.entityName);
-        this.entityConfig.set('name', this.entityName);
-
-        this.entity = this.jhipsterFs.getEntity(this.entityName);
-
         const tenantName = this.blueprintConfig.get('tenantName');
         this.tenant = this.jhipsterFs.getEntity(tenantName);
         this.isTenant = this.entityName === tenantName;
@@ -42,6 +37,16 @@ module.exports = {
       get prompting() {
         return {
           ...super._prompting(),
+
+          init() {
+              // The generator jhipster:entity considers that if the file exists, the entity exists.
+              // So creating a config will create the file of the mem-fs that will cause jhipster:entity
+              // to consider that the entity already exists.
+              this.entityConfig = this.jhipsterFs.getEntityConfig(this.entityName);
+              this.entityConfig.set('name', this.entityName);
+
+              this.entity = this.jhipsterFs.getEntity(this.entityName);
+          },
 
           askTenantAware() {
             if (this.isTenant) return;
@@ -92,6 +97,7 @@ module.exports = {
             // Initialize config to be saved to file.
             const context = this.context;
 
+            this._debug('Tenant aware %o', this.entity.definitions.tenantAware);
             if (this.entity.definitions.tenantAware) {
               if (context.service !== 'serviceClass') {
                 this.entity.definitions.service = 'serviceClass';
@@ -102,7 +108,7 @@ module.exports = {
                 otherEntityStateName = `${context.tenantModule}/${context.tenantStateName}`;
               }
 
-              const real = {
+              const defaultTenantRel = {
                 relationshipName: context.tenantName,
                 otherEntityName: context.tenantNameLowerFirst,
                 relationshipType: 'many-to-one',
@@ -118,14 +124,13 @@ module.exports = {
               };
 
               const tenantRelationship = this._getTenantRelationship();
-              this.entityConfig.set('relationships', context.relationships);
 
               // If tenant relationship already exists in the entity then set options
               if (!tenantRelationship) {
                 this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
-                context.relationships.push(real);
+                context.relationships.push(defaultTenantRel);
               } else {
-                debug('Found relationship with tenant');
+                this._debug('Found relationship with tenant');
                 // Force values
                 tenantRelationship.ownerSide = true;
                 tenantRelationship.relationshipValidateRules = 'required';
@@ -134,9 +139,13 @@ module.exports = {
                 // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
                 // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
 
-                this._.defaults(tenantRelationship, real);
+                this._.defaults(tenantRelationship, defaultTenantRel);
               }
             }
+          },
+          configure() {
+            // The generator jhipster:entity always creates a new config files, so inject our values here.
+            this.storageData = this.entityConfig.getAll();
           },
 
           ...super._configuring(),
