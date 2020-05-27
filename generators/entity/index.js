@@ -51,8 +51,6 @@ module.exports = {
           askTenantAware() {
             if (this.isTenant) return;
 
-            const context = this.context;
-
             // TenantAware is already defined
             this.tenantAwareDefined = this.entity.definitions.tenantAware !== undefined;
             if (this.tenantAwareDefined) {
@@ -75,7 +73,7 @@ module.exports = {
               {
                 type: 'confirm',
                 name: 'tenantAware',
-                message: `Do you want to make ${context.name} tenant aware?`,
+                message: `Do you want to make ${this.entityName} tenant aware?`,
                 default: this._getTenantRelationship() !== undefined
               },
               this.entityConfig
@@ -87,9 +85,9 @@ module.exports = {
       get configuring() {
         return {
           configureTenant() {
-            if (!this.isTenant) return;
             // Force tenant to be serviceClass
             this.entityConfig.set('service', 'serviceClass');
+            this.context.service = 'serviceClass';
           },
           configureTenantAware() {
             if (this.isTenant) return;
@@ -99,28 +97,25 @@ module.exports = {
 
             this._debug('Tenant aware %o', this.entity.definitions.tenantAware);
             if (this.entity.definitions.tenantAware) {
-              if (context.service !== 'serviceClass') {
-                this.entity.definitions.service = 'serviceClass';
-              }
-
-              let otherEntityStateName = context.tenantStateName;
-              if (context.tenantModule) {
-                otherEntityStateName = `${context.tenantModule}/${context.tenantStateName}`;
+              const tenantModule = this.blueprintConfig.get('tenantModule');
+              let otherEntityStateName = this.tenant.entityStateName;
+              if (tenantModule) {
+                otherEntityStateName = `${tenantModule}/${otherEntityStateName}`;
               }
 
               const defaultTenantRel = {
-                relationshipName: context.tenantName,
-                otherEntityName: context.tenantNameLowerFirst,
+                relationshipName: this.tenant.entityInstance,
+                otherEntityName: this.tenant.entityInstance,
                 relationshipType: 'many-to-one',
                 otherEntityField: 'name',
                 relationshipValidateRules: 'required',
                 ownerSide: true,
-                clientRootFolder: context.tenantClientRootFolder,
+                clientRootFolder: this.tenant.clientRootFolder,
                 otherEntityStateName,
                 // Should be tenantFolderName, as of 6.4.1 this is wrong
-                otherEntityFolderName: context.tenantFileName,
-                otherEntityAngularName: context.tenantAngularName,
-                otherEntityRelationshipName: context.tenantNameLowerFirst
+                otherEntityFolderName: this.tenant.entityFileName,
+                otherEntityAngularName: this.tenant.entityAngularName,
+                otherEntityRelationshipName: this.tenant.entityInstance
               };
 
               const tenantRelationship = this._getTenantRelationship();
