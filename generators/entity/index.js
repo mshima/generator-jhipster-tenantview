@@ -27,10 +27,7 @@ module.exports = {
 
       get initializing() {
         return {
-          ...super._initializing(),
-
-          /* Tenant variables */
-          setupTenantVariables: mtUtils.setupTenantVariables
+          ...super._initializing()
         };
       }
 
@@ -39,13 +36,13 @@ module.exports = {
           ...super._prompting(),
 
           init() {
-              // The generator jhipster:entity considers that if the file exists, the entity exists.
-              // So creating a config will create the file of the mem-fs that will cause jhipster:entity
-              // to consider that the entity already exists.
-              this.entityConfig = this.jhipsterFs.getEntityConfig(this.entityName);
-              this.entityConfig.set('name', this.entityName);
+            // The generator jhipster:entity considers that if the file exists, the entity exists.
+            // So creating a config will create the file of the mem-fs that will cause jhipster:entity
+            // to consider that the entity already exists.
+            this.entityConfig = this.jhipsterFs.getEntityConfig(this.entityName);
+            this.entityConfig.set('name', this.entityName);
 
-              this.entity = this.jhipsterFs.getEntity(this.entityName);
+            this.entity = this.jhipsterFs.getEntity(this.entityName);
           },
 
           askTenantAware() {
@@ -157,14 +154,6 @@ module.exports = {
 
             const context = this.context;
 
-            const copy = (dest, source) => {
-              if (context[dest] === context[source]) {
-                this.log(`Not needed for ${this.jhipsterInfo.jhipsterVersion}, ${source} => ${dest}`);
-              }
-
-              context[dest] = context[source];
-            };
-
             const copyValue = (dest, value) => {
               if (context[dest] === value) {
                 this.log(`Copy value not needed for ${this.jhipsterInfo.jhipsterVersion}, ${dest}`);
@@ -173,9 +162,10 @@ module.exports = {
               context[dest] = value;
             };
 
-            copy('entityUrl', 'tenantUrl');
-            copy('entityTranslationKey', 'tenantTranslationKey');
-            copy('entityTranslationKeyMenu', 'tenantMenuTranslationKey');
+            const tenantModule = this.blueprintConfig.get('tenantModule');
+            copyValue('entityUrl', `${tenantModule}/${this.tenant.entityStateName}`);
+            copyValue('entityTranslationKey', this.tenant.entityInstance);
+            copyValue('entityTranslationKeyMenu', this.tenant.entityInstance);
             copyValue('i18nKeyPrefix', `${context.angularAppName}.${context.entityTranslationKey}`);
 
             assert.equal(context.entityFileName, this.tenant.entityFileName);
@@ -202,7 +192,7 @@ module.exports = {
       /* ======================================================================== */
 
       _getTenantRelationship() {
-        return mtUtils.getArrayItemWithFieldValue(this.context.relationships, 'otherEntityName', this.context.tenantName);
+        return mtUtils.getArrayItemWithFieldValue(this.context.relationships, 'otherEntityName', this.tenant.entityInstance);
       }
     };
   }

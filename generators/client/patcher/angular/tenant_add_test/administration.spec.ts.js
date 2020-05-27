@@ -7,8 +7,8 @@ const tmpls = [
     type: 'rewriteFile',
     target: context => "it('should load metrics', async () => {",
     tmpl: context => `it('should load ${context.tenant.entityInstance} management', async () => {
-        await navBarPage.clickOnAdmin('${context.tenantFileName}');
-        const expect1 = '${context.tenantNamePluralUpperFirst}';
+        await navBarPage.clickOnAdmin('${context.tenant.entityFileName}');
+        const expect1 = '${context.tenant.entityClassPlural}';
         const value1 = await element.all(by.css('h2#page-heading span')).first().getText();
         expect(value1).to.eq(expect1);
     });\n`
@@ -18,7 +18,7 @@ const tmpls = [
     type: 'rewriteFile',
     target: context => "it('should load metrics', async () => {",
     tmpl: context => `it('should load ${context.tenant.entityInstance} management', async () => {
-        await navBarPage.clickOnAdmin('${context.tenantFileName}');
+        await navBarPage.clickOnAdmin('${context.tenant.entityFileName}');
         const expect1 = '${context.angularAppName}.${context.tenantTranslationKey}.home.title';
         const value1 = await element.all(by.css('h2#page-heading span')).first().getAttribute('jhiTranslate');
         expect(value1).to.eq(expect1);

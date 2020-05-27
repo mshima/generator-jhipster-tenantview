@@ -50,7 +50,7 @@ describe('<%= tenantFileName %> e2e test', () => {
         await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.clickOnCreateButton();
         <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage = new <%= tenant.entityClass %><%= angularTenantComponentSuffix %>UpdatePage();
         expect(await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.getPageTitle()).to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel');
-        expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenantStateName %>/new'));
+        expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenant.entityStateName %>/new'));
         await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.cancel();
     });
 
@@ -63,7 +63,7 @@ describe('<%= tenantFileName %> e2e test', () => {
         await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>UpdatePage.save();
 
         expect(await <%= tenant.entityInstance %><%= angularTenantComponentSuffix %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-        expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenantStateName %>'));
+        expect(await browser.getCurrentUrl()).to.match(new RegExp('.*/<%= tenant.entityStateName %>'));
     });
 
     after(async () => {
