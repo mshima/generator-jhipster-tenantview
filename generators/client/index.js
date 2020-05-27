@@ -15,11 +15,6 @@ module.exports = {
         debug(`Initializing ${generator} blueprint`);
         super(args, options);
 
-        this.option('tenant-root-folder', {
-          desc: 'Set tenant root folder',
-          type: String
-        });
-
         this.sbsBlueprint = true;
 
         const tenantName = this.blueprintConfig.get('tenantName');

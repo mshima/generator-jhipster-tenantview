@@ -8,7 +8,6 @@ module.exports = {
   createGenerator: env => {
     return class extends customizer.createJHipsterGenerator(generator, env, {
       improverPaths: path.resolve(__dirname, '../../improver'),
-      applyPatcher: true,
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
       constructor(args, options) {
