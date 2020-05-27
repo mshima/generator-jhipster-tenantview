@@ -60,7 +60,6 @@ module.exports = {
           askTenantAware() {
             const prompts = [
               {
-                when: this.tenantName === undefined,
                 name: 'tenantName',
                 message: 'What is the alias given tenants in your application?',
                 default: 'Company',
