@@ -1,5 +1,5 @@
 # generator-jhipster-tenantview
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+[![NPM version][npm-image]][npm-url] ![Integration](https://github.com/mshima/generator-jhipster-tenantview/workflows/Integration/badge.svg) [![Dependency Status][daviddm-image]][daviddm-url]
 > JHipster blueprint, Tenancy customizations
 
 # Introduction
