@@ -1,100 +1,103 @@
-const jhipsterEnv = require('generator-jhipster-customizer');
-
-const jhipsterConstants = jhipsterEnv.constants;
-
 module.exports = {
-    files: {
-        tenant_base: [
+  files: gen => {
+    return {
+      tenant_base: [
+        {
+          condition: gen => gen.entity.definitions.tenantAware,
+          path: gen.constants.SERVER_MAIN_SRC_DIR,
+          templates: [
             {
-                condition: context => context.tenantAware,
-                path: jhipsterConstants.SERVER_MAIN_SRC_DIR,
-                templates: [
-                    {
-                        file: 'package/_EntityAspect.java',
-                        renameTo: context =>
-                            `${context.packageFolder}/aop/${context.tenantNameLowerFirst}/${context.entityClass}Aspect.java`
-                    }
-                ]
-            },
-            {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_SRC_DIR,
-                templates: [
-                    {
-                        file: 'package/domain/_TenantParameter.java',
-                        renameTo: context => `${context.packageFolder}/domain/${context.tenantNameUpperFirst}Parameter.java`
-                    },
-                    {
-                        file: 'package/aop/_tenant/_TenantAspect.java',
-                        renameTo: context =>
-                            `${context.packageFolder}/aop/${context.tenantNameLowerFirst}/${context.tenantNameUpperFirst}Aspect.java`
-                    }
-                ]
-            },
-            {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_RES_DIR,
-                templates: [
-                    {
-                        file: 'config/liquibase/changelog/_user_tenant_constraints.xml',
-                        renameTo: context =>
-                            `config/liquibase/changelog/${context.changelogDate}-1__user_${context.tenantNameUpperFirst}_constraints.xml`
-                    }
-                ]
+              method: 'patcherTemplate',
+              file: 'package/_EntityAspect.java',
+              renameTo: gen => `${gen.storage.packageFolder}/aop/${gen.tenant.entityInstance}/${gen.entity.entityClass}Aspect.java`
             }
-        ],
-        liquibase_data: [
+          ]
+        },
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_SRC_DIR,
+          templates: [
             {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_RES_DIR,
-                templates: [
-                    {
-                        file: 'config/liquibase/changelog/_tenant_user_data.xml',
-                        renameTo: context =>
-                            `config/liquibase/changelog/${context.changelogDate}-2__${context.tenantNameLowerCase}_user_data.xml`
-                    }
-                ]
+              method: 'patcherTemplate',
+              file: 'package/domain/_TenantParameter.java',
+              renameTo: gen => `${gen.storage.packageFolder}/domain/${gen.tenant.entityClass}Parameter.java`
             },
             {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_RES_DIR,
-                templates: [
-                    {
-                        file: 'config/liquibase/data/_tenant.csv',
-                        renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}.csv`
-                    }
-                ]
-            },
-            {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_RES_DIR,
-                templates: [
-                    {
-                        file: 'config/liquibase/data/_tenant_user.csv',
-                        renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_user.csv`
-                    }
-                ]
-            },
-            {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_RES_DIR,
-                templates: [
-                    {
-                        file: 'config/liquibase/data/_tenant_authority.csv',
-                        renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_authority.csv`
-                    }
-                ]
-            },
-            {
-                condition: context => context.isTenant,
-                path: jhipsterConstants.SERVER_MAIN_RES_DIR,
-                templates: [
-                    {
-                        file: 'config/liquibase/data/_tenant_user_authority.csv',
-                        renameTo: context => `config/liquibase/data/${context.tenantNameLowerCase}_user_authority.csv`
-                    }
-                ]
+              method: 'patcherTemplate',
+              file: 'package/aop/_tenant/_TenantAspect.java',
+              renameTo: gen => `${gen.storage.packageFolder}/aop/${gen.tenant.entityInstance}/${gen.tenant.entityClass}Aspect.java`
             }
-        ]
-    }
+          ]
+        },
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
+          templates: [
+            {
+              method: 'patcherTemplate',
+              file: 'config/liquibase/changelog/_user_tenant_constraints.xml',
+              renameTo: gen => `config/liquibase/changelog/${gen.entity.changelogDate}-1__user_${gen.tenant.entityClass}_constraints.xml`
+            }
+          ]
+        }
+      ],
+      liquibase_data: [
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
+          templates: [
+            {
+              method: 'patcherTemplate',
+              file: 'config/liquibase/changelog/_tenant_user_data.xml',
+              renameTo: gen => `config/liquibase/changelog/${gen.entity.changelogDate}-2__${gen.tenant.entityLowerCase}_user_data.xml`
+            }
+          ]
+        },
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
+          templates: [
+            {
+              method: 'patcherTemplate',
+              file: 'config/liquibase/data/_tenant.csv',
+              renameTo: gen => `config/liquibase/data/${gen.tenant.entityLowerCase}.csv`
+            }
+          ]
+        },
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
+          templates: [
+            {
+              method: 'patcherTemplate',
+              file: 'config/liquibase/data/_tenant_user.csv',
+              renameTo: gen => `config/liquibase/data/${gen.tenant.entityLowerCase}_user.csv`
+            }
+          ]
+        },
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
+          templates: [
+            {
+              method: 'patcherTemplate',
+              file: 'config/liquibase/data/_tenant_authority.csv',
+              renameTo: gen => `config/liquibase/data/${gen.tenant.entityLowerCase}_authority.csv`
+            }
+          ]
+        },
+        {
+          condition: gen => gen.isTenant,
+          path: gen.constants.SERVER_MAIN_RES_DIR,
+          templates: [
+            {
+              method: 'patcherTemplate',
+              file: 'config/liquibase/data/_tenant_user_authority.csv',
+              renameTo: gen => `config/liquibase/data/${gen.tenant.entityLowerCase}_user_authority.csv`
+            }
+          ]
+        }
+      ]
+    };
+  }
 };

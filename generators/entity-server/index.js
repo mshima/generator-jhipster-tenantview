@@ -1,62 +1,92 @@
 /* eslint-disable consistent-return */
+const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity:server');
 const path = require('path');
-const jhipsterEnv = require('generator-jhipster-customizer');
+const customizer = require('generator-jhipster-customizer');
 
-const TenantisedNeedle = require('./needle-api/needle-server-tenantised-entities-services');
+const generator = 'entity-server';
 
-const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
+module.exports = {
+  createGenerator: env => {
+    const packagePath = env.getPackagePath('jhipster:app');
+    // eslint-disable-next-line global-require
+    const needleServer = require(`${packagePath}/generators/server/needle-api/needle-server`);
 
-const jhipsterConstants = jhipsterEnv.constants;
+    const TenantisedNeedle = class extends needleServer {
+      addEntityToTenantAspect(generator, tenantAwareEntity) {
+        const packageFolder = generator.config.get('packageFolder');
+        const packageName = generator.config.get('packageName');
+        debug(`addEntityToTenantAspect ${tenantAwareEntity}`);
+        const errorMessage = `${chalk.yellow('Reference to ') + tenantAwareEntity} ${chalk.yellow('not added.\n')}`;
+        // eslint-disable-next-line prettier/prettier
+            const tenantAspectPath = `${generator.constants.SERVER_MAIN_SRC_DIR}${packageFolder}/aop/${generator.tenant.entityInstance}/${generator.tenant.entityClass}Aspect.java`;
+        const content = `+ "|| execution(* ${packageName}.service.${tenantAwareEntity}Service.*(..))"`;
+        const rewriteFileModel = this.generateFileModel(tenantAspectPath, 'jhipster-needle-add-entity-to-tenant-aspect', content);
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+      }
+    };
 
-module.exports = class extends jhipsterEnv.generator('entity-server', {
-    improverPaths: path.resolve(__dirname, '../../improver'),
-    applyPatcher: true,
-    patcherPath: path.resolve(__dirname, 'patcher')
-}) {
-    constructor(args, opts) {
-        debug(`Initializing entity-server ${opts.context.name}`);
-        super(args, opts);
+    return class extends customizer.createJHipsterGenerator(generator, env, {
+      improverPaths: path.resolve(__dirname, '../../improver'),
+      patcherPath: path.resolve(__dirname, 'patcher')
+    }) {
+      constructor(args, options) {
+        super(args, options);
+
+        this.entityName = this._.upperFirst(args[0]);
+        debug(`Initializing ${generator} ${this.entityName}`);
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
-    }
 
-    get writing() {
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
+
+        this.entityConfig = this.createStorage(`.jhipster/${this.entityName}.json`);
+        this.entityConfig.set('name', this.entityName);
+
+        this.entity = this.jhipsterFs.getEntity(this.entityName);
+
+        const tenantName = this.blueprintConfig.get('tenantName');
+        this.tenant = this.jhipsterFs.getEntity(tenantName);
+        this.isTenant = this.entityName === tenantName;
+      }
+
+      get writing() {
         return {
-            ...super._writing(),
+          // Make the necessary server code changes
+          customServerCode() {
+            const tenantisedNeedle = new TenantisedNeedle(this);
+            if (this.entity.definitions.tenantAware) {
+              tenantisedNeedle.addEntityToTenantAspect(this, this.name);
+            } else if (this.isTenant) {
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenant.entityClass}_constraints`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
 
-            // sets up all the variables we'll need for the templating
-            setUpVariables() {
-                this.SERVER_MAIN_SRC_DIR = jhipsterConstants.SERVER_MAIN_SRC_DIR;
-            },
-            /* tenant variables */
-            setupTenantVariables,
-
-            // make the necessary server code changes
-            customServerCode() {
-                const tenantisedNeedle = new TenantisedNeedle(this);
-                if (this.tenantAware) {
-                    tenantisedNeedle.addEntityToTenantAspect(this, this.name);
-                } else if (this.isTenant) {
-                    this.addConstraintsChangelogToLiquibase(`${this.changelogDate}-1__user_${this.tenantNameUpperFirst}_constraints`);
-                    this.addConstraintsChangelogToLiquibase(`${this.changelogDate}-2__${this.tenantNameLowerCase}_user_data`);
-
-                    debug('Adding already tenantised entities');
-                    if (this.configOptions.tenantAwareEntities) {
-                        this.queueMethod(
-                            function() {
-                                // Run after patcher
-                                this.configOptions.tenantAwareEntities.forEach(tenantAwareEntity => {
-                                    debug(`Adding entity ${tenantAwareEntity}`);
-                                    tenantisedNeedle.addEntityToTenantAspect(this, tenantAwareEntity);
-                                });
-                            },
-                            'tenantisedNeedle',
-                            'writing'
-                        );
+              debug('Adding already tenantised entities');
+              this.queueMethod(
+                function () {
+                  // Run after patcher
+                  this.getExistingEntities().forEach(entity => {
+                    if (entity.definition.tenantAware) {
+                      debug(`Adding entity ${entity.name}`);
+                      tenantisedNeedle.addEntityToTenantAspect(this, entity.name);
                     }
-                }
+                  });
+                },
+                'tenantisedNeedle',
+                'writing'
+              );
             }
+          }
         };
-    }
+      }
+
+      _templateData() {
+        return {
+          entity: this.entity,
+          tenant: this.tenant
+        };
+      }
+    };
+  }
 };

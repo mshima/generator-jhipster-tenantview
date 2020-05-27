@@ -53,7 +53,7 @@ const ADMIN_ROUTES = [
 ];
 
 export const adminState: Routes = [
-<%_ if (!skipUserManagement) { _%>
+<%_ if (!storage.skipUserManagement) { _%>
   {
     path: 'user-management',
     data: {

@@ -1,59 +1,59 @@
 // Add jpa filter to the entity to remove entries from another tenant
-const file = context => `${context.SERVER_MAIN_SRC_DIR}${context.packageFolder}/domain/User.java`;
+const file = gen => `${gen.constants.SERVER_MAIN_SRC_DIR}${gen.storage.packageFolder}/domain/User.java`;
 
 const tmpls = [
-    {
-        type: 'replaceContent',
-        regex: true,
-        target: context => '(import org\\.hibernate\\.annotations\\.CacheConcurrencyStrategy;)',
-        tmpl: context => `$1
+  {
+    type: 'replaceContent',
+    regex: true,
+    target: context => '(import org\\.hibernate\\.annotations\\.CacheConcurrencyStrategy;)',
+    tmpl: context => `$1
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;`
-    },
-    {
-        type: 'replaceContent',
-        regex: true,
-        target: context => '(public class User)',
-        tmpl: context => `@FilterDef(name = "${context.tenantNameUpperCase}_FILTER", parameters = {@ParamDef(name = "${context.tenantNameSpinalCased}Id", type = "long")})
-@Filter(name = "${context.tenantNameUpperCase}_FILTER", condition = "${context.tenantNameSpinalCased}_id = :${context.tenantNameSpinalCased}Id")
+  },
+  {
+    type: 'replaceContent',
+    regex: true,
+    target: context => '(public class User)',
+    tmpl: context => `@FilterDef(name = "${context.tenant.entityUpperCase}_FILTER", parameters = {@ParamDef(name = "${context.tenant.entityNameSpinalCased}Id", type = "long")})
+@Filter(name = "${context.tenant.entityUpperCase}_FILTER", condition = "${context.tenant.entityNameSpinalCased}_id = :${context.tenant.entityNameSpinalCased}Id")
 $1`
-    },
-    {
-        type: 'replaceContent',
-        regex: true,
-        target: context => '((.*)public Long getId)',
-        tmpl: context => `$2@ManyToOne
+  },
+  {
+    type: 'replaceContent',
+    regex: true,
+    target: context => '((.*)public Long getId)',
+    tmpl: context => `$2@ManyToOne
 $2@JsonIgnoreProperties("users")
-$2private ${context.tenantNameUpperFirst} ${context.tenantNameLowerFirst};
+$2private ${context.tenant.entityClass} ${context.tenant.entityInstance};
 
 $1`
-    },
-    {
-        type: 'replaceContent',
-        regex: true,
-        target: context => '(@Override\n(.*)public boolean equals\\(Object o\\) \\{\n(.*)if)',
-        tmpl: context => `public ${context.tenantNameUpperFirst} get${context.tenantNameUpperFirst}() {
-$3return ${context.tenantNameLowerFirst};
+  },
+  {
+    type: 'replaceContent',
+    regex: true,
+    target: context => '(@Override\n(.*)public boolean equals\\(Object o\\) \\{\n(.*)if)',
+    tmpl: context => `public ${context.tenant.entityClass} get${context.tenant.entityClass}() {
+$3return ${context.tenant.entityInstance};
 $2}
 
-$2public void set${context.tenantNameUpperFirst}(${context.tenantNameUpperFirst} ${context.tenantNameLowerFirst}) {
-$3this.${context.tenantNameLowerFirst} = ${context.tenantNameLowerFirst};
+$2public void set${context.tenant.entityClass}(${context.tenant.entityClass} ${context.tenant.entityInstance}) {
+$3this.${context.tenant.entityInstance} = ${context.tenant.entityInstance};
 $2}
 
 $2$1`
-    },
-    {
-        type: 'replaceContent',
-        regex: true,
-        target: context => "((.*)\", activationKey='\" \\+ activationKey \\+ '\\\\'' \\+)",
-        tmpl: context => `$1
-$2", ${context.tenantNameLowerFirst}='" + ${context.tenantNameLowerFirst} + '\\'' +`
-    }
+  },
+  {
+    type: 'replaceContent',
+    regex: true,
+    target: context => "((.*)\", activationKey='\" \\+ activationKey \\+ '\\\\'' \\+)",
+    tmpl: context => `$1
+$2", ${context.tenant.entityInstance}='" + ${context.tenant.entityInstance} + '\\'' +`
+  }
 ];
 
 module.exports = {
-    file,
-    tmpls
+  file,
+  tmpls
 };

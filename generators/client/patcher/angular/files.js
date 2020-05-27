@@ -1,20 +1,18 @@
-const jhipsterEnv = require('generator-jhipster-customizer');
-
-const jhipsterConstants = jhipsterEnv.constants;
-
 module.exports = {
-    files: {
-        tenant_admin_menu: [
+  files: context => {
+    return {
+      tenant_admin_menu: [
+        {
+          path: context.constants.ANGULAR_DIR,
+          templates: [
             {
-                path: jhipsterConstants.ANGULAR_DIR,
-                templates: [
-                    {
-                        file: 'tenant-admin/_tenant-admin-routing.module.ts',
-                        renameTo: generator =>
-                            `${generator.tenantNameLowerFirst}-admin/${generator.tenantNameLowerFirst}-admin-routing.module.ts`
-                    }
-                ]
+              method: 'patcherTemplate',
+              file: 'tenant-admin/_tenant-admin-routing.module.ts',
+              renameTo: generator => `${generator.tenant.entityInstance}-admin/${generator.tenant.entityInstance}-admin-routing.module.ts`
             }
-        ]
-    }
+          ]
+        }
+      ]
+    };
+  }
 };

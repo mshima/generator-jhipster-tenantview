@@ -24,18 +24,18 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 @NgModule({
   imports: [
     <%=angularXAppName%>SharedModule,
-    /* jhipster-needle-add-<%= tenantNameLowerCase %>-admin-module - JHipster will add <%= tenantNameUpperFirst %> admin modules here */
+    /* jhipster-needle-add-<%= tenant.entityLowerCase %>-admin-module - JHipster will add <%= tenant.entityClass %> admin modules here */
     RouterModule.forChild(
       [
-        <%_ if (!skipUserManagement) { _%>
+        <%_ if (!storage.skipUserManagement) { _%>
         {
           path: 'user-management',
           loadChildren: () => import('app/admin/user-management/user-management.module').then(m => m.UserManagementModule)
         },
         <%_ } _%>
-        /* jhipster-needle-add-<%= tenantNameLowerCase %>-admin-route - JHipster will add <%= tenantNameUpperFirst %> admin routes here */
+        /* jhipster-needle-add-<%= tenant.entityLowerCase %>-admin-route - JHipster will add <%= tenant.entityClass %> admin routes here */
       ]
     )
   ]
 })
-export class <%= tenantNameUpperFirst %>AdminRoutingModule {}
+export class <%= tenant.entityClass %>AdminRoutingModule {}

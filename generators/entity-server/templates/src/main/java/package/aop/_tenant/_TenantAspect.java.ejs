@@ -1,9 +1,9 @@
-package <%=packageName%>.aop.<%= tenantNameLowerFirst %>;
+package <%=storage.packageName%>.aop.<%= tenant.entityInstance %>;
 
-import <%=packageName%>.web.rest.errors.BadRequestAlertException;
-import <%=packageName%>.security.SecurityUtils;
-import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.domain.User;
+import <%=storage.packageName%>.web.rest.errors.BadRequestAlertException;
+import <%=storage.packageName%>.security.SecurityUtils;
+import <%=storage.packageName%>.repository.UserRepository;
+import <%=storage.packageName%>.domain.User;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Aspect
 @Component
-public class <%= tenantNameUpperFirst %>Aspect {
+public class <%= tenant.entityClass %>Aspect {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -29,16 +29,16 @@ public class <%= tenantNameUpperFirst %>Aspect {
     @Autowired
     private UserRepository userRepository;
 
-    private final String fieldName =  "<%= tenantNameSpinalCased %>Id";
+    private final String fieldName =  "<%= tenant.entityInstance %>Id";
 
-    private final Logger log = LoggerFactory.getLogger(<%= tenantNameUpperFirst %>Aspect.class);
+    private final Logger log = LoggerFactory.getLogger(<%= tenant.entityClass %>Aspect.class);
 
     /**
      * Run method if User service is hit.
-     * Filter users based on which <%= tenantNameLowerCase %> the user is associated with.
-     * Skip filter if user has no <%= tenantNameLowerCase %>
+     * Filter users based on which <%= tenant.entityClass %> the user is associated with.
+     * Skip filter if user has no <%= tenant.entityClass %>
      */
-    @Before("execution(* <%= packageName %>.service.UserService.*(..)) "
+    @Before("execution(* <%= storage.packageName %>.service.UserService.*(..)) "
             // jhipster-needle-add-entity-to-tenant-aspect - Multitenancy will roles here
         )
     public void beforeExecution() throws Throwable {
@@ -52,9 +52,9 @@ public class <%= tenantNameUpperFirst %>Aspect {
             }
             User user = optionalUser.get();
 
-            if (user.get<%= tenantNameUpperFirst %>() != null) {
-                Filter filter = entityManager.unwrap(Session.class).enableFilter("<%= tenantNameUpperCase %>_FILTER");
-                filter.setParameter(fieldName, user.get<%= tenantNameUpperFirst %>().getId());
+            if (user.get<%= tenant.entityClass %>() != null) {
+                Filter filter = entityManager.unwrap(Session.class).enableFilter("<%= tenant.entityUpperCase %>_FILTER");
+                filter.setParameter(fieldName, user.get<%= tenant.entityClass %>().getId());
             }
         }
     }

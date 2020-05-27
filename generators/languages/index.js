@@ -1,26 +1,30 @@
 /* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:languages');
 const path = require('path');
-const jhipsterEnv = require('generator-jhipster-customizer');
+const customizer = require('generator-jhipster-customizer');
 
-const setupTenantVariables = require('../multitenancy-utils').setupTenantVariables;
+const generator = 'languages';
 
-module.exports = class extends jhipsterEnv.generator('languages', {
-    improverPaths: path.resolve(__dirname, '../../improver'),
-    applyPatcher: true,
-    patcherPath: path.resolve(__dirname, 'patcher')
-}) {
-    constructor(args, opts) {
-        debug('Initializing languages blueprint');
-        super(args, opts);
-    }
+module.exports = {
+  createGenerator: env => {
+    return class extends customizer.createJHipsterGenerator(generator, env, {
+      improverPaths: path.resolve(__dirname, '../../improver'),
+      patcherPath: path.resolve(__dirname, 'patcher')
+    }) {
+      constructor(args, options) {
+        debug(`Initializing ${generator} blueprint`);
+        super(args, options);
 
-    get writing() {
-        return {
-            ...super._writing(),
+        // Set side-by-side blueprint
+        this.sbsBlueprint = true;
 
-            /* tenant variables */
-            setupTenantVariables
-        };
-    }
+        const tenantName = this.blueprintConfig.get('tenantName');
+        this.tenant = this.jhipsterFs.getEntity(tenantName);
+      }
+
+      get initializing() {
+        return super._initializing();
+      }
+    };
+  }
 };
