@@ -10,7 +10,7 @@ const generator = 'entity';
 
 module.exports = {
   createGenerator: env => {
-    return class extends customizer.createJHipsterGenerator(generator, env, {
+    return class extends customizer.createJHipsterGenerator('info', env, {
       improverPaths: path.resolve(__dirname, '../../improver'),
       patcherPath: path.resolve(__dirname, 'patcher')
     }) {
@@ -23,18 +23,13 @@ module.exports = {
         const tenantName = this.blueprintConfig.get('tenantName');
         this.tenant = this.jhipsterFs.getEntity(tenantName);
         this.isTenant = this.entityName === tenantName;
-      }
 
-      get initializing() {
-        return {
-          ...super._initializing()
-        };
+        this.context = this.options.jhipsterContext.context;
+        this.sbsBlueprint = true;
       }
 
       get prompting() {
         return {
-          ...super._prompting(),
-
           init() {
             // The generator jhipster:entity considers that if the file exists, the entity exists.
             // So creating a config will create the file of the mem-fs that will cause jhipster:entity
@@ -75,12 +70,8 @@ module.exports = {
               },
               this.entityConfig
             );
-          }
-        };
-      }
+          },
 
-      get configuring() {
-        return {
           configureTenant() {
             // Force tenant to be serviceClass
             this.entityConfig.set('service', 'serviceClass');
@@ -138,10 +129,12 @@ module.exports = {
           configure() {
             // The generator jhipster:entity always creates a new config files, so inject our values here.
             this.storageData = this.entityConfig.getAll();
-          },
+          }
+        };
+      }
 
-          ...super._configuring(),
-
+      get configuring() {
+        return {
           debug() {
             const tenantRelationship = this._getTenantRelationship();
             if (tenantRelationship) {
@@ -175,24 +168,12 @@ module.exports = {
         };
       }
 
-      get default() {
-        return super._default();
-      }
-
-      get writing() {
-        return super._writing();
-      }
-
-      get end() {
-        return super._end();
-      }
-
       /* ======================================================================== */
       /* private methods use within generator (not exposed to modules) */
       /* ======================================================================== */
 
       _getTenantRelationship() {
-        return mtUtils.getArrayItemWithFieldValue(this.context.relationships, 'otherEntityName', this.tenant.entityInstance);
+        return mtUtils.getArrayItemWithFieldValue(this.context.relationships || [], 'otherEntityName', this.tenant.entityInstance);
       }
     };
   }

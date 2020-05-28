@@ -143,7 +143,7 @@ module.exports = {
 
           if (!this.options.withEntities) {
             const configOptions = this.configOptions;
-            this.composeWith('jhipster-tenantview:entity', {
+            this.composeWith('jhipster:entity', {
               ...this.options,
               configOptions,
               regenerate: true,
