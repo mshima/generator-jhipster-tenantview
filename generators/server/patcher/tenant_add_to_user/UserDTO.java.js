@@ -5,6 +5,13 @@ const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
+    target: gen => `(import javax.validation.constraints.*;)`,
+    tmpl: gen => `$1
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;`
+  },
+  {
+    type: 'replaceContent',
+    regex: true,
     target: gen => `(import ${gen.storage.packageName}\\.domain\\.User;)`,
     tmpl: gen => `$1
 import ${gen.storage.packageName}.domain.${gen.tenant.entityClass};`
@@ -12,7 +19,8 @@ import ${gen.storage.packageName}.domain.${gen.tenant.entityClass};`
   {
     type: 'rewriteFile',
     target: 'public UserDTO() {',
-    tmpl: gen => `private ${gen.tenant.entityClass} ${gen.tenant.entityInstance};
+    tmpl: gen => `@JsonIgnoreProperties({"users"})
+    private ${gen.tenant.entityClass} ${gen.tenant.entityInstance};
 `
   },
   {

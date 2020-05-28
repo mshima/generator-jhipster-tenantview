@@ -85,12 +85,6 @@ module.exports = {
 
             this._debug('Tenant aware %o', this.entity.definitions.tenantAware);
             if (this.entity.definitions.tenantAware) {
-              const tenantModule = this.blueprintConfig.get('tenantModule');
-              let otherEntityStateName = this.tenant.entityStateName;
-              if (tenantModule) {
-                otherEntityStateName = `${tenantModule}/${otherEntityStateName}`;
-              }
-
               const defaultTenantRel = {
                 relationshipName: this.tenant.entityInstance,
                 otherEntityName: this.tenant.entityInstance,
@@ -99,7 +93,7 @@ module.exports = {
                 relationshipValidateRules: 'required',
                 ownerSide: true,
                 clientRootFolder: this.tenant.clientRootFolder,
-                otherEntityStateName,
+                otherEntityStateName: this.tenant.entityStateName,
                 // Should be tenantFolderName, as of 6.4.1 this is wrong
                 otherEntityFolderName: this.tenant.entityFileName,
                 otherEntityAngularName: this.tenant.entityAngularName,
@@ -157,13 +151,14 @@ module.exports = {
 
             const tenantModule = this.blueprintConfig.get('tenantModule');
             copyValue('entityUrl', `${tenantModule}/${this.tenant.entityStateName}`);
+            copyValue('entityStateName', `../${tenantModule}/${this.tenant.entityStateName}`);
             copyValue('entityTranslationKey', this.tenant.entityInstance);
             copyValue('entityTranslationKeyMenu', this.tenant.entityInstance);
             copyValue('i18nKeyPrefix', `${context.angularAppName}.${context.entityTranslationKey}`);
 
             assert.equal(context.entityFileName, this.tenant.entityFileName);
             assert.equal(context.entityServiceFileName, this.tenant.entityFileName);
-            assert.equal(context.entityStateName, this.tenant.entityStateName);
+            // assert.equal(context.entityStateName, this.tenant.entityStateName);
           }
         };
       }

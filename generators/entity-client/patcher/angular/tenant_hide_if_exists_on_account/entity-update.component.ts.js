@@ -39,6 +39,15 @@ $3`
     tmpl: context => `      if (this.currentAccount.${context.tenant.entityInstance}) {
         ${context.entityInstance}.${context.tenant.entityInstance} = this.currentAccount.${context.tenant.entityInstance};
       }`
+  },
+  {
+    type: 'replaceContent',
+    regex: true,
+    target: context => `\n((\\s*)this\\.${context.tenant.entityInstance}Service\\.query\\(\\)[^]?.*;)`,
+    tmpl: context => `$2if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
+  $1
+$2};
+`
   }
 ];
 
