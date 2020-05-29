@@ -4,7 +4,7 @@ const tmpls = [
   {
     // Add tenant to account
     type: 'rewriteFile',
-    target: context => 'public imageUrl: string',
+    target: () => 'public imageUrl: string',
     tmpl: context => `public ${context.tenant.entityInstance}: string,`
   }
 ];

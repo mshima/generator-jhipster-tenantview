@@ -3,7 +3,7 @@ const file = gen => `${gen.constants.SERVER_MAIN_SRC_DIR}${gen.storage.packageFo
 const tmpls = [
   {
     type: 'rewriteFile',
-    target: context => '    public static final String USER = "ROLE_USER";',
+    target: () => '    public static final String USER = "ROLE_USER";',
     tmpl: context => `public static final String ${context.tenant.entityUpperCase}_ADMIN = "ROLE_${context.tenant.entityUpperCase}_ADMIN";
 `
   }

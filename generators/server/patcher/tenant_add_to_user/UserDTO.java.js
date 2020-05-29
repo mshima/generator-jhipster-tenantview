@@ -5,8 +5,8 @@ const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
-    target: gen => `(import javax.validation.constraints.*;)`,
-    tmpl: gen => `$1
+    target: () => `(import javax.validation.constraints.*;)`,
+    tmpl: () => `$1
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;`
   },
   {
@@ -26,7 +26,7 @@ import ${gen.storage.packageName}.domain.${gen.tenant.entityClass};`
   {
     type: 'replaceContent',
     regex: true,
-    target: context => `(\n(.*)this\\.authorities = user\\.getAuthorities\\(\\)\\.stream\\(\\)
+    target: () => `(\n(.*)this\\.authorities = user\\.getAuthorities\\(\\)\\.stream\\(\\)
 (.*)\\.map\\(Authority::getName\\)
 (.*)collect\\(Collectors.toSet\\(\\)\\);)`,
     tmpl: context => `$1
@@ -35,7 +35,7 @@ $2this.${context.tenant.entityInstance} = user.get${context.tenant.entityClass}(
   {
     type: 'replaceContent',
     regex: true,
-    target: context => `(\n(.*)this\\.authorities = authorities;
+    target: () => `(\n(.*)this\\.authorities = authorities;
 (.*)\\})`,
     tmpl: context => `$1
 
@@ -50,7 +50,7 @@ $3}`
   {
     type: 'replaceContent',
     regex: true,
-    target: context => '((.*)", authorities=" \\+ authorities \\+)',
+    target: () => '((.*)", authorities=" \\+ authorities \\+)',
     tmpl: context => `$1
 $2", ${context.tenant.entityInstance}='" + ${context.tenant.entityInstance} + '\\'' +`
   }

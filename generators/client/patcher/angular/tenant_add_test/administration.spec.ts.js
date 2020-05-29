@@ -5,7 +5,7 @@ const tmpls = [
     // Add test of admin/tenant menu
     condition: context => context.protractorTests && !context.enableTranslation,
     type: 'rewriteFile',
-    target: context => "it('should load metrics', async () => {",
+    target: () => "it('should load metrics', async () => {",
     tmpl: context => `it('should load ${context.tenant.entityInstance} management', async () => {
         await navBarPage.clickOnAdmin('${context.tenant.entityFileName}');
         const expect1 = '${context.tenant.entityClassPlural}';
@@ -16,7 +16,7 @@ const tmpls = [
   {
     condition: context => context.protractorTests && context.enableTranslation,
     type: 'rewriteFile',
-    target: context => "it('should load metrics', async () => {",
+    target: () => "it('should load metrics', async () => {",
     tmpl: context => `it('should load ${context.tenant.entityInstance} management', async () => {
         await navBarPage.clickOnAdmin('${context.tenant.entityFileName}');
         const expect1 = '${context.angularAppName}.${context.tenantTranslationKey}.home.title';

@@ -5,7 +5,7 @@ const tmpls = [
     type: 'replaceContent',
     regex: true,
     // eslint-disable-next-line prettier/prettier
-        target: context => /((.*)<div class="form-group">\n(\s*)<label(.*)>Profiles<\/label>)/g,
+        target: () => /((.*)<div class="form-group">\n(\s*)<label(.*)>Profiles<\/label>)/g,
     tmpl: context => {
       const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
       return `$2<div class="form-group" *ngIf="(!currentAccount || !currentAccount.${context.tenant.entityInstance}) && ${context.tenant.entityInstancePlural} && ${context.tenant.entityInstancePlural}.length > 0">

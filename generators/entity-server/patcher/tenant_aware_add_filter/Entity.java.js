@@ -7,7 +7,7 @@ const tmpls = [
     condition: context => context.entity.definitions.tenantAware,
     type: 'rewriteFile',
     target: 'import javax.persistence.*;',
-    tmpl: generator => `import org.hibernate.annotations.Filter;
+    tmpl: () => `import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 `

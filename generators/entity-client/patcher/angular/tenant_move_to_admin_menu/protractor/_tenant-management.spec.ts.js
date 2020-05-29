@@ -4,14 +4,14 @@ const tmpls = [
   {
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),
     type: 'replaceContent',
-    target: context => 'new NavBarPage();',
-    tmpl: context => 'new NavBarPage(true);'
+    target: () => 'new NavBarPage();',
+    tmpl: () => 'new NavBarPage(true);'
   },
   {
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),
     type: 'replaceContent',
-    target: context => 'navBarPage.entityMenu',
-    tmpl: context => 'navBarPage.adminMenu'
+    target: () => 'navBarPage.entityMenu',
+    tmpl: () => 'navBarPage.adminMenu'
   },
   {
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),

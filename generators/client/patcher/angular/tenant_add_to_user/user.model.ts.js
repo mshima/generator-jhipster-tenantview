@@ -3,7 +3,7 @@ const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/core/user/user.model.
 const tmpls = [
   {
     type: 'rewriteFile',
-    target: context => 'export interface IUser',
+    target: () => 'export interface IUser',
     tmpl: context => `import { ${context.tenant.entityClass} } from '../../shared/admin/${context.tenant.entityInstance}.model';
 `
   },

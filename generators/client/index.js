@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const debug = require('debug')('tenantview:entity');
 const path = require('path');
 const customizer = require('generator-jhipster-customizer');

@@ -4,7 +4,7 @@ const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
-    target: context => '((.*)<th(.*)>\\s*<span(.*)>Profiles)',
+    target: () => '((.*)<th(.*)>\\s*<span(.*)>Profiles)',
     tmpl: context => {
       const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
       // eslint-disable-next-line prettier/prettier

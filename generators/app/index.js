@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const _ = require('lodash');
 const path = require('path');
 const debug = require('debug')('tenantview:app');

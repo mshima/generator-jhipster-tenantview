@@ -6,15 +6,6 @@
       "global-require": "error",
       "unicorn/filename-case": "off",
       "no-console": "warn",
-      "eslint-comments/no-unused-disable": "warn",
-      "default-param-last": "warn",
-      "import/no-dynamic-require": "warn",
-      "camelcase": "warn",
-      "no-unused-vars": "warn",
-      "new-cap": "warn",
-      "no-multi-assign": "warn",
-      "no-negated-condition": "warn",
-      "eslint-comments/disable-enable-pair": "warn",
-      "unicorn/no-abusive-eslint-disable": "warn"
+      "import/no-dynamic-require": "warn"
     }
 }

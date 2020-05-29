@@ -4,7 +4,7 @@ const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
-    target: context => '@PreAuthorize\\("hasAuthority\\(\\\\""',
+    target: () => '@PreAuthorize\\("hasAuthority\\(\\\\""',
     tmpl: context => `@PreAuthorize("hasAnyAuthority(\\"" + AuthoritiesConstants.${context.tenant.entityUpperCase}_ADMIN + ", "`
   }
 ];

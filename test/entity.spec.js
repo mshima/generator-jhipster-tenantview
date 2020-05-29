@@ -5,7 +5,6 @@ const helpers = require('yeoman-test');
 
 describe('Subgenerator entity of tenantview JHipster blueprint', () => {
   describe('Sample test', () => {
-    let env;
     before(function () {
       this.timeout(15000);
       return helpers

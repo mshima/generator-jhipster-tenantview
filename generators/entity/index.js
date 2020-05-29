@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const assert = require('assert');
 const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity');
@@ -56,7 +55,6 @@ module.exports = {
 
             if (this.options.relationTenantAware) {
               // Look for tenantAware entities
-              // eslint-disable-next-line prettier/prettier
               this.entity.definitions.tenantAware = this._getTenantRelationship() !== undefined;
               return;
             }
@@ -103,10 +101,7 @@ module.exports = {
               const tenantRelationship = this._getTenantRelationship();
 
               // If tenant relationship already exists in the entity then set options
-              if (!tenantRelationship) {
-                this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
-                context.relationships.push(defaultTenantRel);
-              } else {
+              if (tenantRelationship) {
                 this._debug('Found relationship with tenant');
                 // Force values
                 tenantRelationship.ownerSide = true;
@@ -117,6 +112,9 @@ module.exports = {
                 // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
 
                 this._.defaults(tenantRelationship, defaultTenantRel);
+              } else {
+                this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
+                context.relationships.push(defaultTenantRel);
               }
             }
           },
@@ -158,7 +156,7 @@ module.exports = {
 
             assert.equal(context.entityFileName, this.tenant.entityFileName);
             assert.equal(context.entityServiceFileName, this.tenant.entityFileName);
-            // assert.equal(context.entityStateName, this.tenant.entityStateName);
+            // Assert.equal(context.entityStateName, this.tenant.entityStateName);
           }
         };
       }

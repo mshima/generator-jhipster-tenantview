@@ -5,13 +5,13 @@ const tmpls = [
   {
     type: 'replaceContent',
     regexp: true,
-    target: () => '\@EntityGraph\(attributePaths = "authorities"\)',
+    target: () => '@EntityGraph(attributePaths = "authorities")',
     tmpl: context => `@EntityGraph(attributePaths = {"authorities", "${context.tenant.entityInstance}"})`
   },
   {
     type: 'replaceContent',
     regexp: true,
-    target: () => '\@EntityGraph\(attributePaths = "authorities"\)',
+    target: () => '@EntityGraph(attributePaths = "authorities")',
     tmpl: context => `@EntityGraph(attributePaths = {"authorities", "${context.tenant.entityInstance}"})`
   }
 ];

@@ -4,7 +4,7 @@ const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
-    target: context => '((.*)<dt>.*>Created By<)',
+    target: () => '((.*)<dt>.*>Created By<)',
     tmpl: context => {
       const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
       return `$2<dt><span${jhiTranslate}>${context.tenant.entityClass}</span></dt>

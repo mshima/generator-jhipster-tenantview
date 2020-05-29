@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity:server');
 const path = require('path');
@@ -9,7 +8,7 @@ const generator = 'entity-server';
 module.exports = {
   createGenerator: env => {
     const packagePath = env.getPackagePath('jhipster:app');
-    // eslint-disable-next-line global-require
+    // eslint-disable-next-line global-require,import/no-dynamic-require
     const needleServer = require(`${packagePath}/generators/server/needle-api/needle-server`);
 
     const TenantisedNeedle = class extends needleServer {
@@ -71,7 +70,7 @@ module.exports = {
               tenantisedNeedle.addEntityToTenantAspect(this, this.name);
             }
           }
-        }
+        };
       }
 
       _templateData() {

@@ -1,7 +1,7 @@
 module.exports = {
   files: gen => {
     return {
-      tenant_base: [
+      tenantBase: [
         // Copy over aspect
         {
           path: gen.constants.SERVER_MAIN_SRC_DIR,

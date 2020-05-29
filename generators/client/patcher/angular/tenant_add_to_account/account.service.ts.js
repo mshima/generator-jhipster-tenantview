@@ -5,7 +5,7 @@ const tmpls = [
     // Add tenant getter to account
     type: 'rewriteFile',
     regex: true,
-    target: context => 'getImageUrl(): string {',
+    target: () => 'getImageUrl(): string {',
     tmpl: context => `get${context.tenant.entityClass}(): String {
     return this.isAuthenticated() ? this.userIdentity!.${context.tenant.entityInstance} : '';
   }\n`

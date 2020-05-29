@@ -5,23 +5,23 @@ const tmpls = [
     condition: context => context.isTenant,
     disabled: true,
     type: 'rewriteFile',
-    target: context => 'type EntityResponseType',
-    tmpl: context => `import { AccountService } from 'app/core';
+    target: () => 'type EntityResponseType',
+    tmpl: () => `import { AccountService } from 'app/core';
 `
   },
   {
     condition: context => context.isTenant,
     disabled: true,
     type: 'replaceContent',
-    target: context => '(protected http: HttpClient)',
-    tmpl: context => '(protected http: HttpClient, protected accountService: AccountService)'
+    target: () => '(protected http: HttpClient)',
+    tmpl: () => '(protected http: HttpClient, protected accountService: AccountService)'
   },
   {
     condition: context => context.isTenant,
     disabled: true,
     type: 'rewriteFile',
-    target: context => 'const options = createRequestOption(req);',
-    tmpl: context => `    if (!this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
+    target: () => 'const options = createRequestOption(req);',
+    tmpl: () => `    if (!this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
       return new Observable(observer => {
         observer.complete();
       });

@@ -1,6 +1,4 @@
 const _ = require('lodash');
-const pluralize = require('pluralize');
-const debug = require('debug')('tenantview:utils');
 
 /**
  * Utils file to hold methods common to both generator and sub generator

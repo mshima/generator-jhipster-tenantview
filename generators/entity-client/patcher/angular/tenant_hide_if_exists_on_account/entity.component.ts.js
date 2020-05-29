@@ -7,7 +7,7 @@ const tmpls = [
     // Add imports account
     type: 'rewriteFile',
     target: 'import { JhiEventManager',
-    tmpl: context => "import { AccountService } from 'app/core/auth/account.service';"
+    tmpl: () => "import { AccountService } from 'app/core/auth/account.service';"
   },
   {
     // Add currentAccount field
@@ -19,12 +19,12 @@ const tmpls = [
   {
     type: 'replaceContent',
     target: /(constructor\(\n(\s*))/,
-    tmpl: context => '$1$2private accountService: AccountService,\n'
+    tmpl: () => '$1$2private accountService: AccountService,\n'
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)ngOnInit\(\)(: void)? {\n(\s*)this.loadAll\(\);)/,
-    tmpl: context => `$1
+    tmpl: () => `$1
 $4this.accountService.identity().subscribe((account) => {
 $2$4this.currentAccount = account;
 $4});

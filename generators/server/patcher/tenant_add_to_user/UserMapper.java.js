@@ -4,7 +4,7 @@ const file = gen => `${gen.constants.SERVER_MAIN_SRC_DIR}${gen.storage.packageFo
 const tmpls = [
   {
     type: 'rewriteFile',
-    target: context => '            return user;',
+    target: () => '            return user;',
     tmpl: context => `user.set${context.tenant.entityClass}(userDTO.get${context.tenant.entityClass}());`
   }
 ];

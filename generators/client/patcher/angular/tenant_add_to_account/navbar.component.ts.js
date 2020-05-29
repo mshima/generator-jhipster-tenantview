@@ -3,7 +3,7 @@ const file = gen => `${gen.constants.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navb
 const tmpls = [
   {
     type: 'rewriteFile',
-    target: context => 'getImageUrl(): string {',
+    target: () => 'getImageUrl(): string {',
     tmpl: context => `has${context.tenant.entityClass}(): boolean {
     return this.isAuthenticated() && this.accountService.get${context.tenant.entityClass}() ? true : false;
   }

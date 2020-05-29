@@ -1,7 +1,7 @@
 module.exports = {
   files: gen => {
     return {
-      tenant_base: [
+      tenantBase: [
         {
           condition: gen => gen.entity.definitions.tenantAware,
           path: gen.constants.SERVER_MAIN_SRC_DIR,
@@ -25,7 +25,7 @@ module.exports = {
           ]
         }
       ],
-      liquibase_data: [
+      liquibaseData: [
         {
           condition: gen => gen.isTenant,
           path: gen.constants.SERVER_MAIN_RES_DIR,

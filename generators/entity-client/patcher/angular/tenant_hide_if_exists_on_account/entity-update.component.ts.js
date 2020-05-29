@@ -8,7 +8,7 @@ const tmpls = [
     // Add imports account
     type: 'rewriteFile',
     target: "import { Observable } from 'rxjs';",
-    tmpl: context => "import { AccountService } from 'app/core/auth/account.service';"
+    tmpl: () => "import { AccountService } from 'app/core/auth/account.service';"
   },
   {
     // Add currentAccount field
@@ -20,13 +20,13 @@ const tmpls = [
   {
     type: 'replaceContent',
     target: /(\n(\s*)private fb: FormBuilder)/,
-    tmpl: context => `$1,
+    tmpl: () => `$1,
 $2private accountService: AccountService`
   },
   {
     type: 'replaceContent',
     target: /(\n(\s*)ngOnInit\(\): void {\n(\s*))/,
-    tmpl: context => `$1this.accountService.identity().subscribe((account) => {
+    tmpl: () => `$1this.accountService.identity().subscribe((account) => {
 $2$3this.currentAccount = account;
 $3});
 
@@ -44,7 +44,7 @@ $3`
     type: 'replaceContent',
     regex: true,
     target: context => `\n((\\s*)this\\.${context.tenant.entityInstance}Service\\.query\\(\\)[^]?.*;)`,
-    tmpl: context => `$2if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
+    tmpl: () => `$2if (this.accountService.hasAnyAuthority(['ROLE_ADMIN'])) {
   $1
 $2};
 `

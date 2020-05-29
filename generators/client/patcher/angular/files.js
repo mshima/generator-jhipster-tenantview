@@ -1,7 +1,7 @@
 module.exports = {
   files: context => {
     return {
-      tenant_admin_menu: [
+      tenantAdminMenu: [
         {
           path: context.constants.ANGULAR_DIR,
           templates: [

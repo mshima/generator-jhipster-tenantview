@@ -4,15 +4,11 @@ const helpers = require('yeoman-test');
 
 describe('Subgenerator client of tenantview JHipster blueprint', () => {
   describe('Sample test', () => {
-    let env;
     before(function () {
       this.timeout(20000);
       return helpers
         .create('jhipster:client')
         .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}, {packagePaths: path.join(__dirname, '..')}])
-        .withEnvironment(ctxEnv => {
-          env = ctxEnv;
-        })
         .withOptions({
           'from-cli': true,
           skipInstall: true,

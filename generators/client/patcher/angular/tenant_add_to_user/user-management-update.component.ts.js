@@ -5,7 +5,7 @@ const tmpls = [
     type: 'replaceContent',
     target: /(import { ActivatedRoute(.*) } from '@angular\/router';)/,
     // eslint-disable-next-line prettier/prettier
-        tmpl: context => `$1
+        tmpl: () => `$1
 import { HttpResponse } from '@angular/common/http';
 `
   },

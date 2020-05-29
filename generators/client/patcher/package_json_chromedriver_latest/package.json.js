@@ -1,4 +1,4 @@
-const file = context => 'package.json';
+const file = () => 'package.json';
 
 const tmpls = [
   {
