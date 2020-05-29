@@ -15,22 +15,6 @@ module.exports = {
         },
         {
           condition: gen => gen.isTenant,
-          path: gen.constants.SERVER_MAIN_SRC_DIR,
-          templates: [
-            {
-              method: 'patcherTemplate',
-              file: 'package/domain/_TenantParameter.java',
-              renameTo: gen => `${gen.storage.packageFolder}/domain/${gen.tenant.entityClass}Parameter.java`
-            },
-            {
-              method: 'patcherTemplate',
-              file: 'package/aop/_tenant/_TenantAspect.java',
-              renameTo: gen => `${gen.storage.packageFolder}/aop/${gen.tenant.entityInstance}/${gen.tenant.entityClass}Aspect.java`
-            }
-          ]
-        },
-        {
-          condition: gen => gen.isTenant,
           path: gen.constants.SERVER_MAIN_RES_DIR,
           templates: [
             {
