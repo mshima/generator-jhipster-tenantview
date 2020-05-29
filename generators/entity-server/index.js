@@ -55,30 +55,23 @@ module.exports = {
         return {
           // Make the necessary server code changes
           customServerCode() {
-            const tenantisedNeedle = new TenantisedNeedle(this);
-            if (this.entity.definitions.tenantAware) {
-              tenantisedNeedle.addEntityToTenantAspect(this, this.name);
-            } else if (this.isTenant) {
+            if (this.isTenant) {
               this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenant.entityClass}_constraints`);
               this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
-
-              debug('Adding already tenantised entities');
-              this.queueMethod(
-                function () {
-                  // Run after patcher
-                  this.getExistingEntities().forEach(entity => {
-                    if (entity.definition.tenantAware) {
-                      debug(`Adding entity ${entity.name}`);
-                      tenantisedNeedle.addEntityToTenantAspect(this, entity.name);
-                    }
-                  });
-                },
-                'tenantisedNeedle',
-                'writing'
-              );
             }
           }
         };
+      }
+
+      get patching() {
+        return {
+          tenantAspect() {
+            if (this.entity.definitions.tenantAware) {
+              const tenantisedNeedle = new TenantisedNeedle(this);
+              tenantisedNeedle.addEntityToTenantAspect(this, this.name);
+            }
+          }
+        }
       }
 
       _templateData() {
