@@ -21,7 +21,7 @@ module.exports = {
         this.tenant = this.jhipsterFs.getEntity(tenantName);
       }
 
-      get writing() {
+      get patching() {
         return {
           patchFiles() {
             this.addVendorSCSSStyle(

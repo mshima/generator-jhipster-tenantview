@@ -179,7 +179,7 @@ module.exports = {
               otherEntityName: 'user',
               relationshipType: 'one-to-many',
               otherEntityField: 'login',
-              ownerSide: true,
+              ownerSide: false,
               otherEntityRelationshipName: _.lowerFirst(this.tenantName)
             }
           ],
