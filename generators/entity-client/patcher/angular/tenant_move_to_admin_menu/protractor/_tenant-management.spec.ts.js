@@ -3,18 +3,21 @@ const file = context =>
 
 const tmpls = [
   {
+    disabled: true,
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),
     type: 'replaceContent',
     target: () => 'new NavBarPage();',
     tmpl: () => 'new NavBarPage(true);'
   },
   {
+    disabled: true,
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),
     type: 'replaceContent',
     target: () => 'navBarPage.entityMenu',
     tmpl: () => 'navBarPage.adminMenu'
   },
   {
+    disabled: true,
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),
     type: 'replaceContent',
     target: context => `await navBarPage.goToEntity('${context.generator.entityStateName}');`,
