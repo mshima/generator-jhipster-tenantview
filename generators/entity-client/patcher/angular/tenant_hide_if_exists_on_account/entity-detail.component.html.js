@@ -1,5 +1,5 @@
 const file = context =>
-  `${context.CLIENT_MAIN_SRC_DIR}app/entities/${context.entityFolderName}/${context.entityFileName}-detail.component.html`;
+  `${context.generator.CLIENT_MAIN_SRC_DIR}app/entities/${context.entity.entityFolderName}/${context.entity.entityFileName}-detail.component.html`;
 
 const condition = context => context.entity.definitions.tenantAware;
 
@@ -10,7 +10,7 @@ const tmpls = [
     condition: context => context.entity.definitions.tenantAware,
     regex: true,
     target: context => `<dt>(<span(.*)>${context.tenant.entityClass}</span></dt>(\\s*)<dd>)`,
-    tmpl: context => `<dt *ngIf="${context.entityInstance}.${context.tenant.entityInstance}">$1`
+    tmpl: context => `<dt *ngIf="${context.entity.entityInstance}.${context.tenant.entityInstance}">$1`
   }
 ];
 

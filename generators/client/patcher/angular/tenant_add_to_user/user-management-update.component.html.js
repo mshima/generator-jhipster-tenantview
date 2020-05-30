@@ -1,4 +1,4 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.html`;
+const file = context => `${context.generator.CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.html`;
 
 const tmpls = [
   {
@@ -7,7 +7,7 @@ const tmpls = [
     // eslint-disable-next-line prettier/prettier
         target: () => /((.*)<div class="form-group">\n(\s*)<label(.*)>Profiles<\/label>)/g,
     tmpl: context => {
-      const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
+      const jhiTranslate = context.storage.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
       return `$2<div class="form-group" *ngIf="(!currentAccount || !currentAccount.${context.tenant.entityInstance}) && ${context.tenant.entityInstancePlural} && ${context.tenant.entityInstancePlural}.length > 0">
 $3<label class="form-control-label"${jhiTranslate}>${context.tenant.entityClass}</label>
 $3<select class="form-control" id="field_${context.tenant.entityInstance}" name="${context.tenant.entityInstance}" formControlName="${context.tenant.entityInstance}">

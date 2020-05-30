@@ -1,4 +1,4 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/app-routing.module.ts`;
+const file = context => `${context.generator.CLIENT_MAIN_SRC_DIR}app/app-routing.module.ts`;
 
 const tmpls = [
   {

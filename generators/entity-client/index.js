@@ -26,6 +26,15 @@ module.exports = {
       }
 
       emptyFun() {}
+
+      _templateData() {
+        return {
+          ...super._templateData(),
+          isTenant: this.isTenant,
+          tenant: this.tenant,
+          entity: this.entity
+        };
+      }
     };
   }
 };

@@ -1,4 +1,4 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+const file = context => `${context.generator.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
 
 const tmpls = [
   {
@@ -17,7 +17,7 @@ const tmpls = [
     tmpl: '$1id="admin-menu-container" $2'
   },
   {
-    condition: context => context.enableTranslation,
+    condition: context => context.storage.enableTranslation,
     type: 'replaceContent',
     target: /(<li )([^<.]*\.[^<.]*\n\s*<a[^<.]* id="languagesnavBarDropdown")/,
     tmpl: '$1id="languages-menu-container" $2'
@@ -31,8 +31,10 @@ const tmpls = [
     type: 'rewriteFile',
     target: '- jhipster-needle-add-element-to-menu -',
     tmpl: context => {
-      const jhiTranslate = context.enableTranslation ? ` jhiTranslate="global.menu.${context.tenant.entityInstance}Admin.main"` : '';
-      const jhiTranslate2 = context.enableTranslation ? ' jhiTranslate="global.menu.admin.userManagement"' : '';
+      const jhiTranslate = context.storage.enableTranslation
+        ? ` jhiTranslate="global.menu.${context.tenant.entityInstance}Admin.main"`
+        : '';
+      const jhiTranslate2 = context.storage.enableTranslation ? ' jhiTranslate="global.menu.admin.userManagement"' : '';
       return `<li *jhiHasAnyAuthority="'ROLE_${context.tenant.entityUpperCase}_ADMIN'" ngbDropdown id="${context.tenant.entityLowerCase}-admin-menu-container" class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="${context.tenant.entityInstance}-admin-menu">
                     <span>

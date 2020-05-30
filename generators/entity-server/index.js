@@ -75,6 +75,8 @@ module.exports = {
 
       _templateData() {
         return {
+          ...super._templateData(),
+          isTenant: this.isTenant,
           entity: this.entity,
           tenant: this.tenant
         };

@@ -1,4 +1,4 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.html`;
+const file = context => `${context.generator.CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.html`;
 
 const tmpls = [
   {
@@ -6,7 +6,7 @@ const tmpls = [
     regex: true,
     target: () => '((.*)<th(.*)>\\s*<span(.*)>Profiles)',
     tmpl: context => {
-      const jhiTranslate = context.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
+      const jhiTranslate = context.storage.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
       // eslint-disable-next-line prettier/prettier
             return `$2<th$3 jhiSortBy="${context.tenant.entityInstance}" *ngIf="!currentAccount || !currentAccount.${context.tenant.entityInstance}"><span${jhiTranslate}>${context.tenant.entityClass}</span> <fa-icon [icon]="'sort'"></fa-icon></th>
 $1`;

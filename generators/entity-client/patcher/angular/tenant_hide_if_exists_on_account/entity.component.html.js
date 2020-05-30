@@ -1,4 +1,5 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/entities/${context.entityFolderName}/${context.entityFileName}.component.html`;
+const file = context =>
+  `${context.generator.CLIENT_MAIN_SRC_DIR}app/entities/${context.entity.entityFolderName}/${context.entity.entityFileName}.component.html`;
 
 const tmpls = [
   {
@@ -14,7 +15,7 @@ const tmpls = [
     condition: context => context.entity.definitions.tenantAware,
     type: 'replaceContent',
     regex: true,
-    target: context => `<td>\n(\\s*)(<div \\*ngIf="${context.entityInstance}.${context.tenant.entityInstance}">)`,
+    target: context => `<td>\n(\\s*)(<div \\*ngIf="${context.entity.entityInstance}.${context.tenant.entityInstance}">)`,
     tmpl: context => `<td *ngIf="!currentAccount.${context.tenant.entityInstance}">\n$1$2`
   }
 ];

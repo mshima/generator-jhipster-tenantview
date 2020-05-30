@@ -1,4 +1,5 @@
-const file = context => `${context.CLIENT_MAIN_SRC_DIR}app/entities/${context.entityFolderName}/${context.entityFileName}.component.ts`;
+const file = context =>
+  `${context.generator.CLIENT_MAIN_SRC_DIR}app/entities/${context.entity.entityFolderName}/${context.entity.entityFileName}.component.ts`;
 
 const condition = context => context.entity.definitions.tenantAware;
 

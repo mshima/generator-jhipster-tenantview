@@ -41,6 +41,7 @@ module.exports = {
       _templateData() {
         const angularXAppName = this.getAngularXAppName();
         return {
+          ...super._templateData(),
           angularXAppName,
           tenant: this.tenant
         };

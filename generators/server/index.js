@@ -24,8 +24,11 @@ module.exports = {
 
       emptyFun() {}
 
-      _templateData() {
-        return {tenant: this.tenant};
+      _templateData(...args) {
+        return {
+          ...super._templateData(...args),
+          tenant: this.tenant
+        };
       }
     };
   }

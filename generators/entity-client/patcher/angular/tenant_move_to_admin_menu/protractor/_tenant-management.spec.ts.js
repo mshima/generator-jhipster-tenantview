@@ -1,4 +1,5 @@
-const file = context => `${context.constants.CLIENT_TEST_SRC_DIR}e2e/admin/${context.entityFolderName}/${context.entityFileName}.spec.ts`;
+const file = context =>
+  `${context.constants.CLIENT_TEST_SRC_DIR}e2e/admin/${context.entity.entityFolderName}/${context.entity.entityFileName}.spec.ts`;
 
 const tmpls = [
   {
@@ -16,9 +17,9 @@ const tmpls = [
   {
     condition: context => context.isTenant && context.testFrameworks.includes('protractor'),
     type: 'replaceContent',
-    target: context => `await navBarPage.goToEntity('${context.entityStateName}');`,
+    target: context => `await navBarPage.goToEntity('${context.generator.entityStateName}');`,
     tmpl: context => `await navBarPage.clickOnAdminMenu();
-await navBarPage.clickOnAdmin('${context.entityFileName}');`
+await navBarPage.clickOnAdmin('${context.entity.entityFileName}');`
   }
 ];
 

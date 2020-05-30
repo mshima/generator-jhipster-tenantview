@@ -1,4 +1,4 @@
-const file = context => `${context.constants.CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`;
+const file = context => `${context.generator.CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`;
 
 const tmpls = [
   {

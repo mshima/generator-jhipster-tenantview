@@ -1,5 +1,5 @@
 const file = context =>
-  `${context.CLIENT_MAIN_SRC_DIR}app/entities/${context.entityFolderName}/${context.entityFileName}-update.component.ts`;
+  `${context.generator.CLIENT_MAIN_SRC_DIR}app/entities/${context.entity.entityFolderName}/${context.entity.entityFileName}-update.component.ts`;
 
 const condition = context => context.entity.definitions.tenantAware;
 
@@ -37,7 +37,7 @@ $3`
     regex: true,
     target: 'this.updateForm',
     tmpl: context => `      if (this.currentAccount.${context.tenant.entityInstance}) {
-        ${context.entityInstance}.${context.tenant.entityInstance} = this.currentAccount.${context.tenant.entityInstance};
+        ${context.entity.entityInstance}.${context.tenant.entityInstance} = this.currentAccount.${context.tenant.entityInstance};
       }`
   },
   {

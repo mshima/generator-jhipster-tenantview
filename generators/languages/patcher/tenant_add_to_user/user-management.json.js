@@ -1,4 +1,4 @@
-const file = context => context.languagesToApply.map(lang => `${context.CLIENT_MAIN_SRC_DIR}i18n/${lang}/user-management.json`);
+const file = context => context.languagesToApply.map(lang => `${context.generator.CLIENT_MAIN_SRC_DIR}i18n/${lang}/user-management.json`);
 
 const tmpls = [
   {

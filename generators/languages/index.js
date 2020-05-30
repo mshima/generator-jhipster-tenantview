@@ -24,6 +24,14 @@ module.exports = {
       get initializing() {
         return super._initializing();
       }
+
+      _templateData() {
+        return {
+          ...super._templateData(),
+          languagesToApply: this.options.jhipsterContext.languagesToApply,
+          tenant: this.tenant
+        };
+      }
     };
   }
 };
