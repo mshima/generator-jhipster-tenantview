@@ -1,3 +1,6 @@
+const assert = require('assert');
+const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 const debug = require('debug')('tenantview:app');
@@ -41,8 +44,20 @@ module.exports = {
       get initializing() {
         return {
           loadConf() {
-            if (this.options.tenantName) {
-              this.blueprintConfig.set('tenantName', _.upperFirst(this.options.tenantName));
+            if (!this.blueprintConfig.get('tenantName')) {
+              if (this.options.tenantName) {
+                this.blueprintConfig.set('tenantName', _.upperFirst(this.options.tenantName));
+              } else {
+                const tenant = this.getExistingEntities().find(entity => entity.definitions.tenant);
+                if (tenant) {
+                  this.blueprintConfig.set('tenantName', _.upperFirst(tenant.name));
+                }
+              }
+            }
+
+            const tenantName = this.blueprintConfig.get('tenantName');
+            if (tenantName) {
+              this.info(`Using ${chalk.yellow(tenantName)} as tenant`);
             }
 
             const tenantModule = this.options.tenantModule || this.blueprintConfig.get('tenantModule') || 'admin';
@@ -80,14 +95,6 @@ module.exports = {
 
       get default() {
         return {
-          loadConfig() {
-            this.tenantName = this.blueprintConfig.get('tenantName');
-          }
-        };
-      }
-
-      get writing() {
-        return {
           generateTenant: this._generateTenant
         };
       }
@@ -97,15 +104,16 @@ module.exports = {
       /* ======================================================================== */
 
       _generateTenant() {
-        debug(`Generating tenant ${this.tenantName}`);
-        const tenantPath = this.destinationPath(path.join('.jhipster', `${this.tenantName}.json`));
-        const tenantStorage = this.createStorage(tenantPath);
+        const tenantName = this.blueprintConfig.get('tenantName');
+        assert(tenantName);
+        debug(`Generating tenant ${tenantName}`);
+        const tenantStorage = this.jhipsterFs.getEntityConfig(tenantName);
         if (tenantStorage.existed) {
           debug('Tenant exists');
-          const tenantModule = tenantStorage.get('tenantModule');
+          const tenantModule = this.blueprintConfig.get('tenantModule');
           tenantStorage.set({
+            tenant: true,
             service: 'serviceClass',
-            tenantModule,
             clientRootFolder: `../${tenantModule}`
           });
 
@@ -123,22 +131,20 @@ module.exports = {
           // Add users relationship if doesn´t exists.
           const relationships = tenantStorage.get('relationships') || [];
           if (!mtUtils.getArrayItemWithFieldValue(relationships, 'relationshipName', 'users')) {
-            relationships.push({
-              relationshipName: 'users',
-              otherEntityName: 'user',
-              relationshipType: 'one-to-many',
-              otherEntityField: 'login',
-              // RelationshipValidateRules: 'required',
-              ownerSide: true,
-              otherEntityRelationshipName: this.tenantNameLowerFirst
-            });
+            relationships.push(this._getUserRelationship(tenantName));
             tenantStorage.set('relationships', relationships);
           }
         } else {
           debug("Tenant doesn't exists");
-          const definition = this._getDefaultDefinition();
+          const definition = this._getDefaultDefinition(tenantName);
 
           tenantStorage.set(definition);
+          // The method getExistingFiles() uses shelljs.ls, so we must write to disk to for the entity be found
+          if (!fs.existsSync('.jhipster')) {
+            fs.mkdirSync('.jhipster');
+          }
+
+          fs.writeFileSync(tenantStorage.path, JSON.stringify(definition, null, 2).concat('\n'));
 
           if (!this.options.withEntities) {
             const configOptions = this.configOptions;
@@ -148,16 +154,18 @@ module.exports = {
               regenerate: true,
               'skip-install': false,
               debug: this.isDebugEnabled,
-              arguments: [this.tenantName]
+              arguments: [tenantName]
             });
           }
         }
       }
 
-      _getDefaultDefinition() {
+      _getDefaultDefinition(tenantName) {
+        assert(tenantName);
         const tenantModule = this.blueprintConfig.get('tenantModule');
         return {
-          name: this.tenantName,
+          name: tenantName,
+          tenant: true,
           fields: [
             {
               fieldName: 'name',
@@ -172,22 +180,25 @@ module.exports = {
               fieldValidateRulesMinlength: 3
             }
           ],
-          relationships: [
-            {
-              relationshipName: 'users',
-              otherEntityName: 'user',
-              relationshipType: 'one-to-many',
-              otherEntityField: 'login',
-              ownerSide: false,
-              otherEntityRelationshipName: _.lowerFirst(this.tenantName)
-            }
-          ],
+          relationships: [this._getUserRelationship(tenantName)],
           changelogDate: this.dateFormatForLiquibase(),
           dto: 'no',
           service: 'serviceClass',
           clientRootFolder: `../${tenantModule}`,
           tenantModule,
           tenantAware: false
+        };
+      }
+
+      _getUserRelationship(tenantName) {
+        assert(tenantName);
+        return {
+          relationshipName: 'users',
+          otherEntityName: 'user',
+          relationshipType: 'one-to-many',
+          otherEntityField: 'login',
+          ownerSide: false,
+          otherEntityRelationshipName: _.lowerFirst(tenantName)
         };
       }
     };

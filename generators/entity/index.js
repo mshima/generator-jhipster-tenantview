@@ -71,6 +71,7 @@ module.exports = {
           },
 
           configureTenant() {
+            if (!this.isTenant) return;
             // Force tenant to be serviceClass
             this.entityConfig.set('service', 'serviceClass');
             this.context.service = 'serviceClass';
