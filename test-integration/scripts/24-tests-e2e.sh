@@ -5,7 +5,6 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 # Specific for couchbase
 #-------------------------------------------------------------------------------
-cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/couchbase.yml ]; then
     docker-compose -f src/main/docker/couchbase.yml up -d
     sleep 20
@@ -80,7 +79,6 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         sleep 80
     fi
 
-    cd "$JHI_FOLDER_APP"
     # Run the app packaged as war/jar
     if [[ "$JHI_WAR" == 1 ]]; then
         java \

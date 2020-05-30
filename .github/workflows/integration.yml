@@ -1,51 +1,14 @@
-#
-# Copyright 2013-2020 the original author or authors from the JHipster project.
-#
-# This file is part of the JHipster project, see https://www.jhipster.tech/
-# for more information.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 name: Integration
 on: [push, pull_request]
 env:
     JHI_RUN_APP: 1
-    JHI_PROTRACTOR: 0
-    JHI_JDK: 11
-    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: release
-    JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: release
+    JHI_PROTRACTOR: 1
+    JHI_PROFILE: prod
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: ./test-integration/scripts
     NG_CLI_ANALYTICS: false
-    JHI_GITHUB_CI: true
-
-    # Blueprint defaults
-    BLUEPRINT_BUILD: true
-    BLUEPRINT_NAME: generator-jhipster-tenantview
-    BLUEPRINT_GLOBAL: false
-    BLUEPRINT_FIX_VERSION: true
-    BLUEPRINT_RUN_NPM: true
-    BLUEPRINT_LINK: false
-    BLUEPRINT_REGENERATE: false
-
-    BLUEPRINT_CHECKSTYLE: 1
-    JHI_GEN_VERSION: latest
 
 jobs:
     applications:
@@ -56,44 +19,20 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.14.0]
-                os: [ubuntu-latest]
+                node_version:
+                    - 12.14.0
+                os:
+                    - ubuntu-latest
                 app-type:
                     - jdl-company
                     - jdl-relation
                     - jdl-relation-protractor
                 jhi-gen-version:
                     - 6.9.0
-                include:
-                    - app-type: jdl-company
-                      entity: other
-                      profile: prod
-                      protractor: 1
-                      blueprint-entity: jdl
-                    - app-type: jdl-relation
-                      entity: other
-                      profile: prod
-                      protractor: 0
-                      blueprint-entity: jdl
-                    - app-type: jdl-relation-protractor
-                      entity: other
-                      profile: prod
-                      protractor: 1
-                      blueprint-entity: jdl
-        env:
-            JHI_ENTITY: ${{ matrix.entity }}
-            JHI_APP: ${{ matrix.app-type }}
-            JHI_PROFILE: ${{ matrix.profile }}
-            JHI_WAR: ${{ matrix.war }}
-            JHI_PROTRACTOR: ${{ matrix.protractor }}
-            BLUEPRINT_ENTITY: ${{ matrix.blueprint-entity }}
-            JHI_GEN_VERSION: ${{ matrix.jhi-gen-version }}
-            BLUEPRINT_CHECKSTYLE: ${{ matrix.checkstyle }}
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
             #----------------------------------------------------------------------
-            - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node_version }}
@@ -104,41 +43,87 @@ jobs:
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-            - name: 'TOOLS: configure tools installed by the system'
-              run: $JHI_SCRIPTS/03-system.sh
-            - name: 'TOOLS: configure git'
-              run: $JHI_SCRIPTS/04-git-config.sh
+
             #----------------------------------------------------------------------
-            # Install JHipster and generate project+entities
+            # Create Application folder
             #----------------------------------------------------------------------
-            - name: 'GENERATION: install JHipster'
-              run: $JHI_SCRIPTS/10-install-jhipster.sh
-            - name: 'GENERATION: entities'
-              run: $JHI_SCRIPTS/11-generate-entities.sh
-            - name: 'GENERATION: entities'
-              run: $JHI_SCRIPTS/11.1-pre-generate-project.sh
-            - name: 'GENERATION: entities'
-              run: $JHI_SCRIPTS/11.2-pre-generate-project.sh
-            - name: 'GENERATION: project'
-              run: $JHI_SCRIPTS/12-generate-project.sh
-            - name: 'GENERATION: project'
-              run: $JHI_SCRIPTS/12.1-post-generate-project.sh
-            - name: 'GENERATION: replace version in generated project'
-              run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
-            - name: 'GENERATION: jhipster info'
-              run: $JHI_SCRIPTS/14-jhipster-info.sh
-            - name: 'GENERATION: npm info'
-              run: $JHI_SCRIPTS/15-npm-info.sh
+            - name: Create application folder
+              run: mkdir ../app
+
             #----------------------------------------------------------------------
-            # Launch tests
+            # Install Blueprint
             #----------------------------------------------------------------------
-            - name: 'TESTS: Start docker-compose containers'
-              run: $JHI_SCRIPTS/20-docker-compose.sh
-            - name: 'TESTS: backend'
-              run: $JHI_SCRIPTS/21-tests-backend.sh
-            - name: 'TESTS: frontend'
-              run: $JHI_SCRIPTS/22-tests-frontend.sh
-            - name: 'TESTS: packaging'
-              run: $JHI_SCRIPTS/23-package.sh
-            - name: 'TESTS: End-to-End'
-              run: $JHI_SCRIPTS/24-tests-e2e.sh
+            - name: Checkout blueprint
+              uses: actions/checkout@v1
+            - name: Link blueprint
+              run: npm link
+              working-directory: ${{ matrix.workspace }}
+
+            #----------------------------------------------------------------------
+            # Install JHipster
+            #----------------------------------------------------------------------
+            - name: Install jhipster
+              run: npm install -g generator-jhipster@${{ matrix.jhi-gen-version }}
+
+            #----------------------------------------------------------------------
+            # Install scripts blueprint
+            #----------------------------------------------------------------------
+            - name: Install scripts blueprint
+              run: npm install -g generator-jhipster-scripts@0.1.0
+
+            #----------------------------------------------------------------------
+            # Copy jdl file
+            #----------------------------------------------------------------------
+            - name: Copy jdl files
+              run: cp ${{ github.workspace }}/test-integration/samples/${{ matrix.app-type }}/* .
+              working-directory: ../app
+
+            #----------------------------------------------------------------------
+            # Generate project
+            #----------------------------------------------------------------------
+            - name: Project generation
+              run: jhipster import-jdl *.jdl --no-insight --blueprints scripts,tenantview --relation-tenant-aware --tenant-name Company
+              working-directory: ../app
+
+            - name: Package.json information
+              run: cat package.json
+              working-directory: ../app
+
+            - name: Project information
+              run: jhipster info
+              working-directory: ../app
+
+            #----------------------------------------------------------------------
+            # Tests
+            #----------------------------------------------------------------------
+            - name: Start db containers
+              run: npm run ci:test:prepare:docker
+              working-directory: ../app
+
+            - name: Start others containers
+              run: npm run docker:others
+              working-directory: ../app
+
+            - name: Frontend tests
+              run: npm test
+              working-directory: ../app
+
+            - name: Backend info
+              run: npm run backend:info
+              working-directory: ../app
+
+            - name: Backend javadoc
+              run: npm run backend:doc:test
+              working-directory: ../app
+
+            - name: Backend test
+              run: npm run backend:test
+              working-directory: ../app
+
+            - name: Packaging
+              run: npm run java:jar
+              working-directory: ../app
+
+            - name: End-to-End
+              run: npm run ci:e2e
+              working-directory: ../app
