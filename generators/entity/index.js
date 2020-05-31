@@ -43,8 +43,7 @@ module.exports = {
             if (this.isTenant) return;
 
             // TenantAware is already defined
-            this.tenantAwareDefined = this.entity.definitions.tenantAware !== undefined;
-            if (this.tenantAwareDefined) {
+            if (this.entity.definitions.tenantAware !== undefined) {
               return;
             }
 
@@ -57,6 +56,12 @@ module.exports = {
               // Look for tenantAware entities
               this.entity.definitions.tenantAware = this._getTenantRelationship() !== undefined;
               return;
+            }
+
+            if (this.options.regenerate) {
+              // Regenerating the entity, undefined tenantAware means false.
+              this.entity.definitions.tenantAware = false;
+              return
             }
 
             return this.prompt(
