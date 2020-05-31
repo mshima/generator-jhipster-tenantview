@@ -24,11 +24,20 @@ jobs:
                 os:
                     - ubuntu-latest
                 app-type:
+                    - jdl-definition
+                    - jdl-owner
                     - jdl-company
                     - jdl-relation
                     - jdl-relation-protractor
                 jhi-gen-version:
                     - 6.9.0
+                include:
+                    - app-type: jdl-relation
+                      additional-parameters: --relation-tenant-aware --tenant-name Company
+                    - app-type: jdl-company
+                      additional-parameters: --relation-tenant-aware --tenant-name Company
+                    - app-type: jdl-relation-protractor
+                      additional-parameters: --relation-tenant-aware --tenant-name Company
         steps:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
@@ -82,7 +91,7 @@ jobs:
             # Generate project
             #----------------------------------------------------------------------
             - name: Project generation
-              run: jhipster import-jdl *.jdl --no-insight --blueprints scripts,tenantview --relation-tenant-aware --tenant-name Company
+              run: jhipster import-jdl *.jdl --no-insight --blueprints scripts,tenantview ${{ matrix.additional-parameters }}
               working-directory: ../app
 
             - name: Package.json information
