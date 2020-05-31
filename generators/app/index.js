@@ -48,7 +48,7 @@ module.exports = {
               if (this.options.tenantName) {
                 this.blueprintConfig.set('tenantName', _.upperFirst(this.options.tenantName));
               } else {
-                const tenant = this.getExistingEntities().find(entity => entity.definitions.tenant);
+                const tenant = this.getExistingEntities().find(entity => entity.definition.tenant);
                 if (tenant) {
                   this.blueprintConfig.set('tenantName', _.upperFirst(tenant.name));
                 }
