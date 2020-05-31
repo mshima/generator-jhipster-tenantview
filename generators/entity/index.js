@@ -61,7 +61,7 @@ module.exports = {
             if (this.options.regenerate) {
               // Regenerating the entity, undefined tenantAware means false.
               this.entity.definitions.tenantAware = false;
-              return
+              return;
             }
 
             return this.prompt(

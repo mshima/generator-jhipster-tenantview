@@ -1,14 +1,14 @@
 # generator-jhipster-tenantview
-[![NPM version][npm-image]][npm-url] ![Integration](https://github.com/mshima/generator-jhipster-tenantview/workflows/Integration/badge.svg) [![Dependency Status][daviddm-image]][daviddm-url]
+
 > JHipster blueprint, Tenancy customizations
+
+[![NPM version](https://img.shields.io/npm/v/generator-jhipster-tenantview.svg)](https://npmjs.org/package/generator-jhipster-tenantview)
+[![NPM Test](https://github.com/mshima/generator-jhipster-tenantview/workflows/NPM%20Test/badge.svg)](https://github.com/mshima/generator-jhipster-tenantview/actions?query=workflow%3A%22NPM+Test%22)
+[![Dependency Status][daviddm-image]][daviddm-url]
 
 # Introduction
 
-This is a multitenancy/tenancy customization [JHipster](https://www.jhipster.tech/) blueprint with support for generator-jhispter >= 6.3.0.
-
-It's a rewrite of https://github.com/sonalake/generator-jhipster-multitenancy module (1.x) as a blueprint.
-
-https://github.com/sonalake/generator-jhipster-multitenancy blueprint (2.x) is a fork of an old version of this blueprint.
+This is a multitenancy/tenancy customization [JHipster](https://www.jhipster.tech/) blueprint.
 
 # Installation
 
