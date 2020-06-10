@@ -1,138 +1,139 @@
 name: Integration
 on: [push, pull_request]
 env:
-    JHI_RUN_APP: 1
-    JHI_PROTRACTOR: 1
-    JHI_PROFILE: prod
-    SPRING_OUTPUT_ANSI_ENABLED: NEVER
-    SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
-    JHI_E2E_HEADLESS: true
-    NG_CLI_ANALYTICS: false
+  JHI_RUN_APP: 1
+  JHI_PROTRACTOR: 1
+  JHI_PROFILE: prod
+  SPRING_OUTPUT_ANSI_ENABLED: NEVER
+  SPRING_JPA_SHOW_SQL: false
+  JHI_DISABLE_WEBPACK_LOGS: true
+  JHI_E2E_HEADLESS: true
+  NG_CLI_ANALYTICS: false
 
 jobs:
-    applications:
-        name: ${{ matrix.app-type }} ${{ matrix.jhi-gen-version }}
-        runs-on: ${{ matrix.os }}
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
-        timeout-minutes: 40
-        strategy:
-            fail-fast: false
-            matrix:
-                node_version:
-                    - 12.14.0
-                os:
-                    - ubuntu-latest
-                app-type:
-                    - jdl-definition
-                    - jdl-owner
-                    - jdl-company
-                    - jdl-relation
-                    - jdl-relation-protractor
-                jhi-gen-version:
-                    - 6.9.0
-                include:
-                    - app-type: jdl-relation
-                      additional-parameters: --relation-tenant-aware --tenant-name Company
-                    - app-type: jdl-company
-                      additional-parameters: --relation-tenant-aware --tenant-name Company
-                    - app-type: jdl-relation-protractor
-                      additional-parameters: --relation-tenant-aware --tenant-name Company
-        steps:
-            #----------------------------------------------------------------------
-            # Install all tools and check configuration
-            #----------------------------------------------------------------------
-            - uses: actions/setup-node@v1
-              with:
-                  node-version: ${{ matrix.node_version }}
-            - name: Download latest chrome binary
-              run: |
-                  sudo apt update
-                  sudo apt install google-chrome-stable
-            - uses: actions/setup-java@v1
-              with:
-                  java-version: '11.x'
+  applications:
+    name: ${{ matrix.app-type }} ${{ matrix.jhi-gen-version }}
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version:
+          - 12.14.0
+        os:
+          - ubuntu-latest
+        app-type:
+          - jdl-definition
+          - jdl-owner
+          - jdl-company
+          - jdl-relation
+          - jdl-relation-protractor
+        jhi-gen-version:
+          - 6.9.0
+          - 6.9.1
+        include:
+          - app-type: jdl-relation
+            additional-parameters: --relation-tenant-aware --tenant-name Company
+          - app-type: jdl-company
+            additional-parameters: --relation-tenant-aware --tenant-name Company
+          - app-type: jdl-relation-protractor
+            additional-parameters: --relation-tenant-aware --tenant-name Company
+    steps:
+      #----------------------------------------------------------------------
+      # Install all tools and check configuration
+      #----------------------------------------------------------------------
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Download latest chrome binary
+        run: |
+          sudo apt update
+          sudo apt install google-chrome-stable
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11.x'
 
-            #----------------------------------------------------------------------
-            # Create Application folder
-            #----------------------------------------------------------------------
-            - name: Create application folder
-              run: mkdir ../app
+      #----------------------------------------------------------------------
+      # Create Application folder
+      #----------------------------------------------------------------------
+      - name: Create application folder
+        run: mkdir ../app
 
-            #----------------------------------------------------------------------
-            # Install Blueprint
-            #----------------------------------------------------------------------
-            - name: Checkout blueprint
-              uses: actions/checkout@v1
-            - name: Link blueprint
-              run: npm link
-              working-directory: ${{ matrix.workspace }}
+      #----------------------------------------------------------------------
+      # Install Blueprint
+      #----------------------------------------------------------------------
+      - name: Checkout blueprint
+        uses: actions/checkout@v1
+      - name: Link blueprint
+        run: npm link
+        working-directory: ${{ matrix.workspace }}
 
-            #----------------------------------------------------------------------
-            # Install JHipster
-            #----------------------------------------------------------------------
-            - name: Install jhipster
-              run: npm install -g generator-jhipster@${{ matrix.jhi-gen-version }}
+      #----------------------------------------------------------------------
+      # Install JHipster
+      #----------------------------------------------------------------------
+      - name: Install jhipster
+        run: npm install -g generator-jhipster@${{ matrix.jhi-gen-version }}
 
-            #----------------------------------------------------------------------
-            # Install scripts blueprint
-            #----------------------------------------------------------------------
-            - name: Install scripts blueprint
-              run: npm install -g generator-jhipster-scripts@0.1.0
+      #----------------------------------------------------------------------
+      # Install scripts blueprint
+      #----------------------------------------------------------------------
+      - name: Install scripts blueprint
+        run: npm install -g generator-jhipster-scripts@0.1.0
 
-            #----------------------------------------------------------------------
-            # Copy jdl file
-            #----------------------------------------------------------------------
-            - name: Copy jdl files
-              run: cp ${{ github.workspace }}/test-integration/samples/${{ matrix.app-type }}/* .
-              working-directory: ../app
+      #----------------------------------------------------------------------
+      # Copy jdl file
+      #----------------------------------------------------------------------
+      - name: Copy jdl files
+        run: cp ${{ github.workspace }}/test-integration/samples/${{ matrix.app-type }}/* .
+        working-directory: ../app
 
-            #----------------------------------------------------------------------
-            # Generate project
-            #----------------------------------------------------------------------
-            - name: Project generation
-              run: jhipster import-jdl *.jdl --no-insight --blueprints scripts,tenantview ${{ matrix.additional-parameters }}
-              working-directory: ../app
+      #----------------------------------------------------------------------
+      # Generate project
+      #----------------------------------------------------------------------
+      - name: Project generation
+        run: jhipster import-jdl *.jdl --no-insight --blueprints scripts,tenantview ${{ matrix.additional-parameters }}
+        working-directory: ../app
 
-            - name: Package.json information
-              run: cat package.json
-              working-directory: ../app
+      - name: Package.json information
+        run: cat package.json
+        working-directory: ../app
 
-            - name: Project information
-              run: jhipster info
-              working-directory: ../app
+      - name: Project information
+        run: jhipster info
+        working-directory: ../app
 
-            #----------------------------------------------------------------------
-            # Tests
-            #----------------------------------------------------------------------
-            - name: Start db containers
-              run: npm run ci:test:prepare:docker
-              working-directory: ../app
+      #----------------------------------------------------------------------
+      # Tests
+      #----------------------------------------------------------------------
+      - name: Start db containers
+        run: npm run ci:test:prepare:docker
+        working-directory: ../app
 
-            - name: Start others containers
-              run: npm run docker:others
-              working-directory: ../app
+      - name: Start others containers
+        run: npm run docker:others
+        working-directory: ../app
 
-            - name: Frontend tests
-              run: npm test
-              working-directory: ../app
+      - name: Frontend tests
+        run: npm test
+        working-directory: ../app
 
-            - name: Backend info
-              run: npm run backend:info
-              working-directory: ../app
+      - name: Backend info
+        run: npm run backend:info
+        working-directory: ../app
 
-            - name: Backend javadoc
-              run: npm run backend:doc:test
-              working-directory: ../app
+      - name: Backend javadoc
+        run: npm run backend:doc:test
+        working-directory: ../app
 
-            - name: Backend test
-              run: npm run backend:test
-              working-directory: ../app
+      - name: Backend test
+        run: npm run backend:test
+        working-directory: ../app
 
-            - name: Packaging
-              run: npm run java:jar
-              working-directory: ../app
+      - name: Packaging
+        run: npm run java:jar
+        working-directory: ../app
 
-            - name: End-to-End
-              run: npm run ci:e2e
-              working-directory: ../app
+      - name: End-to-End
+        run: npm run ci:e2e
+        working-directory: ../app
