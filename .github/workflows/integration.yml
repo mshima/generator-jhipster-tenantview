@@ -30,8 +30,8 @@ jobs:
           - jdl-relation
           - jdl-relation-protractor
         jhi-gen-version:
+          - generator-jhipster@6.9.0
           - generator-jhipster@6.9.1
-          - generator-jhipster@6.9.2
         include:
           - jdl-path: jdl-relation
             additional-parameters: --relation-tenant-aware --tenant-name Company
