@@ -26,9 +26,11 @@ module.exports = {
       }
 
       _templateData() {
+        let languagesToApply = this.options.jhipsterContext ? this.options.jhipsterContext.languagesToApply : [];
+        languagesToApply = languagesToApply || [];
         return {
           ...super._templateData(),
-          languagesToApply: this.options.jhipsterContext.languagesToApply,
+          languagesToApply,
           tenant: this.tenant
         };
       }

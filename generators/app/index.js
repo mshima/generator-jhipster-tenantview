@@ -71,7 +71,7 @@ module.exports = {
 
       get prompting() {
         return {
-          askTenantAware() {
+          askTenantName() {
             const prompts = [
               {
                 name: 'tenantName',

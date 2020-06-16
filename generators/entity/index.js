@@ -77,6 +77,10 @@ module.exports = {
 
           configureTenant() {
             if (!this.isTenant) return;
+
+            // Workaround to make jhipster save the relationship
+            this.context.useConfigurationFile = false;
+
             // Force tenant to be serviceClass
             this.entityConfig.set('service', 'serviceClass');
             this.context.service = 'serviceClass';
@@ -120,6 +124,8 @@ module.exports = {
                 this._.defaults(tenantRelationship, defaultTenantRel);
               } else {
                 this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
+                // Workaround to make jhipster save the relationship
+                context.useConfigurationFile = false;
                 context.relationships.push(defaultTenantRel);
               }
             }
