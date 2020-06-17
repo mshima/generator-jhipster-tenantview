@@ -29,6 +29,7 @@ jobs:
           - jdl-company
           - jdl-relation
           - jdl-relation-protractor
+          - jdl-simple
         jhi-gen-version:
           - generator-jhipster@6.9.0
           - generator-jhipster@6.9.1

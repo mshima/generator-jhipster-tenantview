@@ -1,0 +1,49 @@
+application {
+  config {
+    applicationType monolith,
+    baseName jhipsterSampleApplication,
+    packageName io.github.jhipster.sample,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    buildTool maven,
+    searchEngine false,
+    testFrameworks [protractor],
+    clientFramework angularX,
+    enableTranslation false,
+    nativeLanguage en,
+    languages [ en, fr ]
+  }
+  entities *
+}
+
+@tenant
+entity Bank {
+  name String required minlength(3)
+  idName String minlength(3)
+}
+
+@tenantAware
+entity BankAccount {
+  name String required
+  bankNumber Integer
+  agencyNumber Long
+  lastOperationDuration Float
+  meanOperationDuration Double
+  balance BigDecimal required
+  openingDay LocalDate
+  lastOperationDate Instant
+  active Boolean
+  accountType BankAccountType
+  attachment AnyBlob
+  description TextBlob
+}
+
+enum BankAccountType {
+  CHECKING,
+  SAVINGS,
+  LOAN
+}
+
+filter BankAccount
+
+service * with serviceImpl
