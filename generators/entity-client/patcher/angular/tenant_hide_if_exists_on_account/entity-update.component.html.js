@@ -10,13 +10,6 @@ const tmpls = [
     regex: true,
     target: context => `<div class="form-group">(\\s*)(.*)(for="field_${context.tenant.entityInstance})"`,
     tmpl: context => `<div class="form-group" *ngIf="!currentAccount.${context.tenant.entityInstance}">$1$2$3"`
-  },
-  {
-    // Hide the tenant if the current account is from a tenant (requirements)
-    type: 'replaceContent',
-    regex: false,
-    target: context => `<div *ngIf="editForm.get('${context.tenant.entityInstance}`,
-    tmpl: context => `<div *ngIf="!currentAccount.${context.tenant.entityInstance} && editForm.get('${context.tenant.entityInstance}`
   }
 ];
 
