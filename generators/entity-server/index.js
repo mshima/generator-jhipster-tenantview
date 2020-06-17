@@ -55,8 +55,9 @@ module.exports = {
           // Make the necessary server code changes
           customServerCode() {
             if (this.isTenant) {
-              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenant.entityClass}_constraints`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-1__user_${this.tenant.entityClass}`);
               this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
+              this.addConstraintsChangelogToLiquibase(`${this.entity.changelogDate}-3__user_${this.tenant.entityClass}_constraints`);
             }
           }
         };

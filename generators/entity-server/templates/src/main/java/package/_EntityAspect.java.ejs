@@ -46,7 +46,7 @@ public class <%= entity.entityClass %>Aspect {
         if(login.isPresent()) {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
-            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
+            if (loggedInUser.get<%= tenant.entityClass %>().getId() != 0) {
                 <%= entity.entityInstance %>.set<%= tenant.entityClass %>(loggedInUser.get<%= tenant.entityClass %>());
             }
         }
@@ -63,7 +63,7 @@ public class <%= entity.entityClass %>Aspect {
         if(login.isPresent()) {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
-            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
+            if (loggedInUser.get<%= tenant.entityClass %>().getId() != 0) {
                 <%= entity.entityClass %> <%= entity.entityInstance %> = <%= entity.entityInstance %>Repository.findById(id).get();
                 if(<%= entity.entityInstance %>.get<%= tenant.entityClass %>() != loggedInUser.get<%= tenant.entityClass %>()){
                     throw new NoSuchElementException();
@@ -85,7 +85,7 @@ public class <%= entity.entityClass %>Aspect {
         {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
-            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
+            if (loggedInUser.get<%= tenant.entityClass %>().getId() != 0) {
                 if(optional.isPresent() && optional.get().get<%= tenant.entityClass %>() != loggedInUser.get<%= tenant.entityClass %>()){
                     throw new NoSuchElementException();
                 }
@@ -106,7 +106,7 @@ public class <%= entity.entityClass %>Aspect {
         {
             User loggedInUser = userRepository.findOneByLogin(login.get()).get();
 
-            if (loggedInUser.get<%= tenant.entityClass %>() != null) {
+            if (loggedInUser.get<%= tenant.entityClass %>().getId() != 0) {
                 <%= entity.entityClass %> example = new <%= entity.entityClass %>();
                 example.set<%= tenant.entityClass %>(loggedInUser.get<%= tenant.entityClass %>());
                 List<<%= entity.entityClass %>> <%= entity.entityInstancePlural %> = <%= entity.entityInstance %>Repository.findAll(Example.of(example));

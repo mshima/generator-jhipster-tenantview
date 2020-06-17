@@ -52,7 +52,7 @@ public class <%= tenant.entityClass %>Aspect {
             }
             User user = optionalUser.get();
 
-            if (user.get<%= tenant.entityClass %>() != null) {
+            if (user.get<%= tenant.entityClass %>().getId() != 0) {
                 Filter filter = entityManager.unwrap(Session.class).enableFilter("<%= tenant.entityUpperCase %>_FILTER");
                 filter.setParameter(fieldName, user.get<%= tenant.entityClass %>().getId());
             }

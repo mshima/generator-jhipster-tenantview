@@ -3,20 +3,30 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <!--
-        Load <%= tenant.entityClass %> data
-        Dev context uses faker-data so this will conflict with it.
-        Apply to prod only.
-    -->
-    <changeSet id="<%= entity.changelogDate %>-2" author="jhipster" context="prod, test">
-        <loadData file="config/liquibase/data/<%= tenant.entityLowerCase %>.csv"
+
+    <changeSet id="<%= entity.changelogDate %>-2" author="jhipster">
+        <loadData
+                  file="config/liquibase/data/<%= tenant.entityLowerCase %>/authority.csv"
+                  separator=";"
+                  tableName="jhi_authority"/>
+
+        <loadData file="config/liquibase/data/<%= tenant.entityLowerCase %>/<%= tenant.entityLowerCase %>_root.csv"
                   separator=";"
                   tableName="<%= tenant.entityLowerCase %>">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+            <column name="id_name" type="string"/>
         </loadData>
-    </changeSet>
 
-    <changeSet id="<%= entity.changelogDate %>-2.1" author="jhipster">
-        <loadData file="config/liquibase/data/<%= tenant.entityLowerCase %>_user.csv"
+        <loadUpdateData file="config/liquibase/data/<%= tenant.entityLowerCase %>/user_relationship.csv"
+                  separator=";"
+                  tableName="jhi_user"
+                  primaryKey="id">
+            <column name="id" type="numeric"/>
+            <column name="<%= tenant.entityLowerCase %>_id" type="numeric"/>
+        </loadUpdateData>
+
+        <loadData file="config/liquibase/data/<%= tenant.entityLowerCase %>/user.csv"
                   separator=";"
                   tableName="jhi_user">
             <column name="id" type="numeric"/>
@@ -26,16 +36,23 @@
         </loadData>
 
         <loadData
-                  file="config/liquibase/data/<%= tenant.entityLowerCase %>_authority.csv"
-                  separator=";"
-                  tableName="jhi_authority"/>
-
-        <loadData
-                  file="config/liquibase/data/<%= tenant.entityLowerCase %>_user_authority.csv"
+                  file="config/liquibase/data/<%= tenant.entityLowerCase %>/user_authority.csv"
                   separator=";"
                   tableName="jhi_user_authority">
             <column name="user_id" type="numeric"/>
         </loadData>
 
+    </changeSet>
+
+    <!--
+        Load <%= tenant.entityClass %> data
+        Dev context uses faker-data so this will conflict with it.
+        Apply to prod only.
+    -->
+    <changeSet id="<%= entity.changelogDate %>-2.1" author="jhipster" context="prod, test">
+        <loadData file="config/liquibase/data/<%= tenant.entityLowerCase %>/<%= tenant.entityLowerCase %>_others.csv"
+                  separator=";"
+                  tableName="<%= tenant.entityLowerCase %>">
+        </loadData>
     </changeSet>
 </databaseChangeLog>
