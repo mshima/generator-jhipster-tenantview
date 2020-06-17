@@ -39,6 +39,11 @@ module.exports = {
         });
 
         this.sbsBlueprint = true;
+
+        // The method getExistingFiles() uses shelljs.ls, so we must write to disk to for the entity be found
+        if (!fs.existsSync('.jhipster')) {
+          fs.mkdirSync('.jhipster');
+        }
       }
 
       get initializing() {
@@ -93,9 +98,31 @@ module.exports = {
         };
       }
 
+      get configuring() {
+        return {
+          generateTenant: this._generateTenant,
+          configureTenantAware: this._configureTenantAware
+        };
+      }
+
       get default() {
         return {
-          generateTenant: this._generateTenant
+          composeWithTenant() {
+            if (!this.forceComposeWithTenant) {
+              return;
+            }
+
+            const tenantName = this.blueprintConfig.get('tenantName');
+            const configOptions = this.configOptions;
+            this.composeWith('jhipster:entity', {
+              ...this.options,
+              configOptions,
+              regenerate: true,
+              'skip-install': false,
+              debug: this.isDebugEnabled,
+              arguments: [tenantName]
+            });
+          }
         };
       }
 
@@ -103,6 +130,9 @@ module.exports = {
       /* private methods use within generator (not exposed to modules) */
       /* ======================================================================== */
 
+      /**
+       * return {Boolean} true if needs to be composed
+       */
       _generateTenant() {
         const tenantName = this.blueprintConfig.get('tenantName');
         assert(tenantName);
@@ -139,23 +169,11 @@ module.exports = {
           const definition = this._getDefaultDefinition(tenantName);
 
           tenantStorage.set(definition);
-          // The method getExistingFiles() uses shelljs.ls, so we must write to disk to for the entity be found
-          if (!fs.existsSync('.jhipster')) {
-            fs.mkdirSync('.jhipster');
-          }
 
           fs.writeFileSync(tenantStorage.path, JSON.stringify(definition, null, 2).concat('\n'));
 
           if (!this.options.withEntities) {
-            const configOptions = this.configOptions;
-            this.composeWith('jhipster:entity', {
-              ...this.options,
-              configOptions,
-              regenerate: true,
-              'skip-install': false,
-              debug: this.isDebugEnabled,
-              arguments: [tenantName]
-            });
+            this.forceComposeWithTenant = true;
           }
         }
       }
@@ -200,6 +218,17 @@ module.exports = {
           ownerSide: false,
           otherEntityRelationshipName: _.lowerFirst(tenantName)
         };
+      }
+
+      _configureTenantAware() {
+        const tenantName = this.blueprintConfig.get('tenantName');
+        const tenant = this.jhipsterFs.getEntity(tenantName);
+        this.getExistingEntities()
+          .filter(entity => entity.definition.tenantAware)
+          .forEach(tenantAwareEntity => {
+            const entity = this.jhipsterFs.getEntity(tenantAwareEntity.name);
+            mtUtils.configureTenantAwareEntity(entity, tenant);
+          });
       }
     };
   }

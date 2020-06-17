@@ -1,5 +1,4 @@
 const assert = require('assert');
-const chalk = require('chalk');
 const debug = require('debug')('tenantview:entity');
 const path = require('path');
 const customizer = require('generator-jhipster-customizer');
@@ -16,6 +15,10 @@ module.exports = {
       constructor(args, options) {
         debug(`Initializing ${generator} ${args[0]}`);
         super(args, options);
+
+        if (this.options.help) {
+          return;
+        }
 
         this.entityName = this._.upperFirst(args[0]);
 
@@ -78,9 +81,6 @@ module.exports = {
           configureTenant() {
             if (!this.isTenant) return;
 
-            // Workaround to make jhipster save the relationship
-            this.context.useConfigurationFile = false;
-
             // Force tenant to be serviceClass
             this.entityConfig.set('service', 'serviceClass');
             this.context.service = 'serviceClass';
@@ -93,41 +93,8 @@ module.exports = {
 
             this._debug('Tenant aware %o', this.entity.definitions.tenantAware);
             if (this.entity.definitions.tenantAware) {
-              const defaultTenantRel = {
-                relationshipName: this.tenant.entityInstance,
-                otherEntityName: this.tenant.entityInstance,
-                relationshipType: 'many-to-one',
-                otherEntityField: 'name',
-                relationshipValidateRules: 'required',
-                ownerSide: true,
-                clientRootFolder: this.tenant.clientRootFolder,
-                otherEntityStateName: this.tenant.entityStateName,
-                // Should be tenantFolderName, as of 6.4.1 this is wrong
-                otherEntityFolderName: this.tenant.entityFileName,
-                otherEntityAngularName: this.tenant.entityAngularName,
-                otherEntityRelationshipName: this.tenant.entityInstance
-              };
-
-              const tenantRelationship = this._getTenantRelationship();
-
-              // If tenant relationship already exists in the entity then set options
-              if (tenantRelationship) {
-                this._debug('Found relationship with tenant');
-                // Force values
-                tenantRelationship.ownerSide = true;
-                tenantRelationship.relationshipValidateRules = 'required';
-
-                // Entity-management-update.component.ts.ejs:
-                // import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-                // import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
-
-                this._.defaults(tenantRelationship, defaultTenantRel);
-              } else {
-                this.log(chalk.white(`Entity ${chalk.bold(this.options.name)} found. Adding relationship`));
-                // Workaround to make jhipster save the relationship
-                context.useConfigurationFile = false;
-                context.relationships.push(defaultTenantRel);
-              }
+              mtUtils.configureTenantAwareEntity(this.entity, this.tenant);
+              context.relationships = this.entity.definitions.relationships;
             }
           },
           configure() {

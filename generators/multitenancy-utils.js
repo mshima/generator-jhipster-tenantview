@@ -4,7 +4,8 @@ const _ = require('lodash');
  * Utils file to hold methods common to both generator and sub generator
  */
 module.exports = {
-  getArrayItemWithFieldValue
+  getArrayItemWithFieldValue,
+  configureTenantAwareEntity
 };
 
 /**
@@ -24,4 +25,38 @@ function getArrayItemWithFieldValue(array, fieldName, value) {
     }
   });
   return found;
+}
+
+function configureTenantAwareEntity(tenantAwareEntity, tenant) {
+  const tenantRelationship = getArrayItemWithFieldValue(
+    tenantAwareEntity.definitions.relationships || [],
+    'otherEntityName',
+    tenant.entityInstance
+  );
+  const defaultTenantRel = createDefaultTenantAwareRelationship(tenant);
+  if (tenantRelationship) {
+    tenantRelationship.ownerSide = true;
+    tenantRelationship.relationshipValidateRules = 'required';
+    _.defaults(tenantRelationship, defaultTenantRel);
+    tenantAwareEntity.definitions.relationships = tenantAwareEntity.definitions.relationships.concat([]);
+  } else {
+    tenantAwareEntity.definitions.relationships = tenantAwareEntity.definitions.relationships.concat([defaultTenantRel]);
+  }
+}
+
+function createDefaultTenantAwareRelationship(tenant) {
+  return {
+    relationshipName: tenant.entityInstance,
+    otherEntityName: tenant.entityInstance,
+    relationshipType: 'many-to-one',
+    otherEntityField: 'name',
+    relationshipValidateRules: 'required',
+    ownerSide: true,
+    clientRootFolder: tenant.clientRootFolder,
+    otherEntityStateName: tenant.entityStateName,
+    // Should be tenantFolderName, as of 6.4.1 this is wrong
+    otherEntityFolderName: tenant.entityFileName,
+    otherEntityAngularName: tenant.entityAngularName,
+    otherEntityRelationshipName: tenant.entityInstance
+  };
 }

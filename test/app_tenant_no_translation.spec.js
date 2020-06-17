@@ -7,7 +7,7 @@ const getFilesForOptions = require('./jhipster_utils/utils').getFilesForOptions;
 const expectedFiles = require('./jhipster_utils/expected-files');
 const mtExpectedFiles = require('./multitenancy_utils/expected-files');
 
-describe('JHipster generator with tenantview blueprint', () => {
+describe('JHipster generator with tenantview blueprint no translation', () => {
   context('Default configuration with', () => {
     describe('AngularX', () => {
       let env;
