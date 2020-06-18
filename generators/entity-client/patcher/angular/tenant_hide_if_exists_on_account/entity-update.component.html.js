@@ -9,7 +9,7 @@ const tmpls = [
     type: 'replaceContent',
     regex: true,
     target: context => `<div class="form-group">(\\s*)(.*)(for="field_${context.tenant.entityInstance})"`,
-    tmpl: context => `<div class="form-group" *ngIf="!currentAccount.${context.tenant.entityInstance}">$1$2$3"`
+    tmpl: context => `<div class="form-group" *ngIf="currentAccount.${context.tenant.entityInstance}.id === 0">$1$2$3"`
   }
 ];
 

@@ -4,18 +4,18 @@ const tmpls = [
   {
     type: 'rewriteFile',
     target: () => 'export interface IUser',
-    tmpl: context => `import { ${context.tenant.entityClass} } from '../../shared/admin/${context.tenant.entityInstance}.model';
+    tmpl: context => `import { I${context.tenant.entityClass} } from '../../shared/admin/${context.tenant.entityInstance}.model';
 `
   },
   {
     type: 'replaceContent',
     target: /((\n\s*)password\?: string;)/,
-    tmpl: context => `$1$2${context.tenant.entityInstance}?: ${context.tenant.entityClass};`
+    tmpl: context => `$1$2${context.tenant.entityInstance}?: I${context.tenant.entityClass};`
   },
   {
     type: 'replaceContent',
     target: /((\n\s*)public password\?: string)/,
-    tmpl: context => `$1,$2public ${context.tenant.entityInstance}?: ${context.tenant.entityClass}`
+    tmpl: context => `$1,$2public ${context.tenant.entityInstance}?: I${context.tenant.entityClass}`
   }
 ];
 

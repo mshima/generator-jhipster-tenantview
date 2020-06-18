@@ -8,7 +8,7 @@ const tmpls = [
     type: 'replaceContent',
     regex: true,
     target: context => `<th(.*)><span(.*)>${context.tenant.entityClass}</span>`,
-    tmpl: context => `<th$1 *ngIf="!currentAccount.${context.tenant.entityInstance}"><span$2>${context.tenant.entityClass}</span>`
+    tmpl: context => `<th$1 *ngIf="currentAccount.${context.tenant.entityInstance}.id === 0"><span$2>${context.tenant.entityClass}</span>`
   },
   {
     // Hide if currentAccount has a tenant
@@ -16,7 +16,7 @@ const tmpls = [
     type: 'replaceContent',
     regex: true,
     target: context => `<td>\n(\\s*)(<div \\*ngIf="${context.entity.entityInstance}.${context.tenant.entityInstance}">)`,
-    tmpl: context => `<td *ngIf="!currentAccount.${context.tenant.entityInstance}">\n$1$2`
+    tmpl: context => `<td *ngIf="currentAccount.${context.tenant.entityInstance}.id === 0">\n$1$2`
   }
 ];
 module.exports = {

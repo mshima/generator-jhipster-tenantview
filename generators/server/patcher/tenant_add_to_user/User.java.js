@@ -26,6 +26,7 @@ $1`
     target: () => '((.*)public Long getId)',
     tmpl: context => `$2@ManyToOne
 $2@JsonIgnoreProperties("users")
+$2@JoinColumn(nullable = false)
 $2private ${context.tenant.entityClass} ${context.tenant.entityInstance};
 
 $1`

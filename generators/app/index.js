@@ -126,6 +126,14 @@ module.exports = {
         };
       }
 
+      get postWriting() {
+        return {
+          removeRegisterFiles() {
+            this.deleteDestination('/src/main/webapp/app/account/register');
+          }
+        }
+      }
+
       /* ======================================================================== */
       /* private methods use within generator (not exposed to modules) */
       /* ======================================================================== */
