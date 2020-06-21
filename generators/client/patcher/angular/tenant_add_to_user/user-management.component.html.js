@@ -8,7 +8,7 @@ const tmpls = [
     tmpl: context => {
       const jhiTranslate = context.storage.enableTranslation ? ` jhiTranslate="userManagement.${context.tenant.entityInstance}"` : '';
       // eslint-disable-next-line prettier/prettier
-            return `$2<th$3 jhiSortBy="${context.tenant.entityInstance}" *ngIf="!currentAccount || !currentAccount.${context.tenant.entityInstance}"><span${jhiTranslate}>${context.tenant.entityClass}</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            return `$2<th$3 jhiSortBy="${context.tenant.entityInstance}" *ngIf="currentAccount?.${context.tenant.entityInstance}?.id === 0"><span${jhiTranslate}>${context.tenant.entityClass}</span> <fa-icon [icon]="'sort'"></fa-icon></th>
 $1`;
     }
   },
@@ -17,7 +17,7 @@ $1`;
     regex: true,
     target: /((\s*)<td>(\s*)<div \*ngFor="let authority of user.authorities">)/,
     tmpl: context =>
-      `$2<td *ngIf="!currentAccount || currentAccount.${context.tenant.entityInstance}.id === 0">{{user.${context.tenant.entityInstance}?.name}}</td>$1`
+      `$2<td *ngIf="currentAccount?.${context.tenant.entityInstance}?.id === 0">{{user.${context.tenant.entityInstance}?.name}}</td>$1`
   }
 ];
 

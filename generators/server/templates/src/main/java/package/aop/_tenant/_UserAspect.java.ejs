@@ -1,5 +1,7 @@
 package <%=storage.packageName%>.aop.<%= tenant.entityInstance %>;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -131,7 +133,7 @@ public class <%= tenant.entityClass %>AwareUserAspect {
 
     private void assertThatCurrent<%= tenant.entityClass %>Exists() {
         if (currentUser<%= tenant.entityClass %> == null || currentUser<%= tenant.entityClass %>.getId() == null) {
-            log.error("Current user does not have an <%= tenant.entityClass %>");
+            log.error("Current user does not have a <%= tenant.entityClass %>");
             throw new org.springframework.security.access.AccessDeniedException("Not allowed");
         }
     }

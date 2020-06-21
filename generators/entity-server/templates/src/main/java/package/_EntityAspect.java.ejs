@@ -114,7 +114,7 @@ public class <%= tenant.entityClass %>Aware<%= entity.entityClass %>Aspect {
 
     private void assertThatCurrent<%= tenant.entityClass %>Exists() {
         if (currentUser<%= tenant.entityClass %> == null || currentUser<%= tenant.entityClass %>.getId() == null) {
-            log.error("Current user does not have an <%= tenant.entityClass %>");
+            log.error("Current user does not have a <%= tenant.entityClass %>");
             throw new org.springframework.security.access.AccessDeniedException("Not allowed");
         }
     }
