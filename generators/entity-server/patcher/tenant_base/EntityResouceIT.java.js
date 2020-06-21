@@ -13,6 +13,22 @@ const tmpls = [
     type: 'replaceContent',
     tmpl: ctx => `@WithUserDetails("${ctx.tenant.entityInstance}_admin")`,
     target: '@WithMockUser'
+  },
+  {
+    condition: context => context.entity.definitions.tenantAware,
+    type: 'replaceContent',
+    regex: true,
+    tmpl: '',
+    target: ctx => `
+\\s*${ctx.tenant.entityClass} ${ctx.tenant.entityInstance};
+.*
+.*
+.*
+.*
+.*
+.*
+.*
+\\s*${ctx.entity.entityInstance}.set${ctx.tenant.entityClass}\\(${ctx.tenant.entityInstance}\\);`
   }
 ];
 

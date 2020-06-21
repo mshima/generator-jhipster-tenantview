@@ -6,21 +6,23 @@ const tmpls = [
   {
     condition: ctx => ctx.entity.definitions.tenantAware,
     type: 'rewriteFile',
-    target: ctx => `
-import ${ctx.storage.packageName}.domain.${ctx.entity.entityClass};
+    tmpl: ctx => `import ${ctx.storage.packageName}.domain.${ctx.tenant.entityClass};
 
-import java.util.Optional;`,
-    tmpl: 'import org.springframework.data.jpa.repository.*;'
+import java.util.Optional;
+`,
+    target: 'import org.springframework.data.jpa.repository.*;'
   },
   {
     condition: ctx => ctx.entity.definitions.tenantAware,
     type: 'replaceContent',
-    target: ctx => `
-    void deleteByIdAnd${ctx.entity.entityClass}(Long id, ${ctx.entity.entityClass} ${ctx.entity.entityInstance});
+    regex: true,
+    tmpl: ctx => `
+    void deleteByIdAnd${ctx.tenant.entityClass}(Long id, ${ctx.tenant.entityClass} ${ctx.tenant.entityInstance});
 
-    Optional<BankAccount> findByIdAnd${ctx.entity.entityClass}(Long id, ${ctx.entity.entityClass} ${ctx.entity.entityInstance});`,
-    tmpl: `}
-$`
+    Optional<BankAccount> findByIdAnd${ctx.tenant.entityClass}(Long id, ${ctx.tenant.entityClass} ${ctx.tenant.entityInstance});
+$1`,
+    target: `(}
+$)`
   }
 ];
 

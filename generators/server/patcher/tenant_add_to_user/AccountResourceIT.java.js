@@ -1,20 +1,22 @@
 // Ignore tests with account
-const file = gen => `${gen.constants.SERVER_TEST_SRC_DIR}${gen.storage.packageFolder}/web/rest/AccountResourceIT.java`;
+const file = ctx => `${ctx.constants.SERVER_TEST_SRC_DIR}${ctx.storage.packageFolder}/web/rest/AccountResourceIT.java`;
 
 const tmpls = [
   {
     type: 'replaceContent',
     tmpl: ctx => `@WithUserDetails("bank_admin")
-@SpringBootTest(classes = {JhipsterSampleApplicationApp.class, CurrentBankConfig.class})
+@SpringBootTest(classes = {${ctx.generator.getMainClassName(ctx.storage.baseName)}.class, Current${ctx.tenant.entityClass}TestConfig.class})
 `,
     target: ctx => `@WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = JhipsterSampleApplicationApp.class)
+@SpringBootTest(classes = ${ctx.generator.getMainClassName(ctx.storage.baseName)}.class)
 `
   },
   {
     type: 'rewriteFile',
-    tmpl: 'import org.springframework.security.test.context.support.WithUserDetails;',
-    target: 'import org.springframework.test.web.servlet.MockMvc;'
+    tmpl: ctx => `import org.springframework.security.test.context.support.WithUserDetails;
+import io.github.jhipster.sample.config.Current${ctx.tenant.entityClass}TestConfig;
+`,
+    target: 'import java.time.Instant;'
   },
   {
     type: 'rewriteFile',
@@ -80,6 +82,11 @@ const tmpls = [
     type: 'rewriteFile',
     tmpl: '@Disabled("Self registration disabled")',
     target: 'testRegisterNullPassword()'
+  },
+  {
+    type: 'rewriteFile',
+    tmpl: '@Disabled("Self registration disabled")',
+    target: 'testRegisterInvalidPassword()'
   }
 ];
 
