@@ -131,7 +131,7 @@ module.exports = {
           removeRegisterFiles() {
             this.deleteDestination('/src/main/webapp/app/account/register');
           }
-        }
+        };
       }
 
       /* ======================================================================== */

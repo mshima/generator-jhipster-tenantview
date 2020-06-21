@@ -1,6 +1,5 @@
 // Add jpa filter to the entity to remove entries from another tenant
-const file = ctx =>
-  `${ctx.constants.SERVER_MAIN_SRC_DIR}${ctx.storage.packageFolder}/repository/${ctx.entity.entityClass}Repository.java`;
+const file = ctx => `${ctx.constants.SERVER_MAIN_SRC_DIR}${ctx.storage.packageFolder}/repository/${ctx.entity.entityClass}Repository.java`;
 
 const tmpls = [
   {
