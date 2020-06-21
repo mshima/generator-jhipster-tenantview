@@ -7,7 +7,7 @@ const tmpls = [
     regex: true,
     target: () => 'getImageUrl(): string {',
     tmpl: context => `get${context.tenant.entityClass}(): String {
-    return this.userIdentity!.${context.tenant.entityInstance}.idName ? this.userIdentity!.${context.tenant.entityInstance}.idName : '';
+    return this.userIdentity!.${context.tenant.entityInstance}.idName ? this.userIdentity!.${context.tenant.entityInstance}.idName : {id:3, idName: 'Mock${context.tenant.entityClass}'};
   }\n`
   }
 ];

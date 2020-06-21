@@ -10,7 +10,7 @@ module.exports = {
               method: 'patcherTemplate',
               file: 'package/_EntityAspect.java',
               renameTo: () =>
-                `${context.storage.packageFolder}/aop/${context.tenant.entityInstance}/${context.entity.entityClass}Aspect.java`
+                `${context.storage.packageFolder}/aop/${context.tenant.entityInstance}/${context.tenant.entityClass}Aware${context.entity.entityClass}Aspect.java`
             }
           ]
         },

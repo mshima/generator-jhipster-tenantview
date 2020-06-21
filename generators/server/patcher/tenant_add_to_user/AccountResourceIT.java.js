@@ -20,16 +20,6 @@ const tmpls = [
   {
     type: 'rewriteFile',
     tmpl: '@Disabled("Self registration disabled")',
-    target: 'testFinishPasswordReset()'
-  },
-  {
-    type: 'rewriteFile',
-    tmpl: '@Disabled("Self registration disabled")',
-    target: 'testFinishPasswordResetWrongKey()'
-  },
-  {
-    type: 'rewriteFile',
-    tmpl: '@Disabled("Self registration disabled")',
     target: 'testGetUnknownAccount()'
   },
   {
@@ -61,11 +51,6 @@ const tmpls = [
     type: 'rewriteFile',
     tmpl: '@Disabled("Self registration disabled")',
     target: 'testRequestPasswordResetUpperCaseEmail()'
-  },
-  {
-    type: 'rewriteFile',
-    tmpl: '@Disabled("Self registration disabled")',
-    target: 'testRequestPasswordResetWrongEmail()'
   },
   {
     type: 'rewriteFile',

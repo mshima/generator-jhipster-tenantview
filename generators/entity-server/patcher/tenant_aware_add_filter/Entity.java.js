@@ -16,8 +16,8 @@ import org.hibernate.annotations.ParamDef;
     condition: context => context.entity.definitions.tenantAware,
     type: 'rewriteFile',
     target: context => `public class ${context.entity.entityClass}`,
-    tmpl: context => `@FilterDef(name = "TENANT_FILTER", parameters = {@ParamDef(name = "${context.tenant.entityInstance}Id", type = "long")})
-@Filter(name = "TENANT_FILTER", condition = "${context.tenant.entityInstance}_id = :${context.tenant.entityInstance}Id")`
+    tmpl: context => `@FilterDef(name = "${context.tenant.entityUpperCase}_FILTER", parameters = {@ParamDef(name = "${context.tenant.entityInstance}Id", type = "long")})
+@Filter(name = "${context.tenant.entityUpperCase}_FILTER", condition = "${context.tenant.entityInstance}_id = :${context.tenant.entityInstance}Id")`
   }
 ];
 
