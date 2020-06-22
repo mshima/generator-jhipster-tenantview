@@ -14,7 +14,7 @@ const tmpls = [
   {
     type: 'rewriteFile',
     tmpl: ctx => `import org.springframework.security.test.context.support.WithUserDetails;
-import io.github.jhipster.sample.config.${ctx.tenant.entityInstance}.${ctx.tenant.entityClass}AwareSessionTestConfiguration;
+import ${ctx.storage.packageName}.config.${ctx.tenant.entityInstance}.${ctx.tenant.entityClass}AwareSessionTestConfiguration;
 `,
     target: 'import java.time.Instant;'
   },

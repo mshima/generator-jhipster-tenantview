@@ -230,12 +230,13 @@ module.exports = {
 
       _configureTenantAware() {
         const tenantName = this.blueprintConfig.get('tenantName');
+        const tenantModule = this.blueprintConfig.get('tenantModule');
         const tenant = this.jhipsterFs.getEntity(tenantName);
         this.getExistingEntities()
           .filter(entity => entity.definition.tenantAware)
           .forEach(tenantAwareEntity => {
             const entity = this.jhipsterFs.getEntity(tenantAwareEntity.name);
-            mtUtils.configureTenantAwareEntity(entity, tenant);
+            mtUtils.configureTenantAwareEntity(entity, tenant, tenantModule ? `${tenantModule}/` : '');
           });
       }
     };

@@ -93,7 +93,8 @@ module.exports = {
 
             this._debug('Tenant aware %o', this.entity.definitions.tenantAware);
             if (this.entity.definitions.tenantAware) {
-              mtUtils.configureTenantAwareEntity(this.entity, this.tenant);
+              const tenantModule = this.blueprintConfig.get('tenantModule');
+              mtUtils.configureTenantAwareEntity(this.entity, this.tenant, tenantModule ? `${tenantModule}/` : '');
               context.relationships = this.entity.definitions.relationships;
             }
           },

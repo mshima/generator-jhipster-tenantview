@@ -27,13 +27,13 @@ function getArrayItemWithFieldValue(array, fieldName, value) {
   return found;
 }
 
-function configureTenantAwareEntity(tenantAwareEntity, tenant) {
+function configureTenantAwareEntity(tenantAwareEntity, tenant, tenantStatePrefix) {
   const tenantRelationship = getArrayItemWithFieldValue(
     tenantAwareEntity.definitions.relationships || [],
     'otherEntityName',
     tenant.entityInstance
   );
-  const defaultTenantRel = createDefaultTenantAwareRelationship(tenant);
+  const defaultTenantRel = createDefaultTenantAwareRelationship(tenant, tenantStatePrefix);
   if (tenantRelationship) {
     tenantRelationship.ownerSide = true;
     tenantRelationship.relationshipValidateRules = 'required';
@@ -44,7 +44,7 @@ function configureTenantAwareEntity(tenantAwareEntity, tenant) {
   }
 }
 
-function createDefaultTenantAwareRelationship(tenant) {
+function createDefaultTenantAwareRelationship(tenant, tenantStatePrefix = '') {
   return {
     relationshipName: tenant.entityInstance,
     otherEntityName: tenant.entityInstance,
@@ -54,7 +54,7 @@ function createDefaultTenantAwareRelationship(tenant) {
     relationshipValidateRules: 'required',
     ownerSide: true,
     clientRootFolder: tenant.clientRootFolder,
-    otherEntityStateName: tenant.entityStateName,
+    otherEntityStateName: `${tenantStatePrefix}tenant.entityStateName`,
     // Should be tenantFolderName, as of 6.4.1 this is wrong
     otherEntityFolderName: tenant.entityFileName,
     otherEntityAngularName: tenant.entityAngularName,
