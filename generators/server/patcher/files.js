@@ -1,14 +1,14 @@
 module.exports = {
-  files: gen => {
+  files: ctx => {
     return {
       tenantBase: [
         {
-          path: gen.constants.SERVER_MAIN_SRC_DIR,
+          path: ctx.constants.SERVER_MAIN_SRC_DIR,
           templates: [
             {
               method: 'patcherTemplate',
               file: 'package/aop/_tenant/_UserAspect.java',
-              renameTo: () => `${gen.storage.packageFolder}/aop/${gen.tenant.entityInstance}/${gen.tenant.entityClass}AwareUserAspect.java`
+              renameTo: () => `${ctx.storage.packageFolder}/aop/${ctx.tenant.entityInstance}/${ctx.tenant.entityClass}AwareUserAspect.java`
             }
           ]
         }

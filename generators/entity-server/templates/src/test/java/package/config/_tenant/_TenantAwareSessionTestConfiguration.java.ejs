@@ -1,0 +1,14 @@
+package <%=storage.packageName%>.config.<%= tenant.entityInstance %>;
+
+import org.springframework.context.annotation.Bean;
+
+import io.github.jhipster.sample.domain.<%= tenant.entityClass %>;
+
+public class <%= tenant.entityClass %>AwareSessionTestConfiguration {
+    @Bean
+    public <%= tenant.entityClass %> currentUser<%= tenant.entityClass %>() {
+        <%= tenant.entityClass %> <%= tenant.entityInstance %> = new <%= tenant.entityClass %>();
+        <%= tenant.entityInstance %>.setId(2l);
+        return <%= tenant.entityInstance %>;
+    }
+}

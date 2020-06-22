@@ -5,7 +5,7 @@ const tmpls = [
   {
     type: 'replaceContent',
     tmpl: ctx => `@WithUserDetails("bank_admin")
-@SpringBootTest(classes = {${ctx.generator.getMainClassName(ctx.storage.baseName)}.class, Current${ctx.tenant.entityClass}TestConfig.class})
+@SpringBootTest(classes = {${ctx.generator.getMainClassName(ctx.storage.baseName)}.class, ${ctx.tenant.entityClass}AwareSessionTestConfiguration.class})
 `,
     target: ctx => `@WithMockUser(value = TEST_USER_LOGIN)
 @SpringBootTest(classes = ${ctx.generator.getMainClassName(ctx.storage.baseName)}.class)
@@ -14,7 +14,7 @@ const tmpls = [
   {
     type: 'rewriteFile',
     tmpl: ctx => `import org.springframework.security.test.context.support.WithUserDetails;
-import io.github.jhipster.sample.config.Current${ctx.tenant.entityClass}TestConfig;
+import io.github.jhipster.sample.config.${ctx.tenant.entityInstance}.${ctx.tenant.entityClass}AwareSessionTestConfiguration;
 `,
     target: 'import java.time.Instant;'
   },
