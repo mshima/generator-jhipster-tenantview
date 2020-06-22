@@ -50,6 +50,7 @@ function createDefaultTenantAwareRelationship(tenant) {
     otherEntityName: tenant.entityInstance,
     relationshipType: 'many-to-one',
     otherEntityField: 'name',
+    relationshipValidate: true,
     relationshipValidateRules: 'required',
     ownerSide: true,
     clientRootFolder: tenant.clientRootFolder,
