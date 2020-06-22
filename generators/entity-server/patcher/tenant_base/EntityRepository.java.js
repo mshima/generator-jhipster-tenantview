@@ -18,7 +18,7 @@ import java.util.Optional;
     tmpl: ctx => `
     void deleteByIdAnd${ctx.tenant.entityClass}(Long id, ${ctx.tenant.entityClass} ${ctx.tenant.entityInstance});
 
-    Optional<BankAccount> findByIdAnd${ctx.tenant.entityClass}(Long id, ${ctx.tenant.entityClass} ${ctx.tenant.entityInstance});
+    Optional<${ctx.entity.entityClass}> findByIdAnd${ctx.tenant.entityClass}(Long id, ${ctx.tenant.entityClass} ${ctx.tenant.entityInstance});
 $1`,
     target: `(}
 $)`

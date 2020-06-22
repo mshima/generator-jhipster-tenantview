@@ -16,8 +16,8 @@ const tmpls = [
   },
   {
     type: 'rewriteFile',
-    target: 'import io.github.jhipster.sample.domain.User;',
-    tmpl: ctx => `import io.github.jhipster.sample.domain.${ctx.tenant.entityClass};`
+    target: ctx => `import ${ctx.storage.packageName}.domain.User;`,
+    tmpl: ctx => `import ${ctx.storage.packageName}.domain.${ctx.tenant.entityClass};`
   },
   {
     type: 'rewriteFile',

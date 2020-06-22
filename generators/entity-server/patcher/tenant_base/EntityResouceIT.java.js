@@ -37,7 +37,7 @@ const tmpls = [
 \\s*${ctx.entity.entityInstance}.set${ctx.tenant.entityClass}\\(${ctx.tenant.entityInstance}\\);`
   },
   {
-    condition: context => context.entity.definitions.tenantAware,
+    condition: context => context.entity.definitions.tenantAware && context.entity.definitions.jpaMetamodelFiltering,
     type: 'rewriteFile',
     tmpl: '@Disabled',
     target: ctx => `getAll${ctx.entity.entityClassPlural}By${ctx.tenant.entityClass}IsEqualToSomething()`
