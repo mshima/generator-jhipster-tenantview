@@ -4,7 +4,7 @@ const file = ctx => `${ctx.constants.SERVER_TEST_SRC_DIR}${ctx.storage.packageFo
 const tmpls = [
   {
     type: 'replaceContent',
-    tmpl: ctx => `@WithUserDetails("bank_admin")
+    tmpl: ctx => `@WithUserDetails("${ctx.tenant.entityInstance}_admin")
 @SpringBootTest(classes = {${ctx.generator.getMainClassName(ctx.storage.baseName)}.class, ${ctx.tenant.entityClass}AwareSessionTestConfiguration.class})
 `,
     target: ctx => `@WithMockUser(value = TEST_USER_LOGIN)

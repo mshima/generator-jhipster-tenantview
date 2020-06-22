@@ -40,7 +40,7 @@ public class <%= tenant.entityClass %>AwareSessionConfiguration {
         }
 
         if (loggedInUser.get().get<%= tenant.entityClass %>() == null) {
-            log.error("Current user does not have an bank");
+            log.error("Current user does not have a <%= tenant.entityClass %>");
             throw new org.springframework.security.access.AccessDeniedException("Not allowed");
         }
         return loggedInUser.get().get<%= tenant.entityClass %>();
