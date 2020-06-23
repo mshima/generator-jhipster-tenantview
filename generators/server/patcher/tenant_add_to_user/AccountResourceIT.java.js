@@ -5,7 +5,9 @@ const tmpls = [
   {
     type: 'replaceContent',
     tmpl: ctx => `@WithUserDetails("${ctx.tenant.entityInstance}_admin")
-@SpringBootTest(classes = {${ctx.generator.getMainClassName(ctx.storage.baseName)}.class, ${ctx.tenant.entityClass}AwareSessionTestConfiguration.class})
+@SpringBootTest(classes = {${ctx.generator.getMainClassName(ctx.storage.baseName)}.class, ${
+      ctx.tenant.entityClass
+    }AwareSessionTestConfiguration.class})
 `,
     target: ctx => `@WithMockUser(value = TEST_USER_LOGIN)
 @SpringBootTest(classes = ${ctx.generator.getMainClassName(ctx.storage.baseName)}.class)

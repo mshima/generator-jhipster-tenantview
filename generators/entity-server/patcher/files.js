@@ -26,8 +26,7 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_user_tenant_constraints.xml',
-              renameTo: () =>
-                `config/liquibase/changelog/${ctx.entity.changelogDate}-3__user_${ctx.tenant.entityClass}_constraints.xml`
+              renameTo: () => `config/liquibase/changelog/${ctx.entity.changelogDate}-3__user_${ctx.tenant.entityClass}_constraints.xml`
             }
           ]
         },
@@ -38,7 +37,8 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'package/config/_tenant/_TenantAwareSessionConfiguration.java',
-              renameTo: () => `${ctx.storage.packageFolder}/config/${ctx.tenant.entityInstance}/${ctx.tenant.entityClass}AwareSessionConfiguration.java`
+              renameTo: () =>
+                `${ctx.storage.packageFolder}/config/${ctx.tenant.entityInstance}/${ctx.tenant.entityClass}AwareSessionConfiguration.java`
             }
           ]
         },
@@ -49,7 +49,8 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'package/config/_tenant/_TenantAwareSessionTestConfiguration.java',
-              renameTo: () => `${ctx.storage.packageFolder}/config/${ctx.tenant.entityInstance}/${ctx.tenant.entityClass}AwareSessionTestConfiguration.java`
+              renameTo: () =>
+                `${ctx.storage.packageFolder}/config/${ctx.tenant.entityInstance}/${ctx.tenant.entityClass}AwareSessionTestConfiguration.java`
             }
           ]
         }
@@ -62,8 +63,7 @@ module.exports = {
             {
               method: 'patcherTemplate',
               file: 'config/liquibase/changelog/_tenant_user_data.xml',
-              renameTo: () =>
-                `config/liquibase/changelog/${ctx.entity.changelogDate}-2__${ctx.tenant.entityLowerCase}_user_data.xml`
+              renameTo: () => `config/liquibase/changelog/${ctx.entity.changelogDate}-2__${ctx.tenant.entityLowerCase}_user_data.xml`
             },
             {
               method: 'patcherTemplate',
