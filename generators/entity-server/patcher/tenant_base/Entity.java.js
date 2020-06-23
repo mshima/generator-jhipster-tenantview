@@ -6,6 +6,7 @@ const tmpls = [
     condition: ctx => ctx.entity.definitions.tenantAware,
     type: 'replaceContent',
     regex: true,
+    ignorePatchErrors: true,
     target: ctx => `@NotNull(\n(.*)\n(\\s*)private ${ctx.tenant.entityClass} ${ctx.tenant.entityInstance};)`,
     tmpl: () => `@JoinColumn(nullable = false)$1`
   }
