@@ -30,6 +30,7 @@ const tmpls = [
     condition: ctx => ctx.entity.definitions.tenantAware,
     type: 'replaceContent',
     regex: true,
+    ignorePatchErrors: true,
     tmpl: '',
     target: ctx => `
 \\s*${ctx.tenant.entityClass} ${ctx.tenant.entityInstance};
