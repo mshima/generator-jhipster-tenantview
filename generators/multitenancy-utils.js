@@ -36,6 +36,7 @@ function configureTenantAwareEntity(tenantAwareEntity, tenant, tenantStatePrefix
   const defaultTenantRel = createDefaultTenantAwareRelationship(tenant, tenantStatePrefix);
   if (tenantRelationship) {
     tenantRelationship.ownerSide = true;
+    tenantRelationship.relationshipValidate = true;
     tenantRelationship.relationshipValidateRules = 'required';
     _.defaults(tenantRelationship, defaultTenantRel);
     tenantAwareEntity.definitions.relationships = tenantAwareEntity.definitions.relationships.concat([]);
