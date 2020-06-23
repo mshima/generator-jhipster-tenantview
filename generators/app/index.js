@@ -143,10 +143,10 @@ module.exports = {
        */
       _generateTenant() {
         const tenantName = this.blueprintConfig.get('tenantName');
-        assert(tenantName);
+        assert(tenantName, 'Tenant name is required');
         debug(`Generating tenant ${tenantName}`);
         const tenantStorage = this.jhipsterFs.getEntityConfig(tenantName);
-        if (tenantStorage.existed) {
+        if (fs.existsSync(tenantStorage.path)) {
           debug('Tenant exists');
           const tenantModule = this.blueprintConfig.get('tenantModule');
           tenantStorage.set({

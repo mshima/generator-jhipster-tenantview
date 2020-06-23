@@ -35,22 +35,20 @@ const expectedFiles = {
     server: [
       '.jhipster/Company.json',
       `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Company.java`,
-      `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/CompanyParameter.java`,
       `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CompanyRepository.java`,
       `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/CompanyResource.java`,
-      `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/company/CompanyAspect.java`,
       `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/CompanyResourceIT.java`,
       `${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/company.csv`
       // `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20190907000100_added_entity_Company.xml`
     ]
   },
 
-  server: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/company/UserAspect.java`],
+  server: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/company/CompanyAwareUserAspect.java`],
 
   tenantManagementServer: [
-    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_authority.csv`,
-    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_user_authority.csv`,
-    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company_user.csv`
+    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company/authority.csv`,
+    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company/user_authority.csv`,
+    `${SERVER_MAIN_RES_DIR}config/liquibase/data/company/user.csv`
   ],
 
   i18nJson: [`${CLIENT_MAIN_SRC_DIR}i18n/fr/company.json`]

@@ -17,10 +17,14 @@ module.exports = {
         // Set side-by-side blueprint
         this.sbsBlueprint = true;
 
-        this.entityName = this._.upperFirst(args[0]);
+        this.entityName = this._.upperFirst(args[0] || options.context.name);
         this.entity = this.jhipsterFs.getEntity(this.entityName);
 
         const tenantName = this.blueprintConfig.get('tenantName');
+        if (!tenantName) {
+          throw new Error(`Tenant name is required for ${generator}`);
+        }
+
         this.tenant = this.jhipsterFs.getEntity(tenantName);
         this.isTenant = this.entityName === tenantName;
       }

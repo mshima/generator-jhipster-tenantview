@@ -3,7 +3,7 @@ const file = ctx => `${ctx.constants.SERVER_TEST_SRC_DIR}${ctx.storage.packageFo
 
 const tmpls = [
   {
-    condition: ctx => !ctx.isTenant,
+    condition: ctx => !ctx.isTenant && ctx.entity.definitions.tenantAware,
     type: 'replaceContent',
     tmpl: 'import org.springframework.security.test.context.support.WithUserDetails;',
     target: 'import org.springframework.security.test.context.support.WithMockUser;'

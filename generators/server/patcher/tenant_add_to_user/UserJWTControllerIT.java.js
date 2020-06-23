@@ -15,6 +15,7 @@ const tmpls = [
 ];
 
 module.exports = {
+  condition: ctx => ctx.storage.authenticationType === 'jwt',
   file,
   tmpls
 };

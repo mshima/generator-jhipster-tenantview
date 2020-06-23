@@ -32,5 +32,9 @@
             "en",
             "fr"
         ]
+    },
+    "generator-jhipster-tenantview": {
+        "tenantName": "Company",
+        "tenantModule": "admin"
     }
 }

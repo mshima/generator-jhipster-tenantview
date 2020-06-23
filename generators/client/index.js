@@ -17,6 +17,10 @@ module.exports = {
         this.sbsBlueprint = true;
 
         const tenantName = this.blueprintConfig.get('tenantName');
+        if (!tenantName) {
+          throw new Error(`Tenant name is required for ${generator}`);
+        }
+
         this.tenant = this.jhipsterFs.getEntity(tenantName);
       }
 

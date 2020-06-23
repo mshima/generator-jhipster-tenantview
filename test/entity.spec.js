@@ -17,7 +17,6 @@ describe('Subgenerator entity of tenantview JHipster blueprint', () => {
           'from-cli': true,
           skipInstall: true,
           blueprints: 'tenantview',
-          tenantName: 'Company',
           skipChecks: true
         })
         .withArguments(['foo'])

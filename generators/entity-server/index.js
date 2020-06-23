@@ -32,7 +32,11 @@ module.exports = {
       constructor(args, options) {
         super(args, options);
 
-        this.entityName = this._.upperFirst(args[0]);
+        this.entityName = this._.upperFirst(args[0] || options.context.name);
+        if (!this.entityName) {
+          throw new Error(`Entity name is required for ${generator}`);
+        }
+
         debug(`Initializing ${generator} ${this.entityName}`);
         // Fix {Tenant}Resource.java setting ENTITY_NAME as 'admin{Tenant}'
         this.skipUiGrouping = true;
@@ -46,6 +50,10 @@ module.exports = {
         this.entity = this.jhipsterFs.getEntity(this.entityName);
 
         const tenantName = this.blueprintConfig.get('tenantName');
+        if (!tenantName) {
+          throw new Error(`Tenant name is required for ${generator}`);
+        }
+
         this.tenant = this.jhipsterFs.getEntity(tenantName);
         this.isTenant = this.entityName === tenantName;
       }

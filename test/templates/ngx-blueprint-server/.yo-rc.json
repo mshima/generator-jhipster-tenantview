@@ -1,0 +1,6 @@
+{
+    "generator-jhipster-tenantview": {
+        "tenantName": "Company",
+        "tenantModule": "admin"
+    }
+}

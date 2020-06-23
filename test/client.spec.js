@@ -1,3 +1,4 @@
+const fse = require('fs-extra');
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -9,11 +10,13 @@ describe('Subgenerator client of tenantview JHipster blueprint', () => {
       return helpers
         .create('jhipster:client')
         .withLookups([{npmPaths: path.join(__dirname, '..', 'node_modules')}, {packagePaths: path.join(__dirname, '..')}])
+        .inTmpDir(dir => {
+          fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
+        })
         .withOptions({
           'from-cli': true,
           skipInstall: true,
           blueprints: 'tenantview',
-          tenantName: 'Company',
           skipChecks: true
         })
         .withPrompts({
