@@ -8,7 +8,7 @@ module.exports = {
           templates: [
             {
               method: 'patcherTemplate',
-              file: 'package/_EntityAspect.java',
+              file: 'package/aop/_tenant/_TenantAwareEntityAspect.java',
               renameTo: () =>
                 `${ctx.storage.packageFolder}/aop/${ctx.tenant.entityInstance}/${ctx.tenant.entityClass}Aware${ctx.entity.entityClass}Aspect.java`
             }
