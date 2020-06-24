@@ -1,4 +1,3 @@
-const assert = require('assert');
 const debug = require('debug')('tenantview:entity');
 const path = require('path');
 const customizer = require('generator-jhipster-customizer');
@@ -111,24 +110,6 @@ module.exports = {
             if (tenantRelationship) {
               debug(tenantRelationship);
             }
-          },
-
-          configureAndVerifyTenant() {
-            if (!this.isTenant) return;
-
-            const context = this.context;
-
-            const copyValue = (dest, value) => {
-              if (context[dest] === value) {
-                this.log(`Copy value not needed for ${this.jhipsterInfo.jhipsterVersion}, ${dest}`);
-              }
-
-              context[dest] = value;
-            };
-
-            assert.equal(context.entityFileName, this.tenant.entityFileName);
-            assert.equal(context.entityServiceFileName, this.tenant.entityFileName);
-            // Assert.equal(context.entityStateName, this.tenant.entityStateName);
           }
         };
       }

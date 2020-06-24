@@ -15,22 +15,22 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const expectedFiles = {
   entity: {
     clientNg2: [
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company.component.html`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company-detail.component.html`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company-update.component.html`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company-delete-dialog.component.html`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company.route.ts`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company.component.ts`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company-update.component.ts`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company-delete-dialog.component.ts`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company-detail.component.ts`,
-      `${CLIENT_MAIN_SRC_DIR}app/admin/company/company.service.ts`,
-      `${CLIENT_MAIN_SRC_DIR}app/shared/admin/company.model.ts`,
-      `${CLIENT_TEST_SRC_DIR}spec/app/admin/company/company-delete-dialog.component.spec.ts`,
-      `${CLIENT_TEST_SRC_DIR}spec/app/admin/company/company-detail.component.spec.ts`,
-      `${CLIENT_TEST_SRC_DIR}spec/app/admin/company/company-update.component.spec.ts`,
-      `${CLIENT_TEST_SRC_DIR}spec/app/admin/company/company.component.spec.ts`,
-      `${CLIENT_TEST_SRC_DIR}spec/app/admin/company/company.service.spec.ts`
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company.component.html`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company-detail.component.html`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company-update.component.html`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company-delete-dialog.component.html`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company.route.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company.component.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company-update.component.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company-delete-dialog.component.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company-detail.component.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/entities/company/company.service.ts`,
+      `${CLIENT_MAIN_SRC_DIR}app/shared/model/company.model.ts`,
+      `${CLIENT_TEST_SRC_DIR}spec/app/entities/company/company-delete-dialog.component.spec.ts`,
+      `${CLIENT_TEST_SRC_DIR}spec/app/entities/company/company-detail.component.spec.ts`,
+      `${CLIENT_TEST_SRC_DIR}spec/app/entities/company/company-update.component.spec.ts`,
+      `${CLIENT_TEST_SRC_DIR}spec/app/entities/company/company.component.spec.ts`,
+      `${CLIENT_TEST_SRC_DIR}spec/app/entities/company/company.service.spec.ts`
     ],
     server: [
       '.jhipster/Company.json',
