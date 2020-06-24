@@ -1,5 +1,5 @@
 const file = context =>
-  `${context.generator.CLIENT_MAIN_SRC_DIR}app/admin/${context.entity.entityFolderName}/${context.entity.entityFileName}.route.ts`;
+  `${context.generator.CLIENT_MAIN_SRC_DIR}app/entities/${context.entity.entityFolderName}/${context.entity.entityFileName}.route.ts`;
 
 const tmpls = [
   {

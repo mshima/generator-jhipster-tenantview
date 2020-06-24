@@ -93,8 +93,7 @@ module.exports = {
 
             this._debug('Tenant aware %o', this.entity.definitions.tenantAware);
             if (this.entity.definitions.tenantAware) {
-              const tenantModule = this.blueprintConfig.get('tenantModule');
-              mtUtils.configureTenantAwareEntity(this.entity, this.tenant, tenantModule ? `${tenantModule}/` : '');
+              mtUtils.configureTenantAwareEntity(this.entity, this.tenant);
               context.relationships = this.entity.definitions.relationships;
             }
           },
@@ -126,13 +125,6 @@ module.exports = {
 
               context[dest] = value;
             };
-
-            const tenantModule = this.blueprintConfig.get('tenantModule');
-            copyValue('entityUrl', `${tenantModule}/${this.tenant.entityStateName}`);
-            copyValue('entityStateName', `../${tenantModule}/${this.tenant.entityStateName}`);
-            copyValue('entityTranslationKey', this.tenant.entityInstance);
-            copyValue('entityTranslationKeyMenu', this.tenant.entityInstance);
-            copyValue('i18nKeyPrefix', `${context.angularAppName}.${context.entityTranslationKey}`);
 
             assert.equal(context.entityFileName, this.tenant.entityFileName);
             assert.equal(context.entityServiceFileName, this.tenant.entityFileName);

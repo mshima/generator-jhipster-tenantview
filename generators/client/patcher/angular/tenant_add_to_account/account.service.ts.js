@@ -5,7 +5,7 @@ const tmpls = [
     // Add tenant getter to account
     type: 'rewriteFile',
     target: "import { Account } from 'app/core/user/account.model';",
-    tmpl: ctx => `import { I${ctx.tenant.entityClass} } from 'app/shared/admin/${ctx.tenant.entityInstance}.model';`
+    tmpl: ctx => `import { I${ctx.tenant.entityClass} } from 'app/shared/model/${ctx.tenant.entityInstance}.model';`
   },
   {
     // Add tenant getter to account

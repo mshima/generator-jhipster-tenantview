@@ -4,7 +4,7 @@ const tmpls = [
   {
     type: 'rewriteFile',
     target: () => 'export interface IUser',
-    tmpl: context => `import { I${context.tenant.entityClass} } from '../../shared/admin/${context.tenant.entityInstance}.model';
+    tmpl: context => `import { I${context.tenant.entityClass} } from '../../shared/model/${context.tenant.entityInstance}.model';
 `
   },
   {

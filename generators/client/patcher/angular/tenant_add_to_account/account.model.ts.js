@@ -5,7 +5,7 @@ const tmpls = [
     // Add tenant to account
     type: 'rewriteFile',
     target: () => 'export class Account',
-    tmpl: context => `import { ${context.tenant.entityClass} } from '../../shared/admin/${context.tenant.entityInstance}.model';
+    tmpl: context => `import { ${context.tenant.entityClass} } from '../../shared/model/${context.tenant.entityInstance}.model';
 `
   },
   {

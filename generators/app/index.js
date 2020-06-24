@@ -64,12 +64,6 @@ module.exports = {
             if (tenantName) {
               this.info(`Using ${chalk.yellow(tenantName)} as tenant`);
             }
-
-            const tenantModule = this.options.tenantModule || this.blueprintConfig.get('tenantModule') || 'admin';
-            this.blueprintConfig.set({
-              tenantModule,
-              tenantModelPath: `shared/${tenantModule}`
-            });
           }
         };
       }
@@ -148,11 +142,9 @@ module.exports = {
         const tenantStorage = this.jhipsterFs.getEntityConfig(tenantName);
         if (fs.existsSync(tenantStorage.path)) {
           debug('Tenant exists');
-          const tenantModule = this.blueprintConfig.get('tenantModule');
           tenantStorage.set({
             tenant: true,
-            service: 'serviceClass',
-            clientRootFolder: `../${tenantModule}`
+            service: 'serviceClass'
           });
 
           // Add name field if doesn´t exists.
@@ -188,7 +180,6 @@ module.exports = {
 
       _getDefaultDefinition(tenantName) {
         assert(tenantName);
-        const tenantModule = this.blueprintConfig.get('tenantModule');
         return {
           name: tenantName,
           tenant: true,
@@ -210,8 +201,6 @@ module.exports = {
           changelogDate: this.dateFormatForLiquibase(),
           dto: 'no',
           service: 'serviceClass',
-          clientRootFolder: `../${tenantModule}`,
-          tenantModule,
           tenantAware: false
         };
       }
@@ -230,13 +219,12 @@ module.exports = {
 
       _configureTenantAware() {
         const tenantName = this.blueprintConfig.get('tenantName');
-        const tenantModule = this.blueprintConfig.get('tenantModule');
         const tenant = this.jhipsterFs.getEntity(tenantName);
         this.getExistingEntities()
           .filter(entity => entity.definition.tenantAware)
           .forEach(tenantAwareEntity => {
             const entity = this.jhipsterFs.getEntity(tenantAwareEntity.name);
-            mtUtils.configureTenantAwareEntity(entity, tenant, tenantModule ? `${tenantModule}/` : '');
+            mtUtils.configureTenantAwareEntity(entity, tenant);
           });
       }
     };

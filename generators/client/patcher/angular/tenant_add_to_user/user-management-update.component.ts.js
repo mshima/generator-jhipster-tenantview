@@ -13,8 +13,8 @@ import { HttpResponse } from '@angular/common/http';
     type: 'replaceContent',
     target: /(@Component\({)/,
     tmpl: context => `import { AccountService } from 'app/core/auth/account.service';
-import { I${context.tenant.entityClass} } from '../../${context.generator.blueprintStorage.tenantModelPath}/${context.tenant.entityInstance}.model';
-import { ${context.tenant.entityClass}Service } from '../${context.tenant.entityFolderName}/${context.tenant.entityFileName}.service';
+import { I${context.tenant.entityClass} } from 'app/shared/model/${context.tenant.entityInstance}.model';
+import { ${context.tenant.entityClass}Service } from 'app/entities/${context.tenant.entityFolderName}/${context.tenant.entityFileName}.service';
 
 $1`
   },
