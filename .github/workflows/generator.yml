@@ -1,0 +1,17 @@
+name: Generator
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  generator-jhipster-tenantview:
+    name: npm-test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test

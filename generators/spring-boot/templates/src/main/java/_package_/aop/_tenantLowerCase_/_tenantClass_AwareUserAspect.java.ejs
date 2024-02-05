@@ -1,0 +1,164 @@
+package <%- packageName %>.aop.<%- tenant.entityInstance %>;
+
+import java.util.Optional;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.hibernate.Filter;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import <%- packageName %>.domain.<%- tenant.entityClass %>;
+import <%- packageName %>.domain.User;
+import <%- packageName %>.repository.UserRepository;
+
+@Aspect
+@Component
+public class <%- tenant.entityClass %>AwareUserAspect {
+
+    private final Logger log = LoggerFactory.getLogger(<%- tenant.entityClass %>AwareUserAspect.class);
+
+    private final String fieldName =  "<%- tenant.entityInstance %>Id";
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private <%- tenant.entityClass %> currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>;
+
+    @Pointcut("target(<%- packageName %>.repository.UserRepository)")
+    private void userRepositoryAsTarget() {} 
+
+    @Pointcut("execution(* *.deleteById(..))")
+    private void deleteByIdOperation() {} 
+
+    @Pointcut("execution(* *.findById(..))")
+    private void findByIdOperation() {} 
+
+    @Pointcut("execution(* *.save(..)) || "
+            + "execution(* *.saveAndFlush(..)) || "
+            + "execution(* *.delete(..))")
+    private void anyOperationWithBean() {} 
+
+    @Pointcut("execution(* *.findAll(..)) || "
+            + "execution(* *.count(..)) || "
+            + "execution(* *.findOneByEmailIgnore(..)) || "
+            + "execution(* *.findOneByEmailIgnoreCase(..)) || "
+            + "execution(* *.findOneByResetKey(..)) || "
+            + "execution(* *.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(..)) || "
+            + "execution(* *.findAllByLoginNot(..)) ")
+    private void anyFilteredOperation() {} 
+
+    @Pointcut("execution(* *.findOneByLogin(..)) || "
+            + "execution(* *.findOneWithAuthoritiesByLogin(..)) || "
+            + "execution(* *.findOneWithAuthoritiesByEmailIgnoreCase(..))")
+    private void ignoredMethods() {} 
+
+    @Pointcut("ignoredMethods() || "
+            + "anyOperationWithBean() || "
+            + "anyFilteredOperation() || "
+            + "findByIdOperation() || "
+            + "deleteByIdOperation()")
+    private void anySecured() {} 
+
+    @Pointcut("userRepositoryAsTarget() && !anySecured()")
+    private void notSecured() {} 
+
+    @Before(value = "userRepositoryAsTarget() && anyOperationWithBean()")
+    public void anyOperationWithBean(JoinPoint jp) {
+        User bean = (User) jp.getArgs()[0];
+        log.info("anyOperationWithBean: {}", bean);
+        this.assertThatCurrent<%- tenant.entityClass %>Exists();
+
+        if (this.isCurrent<%- tenant.entityClass %>Admin()) {
+            return;
+        }
+
+        if(bean.get<%- tenant.entityClass %>() != null && !currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.getId().equals(bean.get<%- tenant.entityClass %>().getId())) {
+            log.error("Manipulating an User from another <%- tenant.entityClass %> isn't allowed {}, {}", bean.get<%- tenant.entityClass %>().getId(), currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.getId());
+            throw new org.springframework.security.access.AccessDeniedException("Not allowed");
+        }
+        bean.set<%- tenant.entityClass %>(newCurrent<%- tenant.entityClass %>Instance());
+    }
+
+    @Around(value = "userRepositoryAsTarget() && deleteByIdOperation()")
+    public void deleteById(ProceedingJoinPoint jp) throws Throwable {
+        Long id = (Long) jp.getArgs()[0];
+        log.info("onDeleteById: {}", id);
+        this.assertThatCurrent<%- tenant.entityClass %>Exists();
+        if (this.isCurrent<%- tenant.entityClass %>Admin()) {
+            jp.proceed();
+            return;
+        }
+        ((UserRepository) jp.getTarget()).deleteByIdAnd<%- tenant.entityClass %>(id, newCurrent<%- tenant.entityClass %>Instance());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Around(value = "userRepositoryAsTarget() && findByIdOperation()")
+    public Optional<User> findById(ProceedingJoinPoint jp) throws Throwable {
+        Long id = (Long) jp.getArgs()[0];
+        log.info("onFindById: {}", id);
+        this.assertThatCurrent<%- tenant.entityClass %>Exists();
+        if (this.isCurrent<%- tenant.entityClass %>Admin()) {
+            return (Optional<User>) jp.proceed();
+        }
+        return ((UserRepository) jp.getTarget()).findByIdAnd<%- tenant.entityClass %>(id, newCurrent<%- tenant.entityClass %>Instance());
+    }
+
+    @Before(value = "userRepositoryAsTarget() && ignoredMethods()")
+    public void ignoredMethods(JoinPoint jp) {
+        log.info("AOP operation ignored: {}", jp);
+    }
+
+    @Before(value = "userRepositoryAsTarget() && anyFilteredOperation()")
+    public void anyFilteredOperation(JoinPoint jp) throws Throwable {
+        log.info("Adding filter for {}", jp);
+        this.assertThatCurrent<%- tenant.entityClass %>Exists();
+        // Root <%- tenant.entityClass %> ignore filtering
+        if (this.isCurrent<%- tenant.entityClass %>Admin()) {
+            return;
+        }
+        Filter filter = entityManager.unwrap(Session.class).enableFilter("<%- tenant.entityNameUpperCase %>_FILTER");
+        filter.setParameter(fieldName, currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.getId());
+    }
+
+    @Before(value = "notSecured()")
+    public void notSecured(JoinPoint jp) {
+        log.error("AOP operation not secured: {}", jp);
+        log.error("getStaticPart: {}", jp.getStaticPart());
+        log.error("getThis: {}", jp.getThis());
+        log.error("getTarget: {}", jp.getTarget());
+        if (this.isCurrent<%- tenant.entityClass %>Admin()) {
+            return;
+        }
+
+        throw new org.springframework.security.access.AccessDeniedException("Not allowed");
+    }
+
+    <%- tenant.entityClass %> newCurrent<%- tenant.entityClass %>Instance() {
+        <%- tenant.entityClass %> <%- tenant.entityInstance %> = new <%- tenant.entityClass %>();
+        <%- tenant.entityInstance %>.setId(currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.getId());
+        return <%- tenant.entityInstance %>;
+    }
+
+    private void assertThatCurrent<%- tenant.entityClass %>Exists() {
+        if (currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %> == null || currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.getId() == null) {
+            log.error("Current user does not have a <%- tenant.entityClass %>");
+            throw new org.springframework.security.access.AccessDeniedException("Not allowed");
+        }
+    }
+
+    private boolean isCurrent<%- tenant.entityClass %>Admin() {
+        return currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.getId() == 0;
+    }
+}

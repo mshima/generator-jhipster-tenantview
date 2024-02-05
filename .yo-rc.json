@@ -1,0 +1,47 @@
+{
+  "generator-jhipster": {
+    "additionalSubGenerators": "tenantview",
+    "baseName": "tenantview",
+    "cli": true,
+    "dynamic": false,
+    "entities": [],
+    "generators": {
+      "angular": {
+        "command": false,
+        "priorities": ["writing", "writingEntities", "postWriting", "postWritingEntities"],
+        "sbs": true,
+        "written": true
+      },
+      "app": {
+        "command": false,
+        "priorities": ["initializing", "composing"],
+        "sbs": true,
+        "written": true
+      },
+      "liquibase": {
+        "command": false,
+        "priorities": ["writing", "writingEntities", "postWriting", "postWritingEntities"],
+        "sbs": true,
+        "written": true
+      },
+      "spring-boot": {
+        "command": false,
+        "priorities": ["writing", "writingEntities", "postWriting", "postWritingEntities"],
+        "sbs": true,
+        "written": true
+      },
+      "tenantview": {
+        "command": false,
+        "priorities": ["initializing", "prompting", "configuring", "loading", "preparing", "configuringEachEntity", "preparingEachEntity"],
+        "sbs": null,
+        "written": true
+      }
+    },
+    "jhipsterVersion": "8.1.0",
+    "js": true,
+    "localBlueprint": false,
+    "sampleWritten": true,
+    "skipCommitHook": true,
+    "subGenerators": ["angular", "app", "liquibase", "spring-boot"]
+  }
+}

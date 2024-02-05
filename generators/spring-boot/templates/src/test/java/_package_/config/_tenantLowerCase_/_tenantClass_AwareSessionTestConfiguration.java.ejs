@@ -1,0 +1,18 @@
+package <%- packageName %>.config.<%- tenant.entityInstance %>;
+
+import static <%- packageName %>.TenantIntegrationTestUtils.DEFAULT_TENANT_USER;
+import <%- packageName %>.domain.<%- tenant.entityClass %>;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class <%- tenant.entityClass %>AwareSessionTestConfiguration {
+    @Bean
+    public <%- tenant.entityClass %> currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>() {
+        <%- tenant.entityClass %> <%- tenant.entityInstance %> = new <%- tenant.entityClass %>();
+        <%- tenant.entityInstance %>.setId(2l);
+        <%- tenant.entityInstance %>.setLogin(DEFAULT_TENANT_USER);
+        return <%- tenant.entityInstance %>;
+    }
+}

@@ -1,0 +1,54 @@
+package <%- packageName %>.config.<%- tenant.entityInstance %>;
+
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.web.context.WebApplicationContext;
+
+import <%- packageName %>.domain.<%- tenant.entityClass %>;
+import <%- packageName %>.domain.User;
+import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.security.SecurityUtils;
+
+@Configuration
+public class <%- tenant.entityClass %>AwareSessionConfiguration {
+
+    private final Logger log = LoggerFactory.getLogger(<%- tenant.entityClass %>AwareSessionConfiguration.class);
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Bean
+    @Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public <%- tenant.entityClass %> currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>() {
+        var userLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> {
+                log.error("Current context does not have an authentication");
+                return new org.springframework.security.access.AccessDeniedException("Not allowed");
+            });
+        log.info("Creating session bean for: {}", userLogin);
+        var user = userRepository
+            .findOneByLogin(userLogin)
+            .orElseThrow(() -> {
+                log.error("Could not fetch current login from database {}", userLogin);
+                return new org.springframework.security.access.AccessDeniedException("Not allowed");
+            });
+<%_ if (tenant.builtInUser) { _%>
+        return user;
+<%_ } else { _%>
+
+        if (user.get<%- tenant.entityClass %>() == null) {
+            log.error("Current user does not have a <%- tenant.entityClass %>");
+            throw new org.springframework.security.access.AccessDeniedException("Not allowed");
+        }
+        return loggedInUser.get().get<%- tenant.entityClass %>();
+<%_ } _%>
+    }
+}
