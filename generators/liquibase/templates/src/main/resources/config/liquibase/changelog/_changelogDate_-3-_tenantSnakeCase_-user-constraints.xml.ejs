@@ -1,0 +1,17 @@
+<%- include('/liquibase-changelog-header') -%>
+
+    <!--
+        Added the constraints for entity <%- entityClass %>.
+    -->
+    <changeSet id="<%- changelogDate %>-3" author="jhipster">
+        <addForeignKeyConstraint baseColumnNames="<%- entityNameLowerCase %>_id"
+                                 baseTableName="jhi_user"
+                                 constraintName="fk_jhi_user_<%- entityNameLowerCase %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%- entityNameLowerCase %>"/>
+
+        <addNotNullConstraint   columnName="<%- entityNameLowerCase %>_id"
+                                columnDataType="bigint"
+                                tableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>

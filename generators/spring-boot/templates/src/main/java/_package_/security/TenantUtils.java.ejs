@@ -1,0 +1,47 @@
+package com.mycompany.myapp.security;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+public class TenantUtils {
+
+    private TenantUtils() {}
+
+    public static Set<String> getCurrentLoginAuthorities() {
+        return SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getAuthorities()
+            .stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toSet());
+    }
+
+    public static List<SimpleGrantedAuthority> addRootGrantedAuthorities(List<SimpleGrantedAuthority> grantedAuthorities) {
+        if (grantedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals(AuthoritiesConstants.ADMIN))) {
+            grantedAuthorities =
+                Stream
+                    .concat(
+                        grantedAuthorities.stream(),
+                        Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ROOT_ADMIN)).stream()
+                    )
+                    .toList();
+        }
+        if (grantedAuthorities.stream().anyMatch(authority -> authority.getAuthority().equals(AuthoritiesConstants.USER))) {
+            grantedAuthorities =
+                Stream
+                    .concat(
+                        grantedAuthorities.stream(),
+                        Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ROOT_USER)).stream()
+                    )
+                    .toList();
+        }
+        return grantedAuthorities;
+    }
+}

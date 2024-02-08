@@ -1,0 +1,44 @@
+package com.mycompany.myapp.config.<%- tenantEntity.entityNameLowerCase %>;
+
+import java.io.Serializable;
+
+public class TenantIdentifier implements Serializable {
+
+    private final Long currentUserTenandId;
+
+    private final boolean root;
+
+    private Long selectedTenantId;
+
+    TenantIdentifier(Long currentUserTenandId, boolean root) {
+        this.currentUserTenandId = currentUserTenandId;
+        this.root = root;
+    }
+
+    public Long getCurrentUserTenantId() {
+        return this.currentUserTenandId;
+    }
+
+    public boolean isRoot() {
+        return this.root;
+    }
+
+    public TenantIdentifier selectedTenantId(Long tenantId) {
+        if (this.root) {
+            this.selectedTenantId = tenantId;
+            return this;
+        }
+        throw new Error("Not allowed");
+    }
+
+    public Long getEffectiveTenantId() {
+        if (this.root) {
+            return this.selectedTenantId;
+        }
+        return this.currentUserTenandId;
+    }
+
+    public boolean hasEffectiveTenantId() {
+        return !this.root || this.selectedTenantId != null;
+    }
+}

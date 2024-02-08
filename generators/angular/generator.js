@@ -1,5 +1,6 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { patcherTask } from '../../lib/patcher.js';
+import { clientSrcTemplatesBlock } from 'generator-jhipster/generators/client/support';
+import { patcherTask } from '../tenantview/support/index.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -14,9 +15,11 @@ export default class extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
         await this.writeFiles({
-          sections: {
-            files: [],
-          },
+          blocks: [
+            clientSrcTemplatesBlock({
+              templates: ['app/core/auth/current-tenant.service.ts'],
+            }),
+          ],
           context: application,
         });
       },

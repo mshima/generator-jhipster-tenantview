@@ -1,0 +1,65 @@
+package <%- packageName %>.aop.<%- tenantEntity.entityNameLowerCase %>;
+
+import <%- packageName %>.config.<%- tenantEntity.entityNameLowerCase %>.TenantIdentifier;
+import <%- packageName %>.domain.Abstract<%- tenantEntity.entityClass %>Aware;
+import <%- packageName %>.domain.<%- tenantEntity.entityClass %>;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.SecurityUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Filter;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+
+public abstract class <%- tenantEntity.entityClass %>AwareAspect {
+
+    private final Logger log = LoggerFactory.getLogger(<%- tenantEntity.entityClass %>AwareAspect.class);
+
+    private final String fieldName = "<%- tenantRelationshipName %>Id";
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    @Autowired
+    protected TenantIdentifier currentTenantIdentifier;
+
+    protected <%- tenantEntity.persistClass %> newCurrentTenantInstance() {
+        <%- tenantEntity.persistClass %> <%- tenantEntity.entityInstance %> = new <%- tenantEntity.persistClass %>();
+        <%- tenantEntity.entityInstance %>.setId(currentTenantIdentifier.getEffectiveTenantId());
+        return <%- tenantEntity.entityInstance %>;
+    }
+
+    protected boolean shouldBypassAllOperationFiltering() {
+        return this.currentTenantIdentifier.isRoot() && !this.currentTenantIdentifier.hasEffectiveTenantId();
+    }
+
+    protected void assertThatCurrentTenantExists() {
+        if (currentTenantIdentifier.getCurrentUserTenantId() == null) {
+            log.error("Current user does not have a <%- tenantEntity.entityClass %> selected");
+            throw new AccessDeniedException("Not allowed");
+        }
+    }
+
+    protected void assertThatHaveEffectiveTenantId() {
+        if (!currentTenantIdentifier.hasEffectiveTenantId()) {
+            log.error("Current user does not have a <%- tenantEntity.entityClass %> selected");
+            throw new AccessDeniedException("Not allowed");
+        }
+    }
+
+    protected boolean isCurrentUserRootAdmin() {
+        return currentTenantIdentifier.isRoot() && SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.ADMIN);
+    }
+
+    protected boolean beanTenantMatchesCurrentTenantIdentifier(Abstract<%- tenantEntity.persistClass %>Aware bean) {
+        return currentTenantIdentifier.getEffectiveTenantId().equals(bean.get<%- tenantEntity.entityClass %>().getId());
+    }
+
+    protected void setupJpaFiltering(String filterName) {
+        Filter filter = entityManager.unwrap(Session.class).enableFilter(filterName);
+        filter.setParameter(fieldName, currentTenantIdentifier.getEffectiveTenantId());
+    }
+}

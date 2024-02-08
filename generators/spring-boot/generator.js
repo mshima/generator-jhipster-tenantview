@@ -1,9 +1,9 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
-import { patcherTask } from '../../lib/patcher.js';
+import { patcherTask } from '../tenantview/support/index.js';
 
 const renameTenantNames = (data, file) =>
-  file.replace(/_tenantLowerCase_/g, data.tenant.entityNameLowerCase).replace(/_tenantClass_/g, data.tenant.entityClass);
+  file.replace(/_tenantLowerCase_/g, data.tenantEntity.entityNameLowerCase).replace(/_tenantClass_/g, data.tenantEntity.entityClass);
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
@@ -20,14 +20,20 @@ export default class extends BaseApplicationGenerator {
           blocks: [
             javaMainPackageTemplatesBlock({
               renameTo: renameTenantNames,
-              templates: ['config/_tenantLowerCase_/_tenantClass_AwareSessionConfiguration.java'],
+              templates: [
+                'config/_tenantLowerCase_/_tenantClass_AwareSessionConfiguration.java',
+                'config/_tenantLowerCase_/TenantIdentifier.java',
+                'domain/Abstract_tenantClass_Aware.java',
+              ],
+            }),
+            javaMainPackageTemplatesBlock({
+              renameTo: renameTenantNames,
+              condition: data => !data.tenantEntity.builtInUser,
+              templates: ['security/TenantUtils.java'],
             }),
             javaTestPackageTemplatesBlock({
               renameTo: renameTenantNames,
-              templates: [
-                'config/_tenantLowerCase_/_tenantClass_AwareSessionTestConfiguration.java',
-                'TenantIntegrationTestUtils.java',
-              ],
+              templates: ['config/_tenantLowerCase_/_tenantClass_AwareSessionTestConfiguration.java', 'TenantIntegrationTestUtils.java'],
             }),
           ],
           context: application,
@@ -40,27 +46,21 @@ export default class extends BaseApplicationGenerator {
     return this.asWritingEntitiesTaskGroup({
       async writingEntitiesTemplateTask({ application, entities }) {
         for (const entity of entities) {
-          if (entity.builtInUser && !entity.tenant) {
-            await this.writeFiles({
-              blocks: [
-                javaMainPackageTemplatesBlock({
-                  renameTo: renameTenantNames,
-                  templates: ['aop/_tenantLowerCase_/_tenantClass_AwareUserAspect.java'],
-                }),
-              ],
-              context: { ...application, ...entity },
-            });
-          } else if (entity.tenantAware) {
-            await this.writeFiles({
-              blocks: [
-                javaMainPackageTemplatesBlock({
-                  renameTo: renameTenantNames,
-                  templates: ['aop/_tenantLowerCase_/_tenantClass_Aware_entityClass_Aspect.java'],
-                }),
-              ],
-              context: { ...application, ...entity },
-            });
-          }
+          await this.writeFiles({
+            blocks: [
+              javaMainPackageTemplatesBlock({
+                renameTo: renameTenantNames,
+                condition: data => data.tenant,
+                templates: ['aop/_tenantLowerCase_/_tenantClass_AwareAspect.java'],
+              }),
+              javaMainPackageTemplatesBlock({
+                renameTo: renameTenantNames,
+                condition: data => data.tenantAware || (!data.tenantEntity.builtInUser && data.builtInUser),
+                templates: ['aop/_tenantLowerCase_/_tenantClass_Aware_entityClass_Aspect.java'],
+              }),
+            ],
+            context: { ...application, ...entity },
+          });
         }
       },
     });

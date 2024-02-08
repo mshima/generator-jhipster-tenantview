@@ -19,23 +19,33 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingEntitiesTemplateTask({ application, entities }) {
-        if (application.user.tenant) return;
-        await this.writeFiles({
-          blocks: [
-            javaMainResourceTemplatesBlock({
-              renameTo: (data, filename) =>
-                filename
-                  .replace('_changelogDate_', data.tenant.changelogDate)
-                  .replace('_tenantSnakeCase_', data.tenant.entityNameSnakeCase),
-              templates: [
-                'config/liquibase/changelog/_changelogDate_-1__tenantSnakeCase__user_column.xml',
-                'config/liquibase/changelog/_changelogDate_-2__tenantSnakeCase__user_data.xml',
-                'config/liquibase/changelog/_changelogDate_-3__tenantSnakeCase__user_constraints.xml',
+        for (const entity of entities) {
+          if (entity.tenant && !entity.builtInUser) {
+            await this.writeFiles({
+              blocks: [
+                javaMainResourceTemplatesBlock({
+                  relativePath: 'config/liquibase/',
+                  renameTo: (data, filename) =>
+                    filename
+                      .replaceAll('_changelogDate_', data.changelogDate)
+                      .replaceAll('_tenantSnakeCase_', data.entityNameLowerCase)
+                      .replaceAll('_entityNameLowerCase_', data.entityNameLowerCase),
+                  templates: [
+                    'changelog/_changelogDate_-1-_tenantSnakeCase_-user-column.xml',
+                    'changelog/_changelogDate_-2-_tenantSnakeCase_-user-data.xml',
+                    'changelog/_changelogDate_-3-_tenantSnakeCase_-user-constraints.xml',
+                    'data/_entityNameLowerCase_/_entityNameLowerCase_-others.csv',
+                    'data/_entityNameLowerCase_/_entityNameLowerCase_-root.csv',
+                    'data/_entityNameLowerCase_/user-authority.csv',
+                    'data/_entityNameLowerCase_/user-relationship.csv',
+                    'data/_entityNameLowerCase_/user.csv',
+                  ],
+                }),
               ],
-            }),
-          ],
-          context: application,
-        });
+              context: { ...application, ...entity },
+            });
+          }
+        }
       },
     });
   }
@@ -48,7 +58,19 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.asPostWritingEntitiesTaskGroup({
-      async postWritingEntitiesTemplateTask() {},
+      async postWritingEntitiesTemplateTask({ source, entities }) {
+        for (const entity of entities) {
+          if (entity.tenant && !entity.builtInUser) {
+            source.addLiquibaseConstraintsChangelog({
+              changelogName: `${entity.changelogDate}-1-${entity.entityNameLowerCase}-user-column`,
+            });
+            source.addLiquibaseConstraintsChangelog({ changelogName: `${entity.changelogDate}-2-${entity.entityNameLowerCase}-user-data` });
+            source.addLiquibaseConstraintsChangelog({
+              changelogName: `${entity.changelogDate}-3-${entity.entityNameLowerCase}-user-constraints`,
+            });
+          }
+        }
+      },
     });
   }
 }

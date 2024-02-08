@@ -1,0 +1,11 @@
+<%- include('/liquibase-changelog-header') -%>
+
+    <!--
+        Added the constraints for entity <%- entityClass %>.
+    -->
+    <changeSet id="<%- changelogDate %>-1" author="jhipster">
+        <addColumn tableName="jhi_user">
+            <column name="<%- entityNameLowerCase %>_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

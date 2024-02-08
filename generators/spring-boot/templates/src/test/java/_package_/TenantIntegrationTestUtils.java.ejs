@@ -1,5 +1,6 @@
 package <%- packageName %>;
 
+import <%- packageName %>.config.<%- tenantEntity.entityNameLowerCase %>.TenantIdentifier;
 import <%- packageName %>.domain.Authority;
 import <%- packageName %>.domain.User;
 import <%- packageName %>.repository.UserRepository;
@@ -21,7 +22,7 @@ public class TenantIntegrationTestUtils {
     public static final String DEFAULT_TENANT_ADMIN_USER_AUTHORITY = "ROLE_ADMIN";
 
     public static void setupTenant(ApplicationContext applicationContext) {
-        var userRepository = (UserRepository) applicationContext.getBean(UserRepository.class);
+        var userRepository = applicationContext.getBean(UserRepository.class);
         final User user;
         if (userRepository.existsByLogin(DEFAULT_TENANT_USER)) {
             user = userRepository.findOneByLogin(DEFAULT_TENANT_USER).orElseThrow();
@@ -34,15 +35,15 @@ public class TenantIntegrationTestUtils {
             user = userRepository.save(newUser);
         }
 
-        var currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %> = (<%- tenant.entityClass %>) applicationContext.getBean("currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>", <%- tenant.entityClass %>.class);
-        currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.setId(user.getId());
+        var currentTenantIdentifier = applicationContext.getBean("currentTenantIdentifier", TenantIdentifier.class);
+        currentTenantIdentifier.selectedTenantId(user.getId());
     }
 
     public static void tearDownTenant(ApplicationContext applicationContext) {
-        var userRepository = (UserRepository) applicationContext.getBean(UserRepository.class);
+        var userRepository = applicationContext.getBean(UserRepository.class);
 
-        var currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %> = (<%- tenant.entityClass %>) applicationContext.getBean("currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>", <%- tenant.entityClass %>.class);
-        currentUser<%- tenant.builtInUser ? '' : tenant.entityClass %>.setId(0l);
+        var currentTenantIdentifier = applicationContext.getBean("currentTenantIdentifier", TenantIdentifier.class);
+        currentTenantIdentifier.selectedTenantId(0l);
 
         if (userRepository.existsByLogin(DEFAULT_TENANT_USER)) {
             User user = userRepository.findOneByLogin(DEFAULT_TENANT_USER).orElseThrow();

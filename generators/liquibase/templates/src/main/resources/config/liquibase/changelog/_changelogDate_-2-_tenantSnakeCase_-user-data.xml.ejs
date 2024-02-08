@@ -1,0 +1,48 @@
+<%- include('/liquibase-changelog-header') -%>
+
+    <changeSet id="<%- changelogDate %>-2" author="jhipster">
+        <loadData file="config/liquibase/data/<%- entityNameLowerCase %>/<%- entityNameLowerCase %>-root.csv"
+                  separator=";"
+                  tableName="<%- entityNameLowerCase %>">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+        </loadData>
+
+        <loadUpdateData file="config/liquibase/data/<%- entityNameLowerCase %>/user-relationship.csv"
+                  separator=";"
+                  tableName="jhi_user"
+                  primaryKey="id">
+            <column name="id" type="numeric"/>
+            <column name="<%- entityNameLowerCase %>_id" type="numeric"/>
+        </loadUpdateData>
+
+        <loadData file="config/liquibase/data/<%- entityNameLowerCase %>/user.csv"
+                  separator=";"
+                  tableName="jhi_user">
+            <column name="id" type="numeric"/>
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="<%- entityNameLowerCase %>_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+                  file="config/liquibase/data/<%- entityNameLowerCase %>/user-authority.csv"
+                  separator=";"
+                  tableName="jhi_user_authority">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+
+    </changeSet>
+
+    <!--
+        Load <%- entityClass %> data
+        Dev context uses faker-data so this will conflict with it.
+        Apply to prod only.
+    -->
+    <changeSet id="<%- changelogDate %>-2.1" author="jhipster" context="prod, test">
+        <loadData file="config/liquibase/data/<%- entityNameLowerCase %>/<%- entityNameLowerCase %>-others.csv"
+                  separator=";"
+                  tableName="<%- entityNameLowerCase %>">
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

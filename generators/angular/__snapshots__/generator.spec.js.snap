@@ -440,6 +440,9 @@ exports[`SubGenerator angular of generator-jhipster-tenantview JHipster blueprin
   "src/main/webapp/app/core/auth/auth-jwt.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/core/auth/current-tenant.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/core/auth/state-storage.service.ts": {
     "stateCleared": "modified",
   },

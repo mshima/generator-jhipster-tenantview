@@ -31,7 +31,7 @@ module.exports = {
               `
 #home-menu-container {@extend .order-0;}
 #entity-menu-container {@extend .order-1;}
-#${this.tenant.entityLowerCase}-admin-menu-container {@extend .order-3;}
+#${this.tenant.entityNameLowerCase}-admin-menu-container {@extend .order-3;}
 #admin-menu-container {@extend .order-10;}
 #languages-menu-container {@extend .order-11;}
 #account-menu-container {@extend .order-12;}

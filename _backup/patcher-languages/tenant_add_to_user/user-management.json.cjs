@@ -1,4 +1,4 @@
-const file = data => data.languagesToApply.map(lang => `${data.CLIENT_MAIN_SRC_DIR}i18n/${lang}/user-management.json`);
+const file = data => data.languagesToApply.map(lang => `${data.srcMainWebapp}i18n/${lang}/user-management.json`);
 
 const tmpls = [
   {

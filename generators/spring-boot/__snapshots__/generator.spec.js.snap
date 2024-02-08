@@ -116,6 +116,12 @@ exports[`SubGenerator spring-boot of generator-jhipster-tenantview JHipster blue
   "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/aop/user/UserAwareAspect.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/aop/user/package-info.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -167,6 +173,9 @@ exports[`SubGenerator spring-boot of generator-jhipster-tenantview JHipster blue
   "src/main/java/com/mycompany/myapp/config/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/user/TenantIdentifier.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/user/UserAwareSessionConfiguration.java": {
     "stateCleared": "modified",
   },
@@ -174,6 +183,9 @@ exports[`SubGenerator spring-boot of generator-jhipster-tenantview JHipster blue
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/AbstractUserAware.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
@@ -423,6 +435,9 @@ exports[`SubGenerator spring-boot of generator-jhipster-tenantview JHipster blue
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/TenantIntegrationTestUtils.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {

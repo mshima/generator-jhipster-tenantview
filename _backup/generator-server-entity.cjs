@@ -8,7 +8,6 @@ const generator = 'entity-server';
 module.exports = {
   createGenerator: env => {
     const packagePath = env.getPackagePath('jhipster:app');
-    // eslint-disable-next-line global-require,import/no-dynamic-require
     const needleServer = require(`${packagePath}/generators/server/needle-api/needle-server`);
 
     const TenantisedNeedle = class extends needleServer {
@@ -64,7 +63,7 @@ module.exports = {
           customServerCode() {
             if (this.tenant) {
               this.addConstraintsChangelogToLiquibase(`${this.tenant.changelogDate}-1__user_${this.tenant.entityClass}`);
-              this.addConstraintsChangelogToLiquibase(`${this.tenant.changelogDate}-2__${this.tenant.entityLowerCase}_user_data`);
+              this.addConstraintsChangelogToLiquibase(`${this.tenant.changelogDate}-2__${this.tenant.entityNameLowerCase}_user_data`);
               this.addConstraintsChangelogToLiquibase(`${this.tenant.changelogDate}-3__user_${this.tenant.entityClass}_constraints`);
             }
           },

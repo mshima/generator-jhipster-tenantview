@@ -1,0 +1,18 @@
+import { Injectable, Signal, signal } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class CurrentTenantService {
+  private tenantId = signal<number | null>(null);
+
+  trackTenantId(): Signal<number | null> {
+    return this.tenantId.asReadonly();
+  }
+
+  setTenantId(tenantId: number | null): void {
+    this.tenantId.update(current => (current === tenantId ? null : tenantId));
+  }
+
+  getTenantId(): number | null {
+    return this.tenantId();
+  }
+}
