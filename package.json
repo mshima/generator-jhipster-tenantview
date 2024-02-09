@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-tenantview",
-  "version": "1.0.0",
+  "version": "1.0.0-git",
   "private": true,
   "description": "Description for Generator Jhipster Tenantview",
   "keywords": [
