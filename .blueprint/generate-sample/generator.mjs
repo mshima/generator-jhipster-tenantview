@@ -1,7 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
 import BaseGenerator from 'generator-jhipster/generators/base';
-import command from './command.mjs';
 
 export default class extends BaseGenerator {
   sampleName;
@@ -26,15 +25,15 @@ export default class extends BaseGenerator {
   get [BaseGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
       async askForSample() {
-        if (!this.sampleName) {
-          const answers = await this.prompt({
-            type: 'list',
-            name: 'sampleName',
-            message: 'which sample do you want to generate?',
-            choices: async () => readdir(this.templatePath('samples')),
-          });
-          this.sampleName = answers.sampleName;
-        }
+        await this.promptCurrentJHipsterCommand();
+      },
+    });
+  }
+
+  get [BaseGenerator.LOADING]() {
+    return this.asPromptingTaskGroup({
+      async promptingTemplateTask({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
       },
     });
   }
