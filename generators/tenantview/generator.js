@@ -6,7 +6,7 @@ import { createTenantAwareRelationship } from './support/index.js';
 
 export default class extends BaseApplicationGenerator {
   async beforeQueue() {
-    await this.dependsOnBootstrapAplication();
+    await this.dependsOnBootstrapApplication();
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -27,7 +27,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.asConfiguringTaskGroup({
       skipJHipsterDependencies() {
-        this.jhipster.config.skipJHipsterDependencies = true;
+        this.jhipsterConfig.skipJHipsterDependencies = true;
       },
       async configuringTemplateTask() {
         const tenants = this.getExistingEntities().filter(entity => entity.definition.annotations?.tenant);

@@ -5,7 +5,7 @@ import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 const SUB_GENERATOR = 'liquibase';
 const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
-describe('SubGenerator liquibase of generator-jhipster-tenantview JHipster blueprint', () => {
+describe('SubGenerator liquibase of tenantview JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers
@@ -13,7 +13,7 @@ describe('SubGenerator liquibase of generator-jhipster-tenantview JHipster bluep
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-          blueprint: 'generator-jhipster-tenantview',
+          blueprint: 'tenantview',
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();

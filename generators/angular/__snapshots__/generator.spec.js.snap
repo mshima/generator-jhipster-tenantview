@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SubGenerator angular of generator-jhipster-tenantview JHipster blueprint > run > should succeed 1`] = `
+exports[`SubGenerator angular of tenantview JHipster blueprint > run > should succeed 1`] = `
 {
   ".editorconfig": {
     "stateCleared": "modified",

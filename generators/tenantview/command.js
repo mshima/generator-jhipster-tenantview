@@ -3,6 +3,8 @@
  */
 const command = {
   options: {},
+  configs: {},
+  arguments: {},
 };
 
 export default command;

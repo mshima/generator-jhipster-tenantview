@@ -23,7 +23,7 @@ const blueprint = packageFolderName.startsWith('jhipster-') ? `generator-${packa
       [blueprint]: version,
     },
     printBlueprintLogo: () => {
-      console.log('===================== JHipster generator-jhipster-tenantview =====================');
+      console.log('===================== JHipster tenantview =====================');
       console.log('');
     },
     lookups: [{ packagePaths: [packagePath] }],

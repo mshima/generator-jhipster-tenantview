@@ -5,7 +5,7 @@ import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 const SUB_GENERATOR = 'tenantview';
 const SUB_GENERATOR_NAMESPACE = `jhipster-tenantview:${SUB_GENERATOR}`;
 
-describe('SubGenerator tenantview of generator-jhipster-tenantview JHipster blueprint', () => {
+describe('SubGenerator tenantview of tenantview JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers

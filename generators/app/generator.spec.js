@@ -5,7 +5,7 @@ import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 const SUB_GENERATOR = 'app';
 const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
-describe('SubGenerator app of generator-jhipster-tenantview JHipster blueprint', () => {
+describe('SubGenerator app of tenantview JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers
@@ -13,7 +13,7 @@ describe('SubGenerator app of generator-jhipster-tenantview JHipster blueprint',
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-          blueprint: 'generator-jhipster-tenantview',
+          blueprint: 'tenantview',
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();
