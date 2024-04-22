@@ -22,7 +22,7 @@ public class <%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect extend
     private final Logger log = LoggerFactory.getLogger(<%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect.class);
 
     @Pointcut("target(<%- packageName %>.repository.<%- entityClass %>Repository)")
-    private void <%- entityInstance %>RepositoryAsTarget() {} 
+    private void <%- entityInstance %>RepositoryAsTarget() {}
 
     @Pointcut("execution(* *.existsById(..))")
     private void existsByIdOperation() {}
@@ -72,7 +72,7 @@ public class <%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect extend
 
         if (bean.get<%- tenantEntity.entityClass %>() == null) {
             this.assertThatHaveEffectiveTenantId();
-            bean.set<%- tenantEntity.entityClass %>(newCurrentTenantInstance());
+            bean.set<%- tenantEntity.entityClass %>(newCurrent<%- tenantEntity.entityClass %>Instance());
             return;
         }
 

@@ -43,7 +43,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.asPostWritingEntitiesTaskGroup({
       async postWritingEntitiesTemplateTask({ application, entities }) {
-        for (const entity of entities) {
+        for (const entity of entities.filter(entity => !entity.skipClient || entity.builtInUserManagement)) {
           await patcherTask(this, { ...application, ...entity }, { options: { autoLoadPath: 'patcher-entities' } });
         }
       },

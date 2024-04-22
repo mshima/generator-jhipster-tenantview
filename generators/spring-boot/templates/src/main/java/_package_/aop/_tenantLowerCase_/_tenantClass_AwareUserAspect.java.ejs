@@ -22,7 +22,7 @@ public class <%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect extend
     private final Logger log = LoggerFactory.getLogger(<%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect.class);
 
     @Pointcut("target(<%- packageName %>.repository.<%- entityClass %>Repository)")
-    private void <%- entityInstance %>RepositoryAsTarget() {} 
+    private void <%- entityInstance %>RepositoryAsTarget() {}
 
     @Pointcut("execution(* *.deleteById(..))")
     private void deleteByIdOperation() {}
@@ -71,7 +71,7 @@ public class <%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect extend
 
         if (this.isCurrentUserRootAdmin()) {
             if (bean.get<%- tenantEntity.entityClass %>() == null) {
-                bean.setTenant(newCurrentTenantInstance());
+                bean.setTenant(newCurrent<%- tenantEntity.entityClass %>Instance());
             }
             return;
         }
@@ -87,7 +87,7 @@ public class <%- tenantEntity.entityClass %>Aware<%- entityClass %>Aspect extend
             );
             throw new org.springframework.security.access.AccessDeniedException("Not allowed");
         }
-        bean.set<%- tenantEntity.entityClass %>(newCurrentTenantInstance());
+        bean.set<%- tenantEntity.entityClass %>(newCurrent<%- tenantEntity.entityClass %>Instance());
     }
 
     @Around(value = "<%- entityInstance %>RepositoryAsTarget() && deleteByIdOperation()")
