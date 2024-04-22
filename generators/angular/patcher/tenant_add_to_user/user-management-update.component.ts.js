@@ -24,7 +24,7 @@ $1`,
     type: 'replaceContent',
     disabled: true,
     target: /(\n(\s*)isSaving = false;)/,
-    tmpl: data => `$1
+    tmpl: () => `$1
 $2currentAccount: any;
 `,
   },

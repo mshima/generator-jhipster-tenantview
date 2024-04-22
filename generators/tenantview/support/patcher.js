@@ -2,7 +2,6 @@ import { last, uniqBy, escapeRegExp } from 'lodash-es';
 import chalk from 'chalk';
 import path, { basename, extname } from 'path';
 import { globSync } from 'glob';
-import semver from 'semver';
 import createDebug from 'debug';
 
 const debug = createDebug('customizer:patcher');
@@ -85,7 +84,7 @@ export function addContentCallback(before, contentToAdd, skipTest = true) {
     const re = new RegExp(`\\s*${escapeRegExp(contentToAdd)}`);
 
     if (!skipTest && re.test(body)) {
-      return content;
+      return body;
     }
 
     const lines = body.split('\n');

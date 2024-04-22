@@ -4,7 +4,7 @@ const tmpls = [
   {
     type: 'rewriteFile',
     target: () => '    public static final String USER = "ROLE_USER";',
-    tmpl: data => `public static final String ROOT_ADMIN = "ROLE_ROOT_ADMIN";
+    tmpl: () => `public static final String ROOT_ADMIN = "ROLE_ROOT_ADMIN";
         public static final String ROOT_USER = "ROLE_ROOT_USER";
 `,
   },

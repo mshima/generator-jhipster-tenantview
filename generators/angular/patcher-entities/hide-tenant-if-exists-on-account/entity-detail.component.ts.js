@@ -5,7 +5,7 @@ const tmpls = [
     // Add tenant getter to account
     type: 'rewriteFile',
     target: "from '@angular/router';",
-    tmpl: data => `import { inject } from '@angular/core';`,
+    tmpl: () => `import { inject } from '@angular/core';`,
   },
   {
     // Add imports account

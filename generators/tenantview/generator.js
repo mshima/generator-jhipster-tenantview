@@ -1,7 +1,6 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { mutateData } from 'generator-jhipster/generators/base/support';
 import { lowerFirst, snakeCase } from 'lodash-es';
-import command from './command.js';
 import { createTenantAwareRelationship } from './support/index.js';
 
 export default class extends BaseApplicationGenerator {
@@ -12,15 +11,16 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       async initializingTemplateTask() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+        await this.parseCurrentJHipsterCommand();
       },
     });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
-      async promptingTemplateTask() {},
+      async promptingTemplateTask() {
+        await this.promptCurrentJHipsterCommand();
+      },
     });
   }
 
@@ -38,18 +38,6 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup({
-      async loadingTemplateTask() {},
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup({
-      async preparingTemplateTask({ application }) {},
-    });
-  }
-
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup({
       async configuringEachEntityTemplateTask({ entityConfig }) {
@@ -59,6 +47,14 @@ export default class extends BaseApplicationGenerator {
             ...entityConfig.annotations,
           };
         }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.asPromptingTaskGroup({
+      async promptingTemplateTask({ application }) {
+        await this.loadCurrentJHipsterCommandConfig(application);
       },
     });
   }
