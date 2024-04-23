@@ -9,7 +9,7 @@ export default {
                   @if (${data.builtInUserManagement ? 'user' : data.entityInstance}.${data.builtInUserManagement ? 'id' : data.primaryKey.name} !== 0) {
                     <button
                       type="submit"
-                      (click)="setCurrentTenantId(${data.builtInUserManagement ? 'user' : data.entityInstance}.${data.builtInUserManagement ? 'id' : data.primaryKey.name})"
+                      (click)="setCurrentTenantId(${data.builtInUserManagement ? 'user' : data.entityInstance}.${data.builtInUserManagement ? 'id' : data.primaryKey.name}!)"
                       class="btn btn-primary btn-sm"
                       data-cy="entitySelectButton"
                     >

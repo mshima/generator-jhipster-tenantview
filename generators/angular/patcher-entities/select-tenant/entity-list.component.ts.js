@@ -9,11 +9,17 @@ export default {
     },
     {
       type: 'rewriteFile',
-      target: ' = inject(',
+      target: data => (data.builtInUserManagement ? 'private userService = ' : 'public router = inject'),
       tmpl: `
-  currentTenantService = inject(CurrentTenantService);
-  currentTenant = this.currentTenantService.trackTenantId();
-  setCurrentTenantId = (tenantId: number) => this.currentTenantService.setTenantId(tenantId);
+  currentTenant = inject(CurrentTenantService).trackTenantId();
+`,
+    },
+    {
+      type: 'rewriteFile',
+      target: data => (data.builtInUserManagement ? 'ngOnInit()' : `track${data.primaryKey.nameCapitalized} =`),
+      tmpl: `
+  private currentTenantService = inject(CurrentTenantService);
+  setCurrentTenantId = (tenantId: number):void => this.currentTenantService.setTenantId(tenantId);
 `,
     },
   ],

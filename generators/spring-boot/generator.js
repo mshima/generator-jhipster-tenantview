@@ -45,7 +45,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingEntitiesTemplateTask({ application, entities }) {
-        for (const entity of entities) {
+        for (const entity of entities.filter(entity => !entity.builtInUserManagement && !entity.builtInAuthority)) {
           await this.writeFiles({
             blocks: [
               javaMainPackageTemplatesBlock({

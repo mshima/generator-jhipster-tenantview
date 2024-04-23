@@ -26,7 +26,7 @@ public abstract class <%- tenantEntity.entityClass %>AwareAspect {
     @Autowired
     protected TenantIdentifier currentTenantIdentifier;
 
-    protected <%- tenantEntity.persistClass %> newCurrentTenantInstance() {
+    protected <%- tenantEntity.persistClass %> newCurrent<%- tenantEntity.entityClass %>Instance() {
         <%- tenantEntity.persistClass %> <%- tenantEntity.entityInstance %> = new <%- tenantEntity.persistClass %>();
         <%- tenantEntity.entityInstance %>.setId(currentTenantIdentifier.getEffectiveTenantId());
         return <%- tenantEntity.entityInstance %>;
