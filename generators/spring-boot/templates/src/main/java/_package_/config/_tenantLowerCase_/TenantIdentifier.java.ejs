@@ -28,6 +28,9 @@ public class TenantIdentifier implements Serializable {
             this.selectedTenantId = tenantId;
             return this;
         }
+        if (this.selectedTenantId == tenantId) {
+            return this;
+        }
         throw new Error("Not allowed");
     }
 
