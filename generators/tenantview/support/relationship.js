@@ -9,4 +9,5 @@ export const createTenantAwareRelationship = (tenantName, tenantLabel, relations
   columnRequired: true,
   autoGenerate: true,
   persistableRelationship: false,
+  tenantRelationship: true,
 });
