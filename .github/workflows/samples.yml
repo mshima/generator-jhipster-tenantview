@@ -55,6 +55,7 @@ jobs:
       - run: jhipster-tenantview generate-sample ${{ matrix.sample-name }} --skip-install
       - uses: jhipster/actions/compare-sample@v0
         id: compare
+        if: github.event.pull_request
         with:
           generator-path: generator-jhipster-tenantview
           cmd: jhipster-tenantview generate-sample ${{ matrix.sample-name }} --skip-install --skip-git
