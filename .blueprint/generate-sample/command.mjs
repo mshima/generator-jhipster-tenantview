@@ -26,18 +26,24 @@ const command = {
   arguments: {
     sampleName: {
       type: String,
+      scope: 'generator',
     },
   },
   configs: {
     sampleName: {
-      argument: {
-        type: String,
-      },
       prompt: gen => ({
+        when: !gen.all,
         type: 'list',
         message: 'which sample do you want to generate?',
         choices: async () => readdir(gen.templatePath('samples')),
       }),
+      scope: 'generator',
+    },
+    all: {
+      description: 'Generate every sample in a workspace',
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
   },
