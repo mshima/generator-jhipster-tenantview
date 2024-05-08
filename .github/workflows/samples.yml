@@ -45,20 +45,21 @@ jobs:
           npm-version: ${{ matrix.npm-version }}
           maven-cache: true
           gradle-cache: true
+          binary-dir: ${{ github.workspace }}/generator-jhipster-tenantview/cli/
       - uses: actions/checkout@v4
         with:
           path: generator-jhipster-tenantview
           fetch-depth: 2
       - name: 'Install blueprint'
-        run: npm install && npm link
+        run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-tenantview
-      - run: jhipster-tenantview generate-sample ${{ matrix.sample-name }} --skip-install
+      - run: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-install
       - uses: jhipster/actions/compare-sample@v0
         id: compare
         if: github.event.pull_request
         with:
           generator-path: generator-jhipster-tenantview
-          cmd: jhipster-tenantview generate-sample ${{ matrix.sample-name }} --skip-install --skip-git
+          cmd: cli.cjs generate-sample ${{ matrix.sample-name }} --skip-install --skip-git
       - run: npm run ci:backend:test
         id: backend
         if: steps.compare.outputs.equals != 'true'
