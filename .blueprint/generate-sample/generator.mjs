@@ -31,14 +31,6 @@ export default class extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.LOADING]() {
-    return this.asPromptingTaskGroup({
-      async promptingTemplateTask({ application }) {
-        await this.loadCurrentJHipsterCommandConfig(application);
-      },
-    });
-  }
-
   get [BaseGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async copySample() {
