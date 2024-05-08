@@ -12,12 +12,6 @@
         "sbs": true,
         "written": true
       },
-      "app": {
-        "command": false,
-        "priorities": ["initializing", "composing"],
-        "sbs": true,
-        "written": true
-      },
       "liquibase": {
         "command": false,
         "priorities": ["writing", "writingEntities", "postWriting", "postWritingEntities"],
@@ -37,11 +31,12 @@
         "written": true
       }
     },
+    "githubWorkflows": true,
     "jhipsterVersion": "8.1.0",
     "js": true,
     "localBlueprint": false,
     "sampleWritten": true,
     "skipCommitHook": true,
-    "subGenerators": ["angular", "app", "liquibase", "spring-boot"]
+    "subGenerators": ["angular", "liquibase", "spring-boot"]
   }
 }

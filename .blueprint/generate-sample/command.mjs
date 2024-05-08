@@ -23,21 +23,24 @@ import { GENERATOR_APP } from 'generator-jhipster/generators';
  * @type {import('generator-jhipster').JHipsterCommandDefinition}
  */
 const command = {
-  arguments: {
-    sampleName: {
-      type: String,
-    },
-  },
   configs: {
     sampleName: {
       argument: {
         type: String,
       },
       prompt: gen => ({
+        when: !gen.all,
         type: 'list',
         message: 'which sample do you want to generate?',
         choices: async () => readdir(gen.templatePath('samples')),
       }),
+      scope: 'generator',
+    },
+    all: {
+      description: 'Generate every sample in a workspace',
+      cli: {
+        type: Boolean,
+      },
       scope: 'generator',
     },
   },
