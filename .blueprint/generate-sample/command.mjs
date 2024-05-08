@@ -23,11 +23,14 @@ import { GENERATOR_APP } from 'generator-jhipster/generators';
  * @type {import('generator-jhipster').JHipsterCommandDefinition}
  */
 const command = {
+  arguments: {
+    sampleName: {
+      type: String,
+      scope: 'generator',
+    },
+  },
   configs: {
     sampleName: {
-      argument: {
-        type: String,
-      },
       prompt: gen => ({
         when: !gen.all,
         type: 'list',
