@@ -67,7 +67,7 @@ export default class extends BaseApplicationGenerator {
         tenant.tenant = true;
         application.tenantEntity = tenant;
 
-        application.tenantLabel = tenant.annotations?.tenantLabel ?? tenant.builtInUser ? 'login' : 'id';
+        application.tenantLabel = tenant.annotations?.tenantLabel ?? (tenant.builtInUser ? 'login' : 'id');
         application.tenantRelationshipName = tenant.annotations?.tenantRelationshipName ?? lowerFirst(tenant.name);
 
         if (!tenant.builtInUser) {

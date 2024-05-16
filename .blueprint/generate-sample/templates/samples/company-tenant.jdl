@@ -1,6 +1,6 @@
 application {
   config {
-    baseName Tenant
+    baseName ComponanyTenant
     blueprints [tenantview]
     cacheProvider no
     creationTimestamp 1632872179205
@@ -8,7 +8,12 @@ application {
     testFrameworks [cypress]
   }
 
-  entities Blog, Post, Tag, Notification
+  entities Company, Blog, Post, Tag, Notification
+}
+
+@Tenant
+entity Company {
+  name String required
 }
 
 entity Blog {
@@ -38,4 +43,4 @@ relationship ManyToMany {
   Post{tag(name)} to Tag{entry}
 }
 
-dto Blog, Post, Tag with mapstruct
+dto Company, Blog, Post, Tag with mapstruct

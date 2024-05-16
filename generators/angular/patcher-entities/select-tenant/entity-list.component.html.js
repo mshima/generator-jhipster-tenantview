@@ -13,7 +13,7 @@ export default {
                       class="btn btn-primary btn-sm"
                       data-cy="entitySelectButton"
                     >
-                      <fa-icon icon="times"></fa-icon>
+                      <fa-icon [icon]="currentTenant() === ${data.builtInUserManagement ? 'user' : data.entityInstance}.${data.builtInUserManagement ? 'id' : data.primaryKey.name} ? 'times' : 'check'"></fa-icon>
                       <span class="d-none d-md-inline">{{ currentTenant() === ${data.builtInUserManagement ? 'user' : data.entityInstance}.${data.builtInUserManagement ? 'id' : data.primaryKey.name} ? 'Deselect' : 'Select' }}</span>
                     </button>
                   }

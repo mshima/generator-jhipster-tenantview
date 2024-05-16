@@ -60,16 +60,19 @@ const tmpls = [
     target: 'testRegisterInvalidLogin()',
   },
   {
+    disabled: true,
     type: 'rewriteFile',
     tmpl: '@Disabled("Self registration disabled")',
     target: 'testRegisterInvalidEmail()',
   },
   {
+    disabled: true,
     type: 'rewriteFile',
     tmpl: '@Disabled("Self registration disabled")',
     target: 'testRegisterNullPassword()',
   },
   {
+    disabled: true,
     type: 'rewriteFile',
     tmpl: '@Disabled("Self registration disabled")',
     target: 'testRegisterInvalidPassword()',

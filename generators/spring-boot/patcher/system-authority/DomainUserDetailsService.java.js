@@ -6,7 +6,7 @@ export default patch({
     {
       type: 'rewriteFile',
       target: 'return new org.springframework.security.core.userdetails.User',
-      tmpl: `        if (user.getTenant().getId() == 0) {
+      tmpl: ctx => `        if (user.get${ctx.tenantEntity.entityClass}().getId() == 0) {
             grantedAuthorities = TenantUtils.addRootGrantedAuthorities(grantedAuthorities);
         }`,
     },

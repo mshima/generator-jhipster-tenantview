@@ -5,7 +5,7 @@ const tmpls = [
   {
     type: 'replaceContent',
     regex: true,
-    target: () => '(import org\\.hibernate\\.annotations\\.CacheConcurrencyStrategy;)',
+    target: () => '(import java\\.util\\.Set;)',
     tmpl: () => `$1
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
