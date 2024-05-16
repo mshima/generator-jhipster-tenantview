@@ -1,6 +1,6 @@
 application {
   config {
-    applicationType monolith
+    baseName UserTenant
     blueprints [tenantview]
     cacheProvider no
     creationTimestamp 1632872179205
