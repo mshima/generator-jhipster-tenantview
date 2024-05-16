@@ -31,6 +31,7 @@
         "written": true
       }
     },
+    "githubRepository": "mshima/generator-jhipster-tenantview",
     "githubWorkflows": true,
     "jhipsterVersion": "8.1.0",
     "js": true,
