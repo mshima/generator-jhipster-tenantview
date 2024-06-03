@@ -26,7 +26,6 @@ const command = {
   arguments: {
     sampleName: {
       type: String,
-      scope: 'generator',
     },
   },
   configs: {
