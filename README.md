@@ -45,13 +45,13 @@ And looking for `(blueprint option: tenantview)` like
 To use an unreleased version, install it using git.
 
 ```bash
-npm install -g jhipster/generator-jhipster-tenantview#main
+npm install -g mshima/generator-jhipster-tenantview#main
 jhipster --blueprints tenantview --skip-jhipster-dependencies
 ```
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-tenantview.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-tenantview
-[github-generator-image]: https://github.com/jhipster/generator-jhipster-tenantview/actions/workflows/generator.yml/badge.svg
-[github-generator-url]: https://github.com/jhipster/generator-jhipster-tenantview/actions/workflows/generator.yml
-[github-samples-image]: https://github.com/jhipster/generator-jhipster-tenantview/actions/workflows/samples.yml/badge.svg
-[github-samples-url]: https://github.com/jhipster/generator-jhipster-tenantview/actions/workflows/samples.yml
+[github-generator-image]: https://github.com/mshima/generator-jhipster-tenantview/actions/workflows/generator.yml/badge.svg
+[github-generator-url]: https://github.com/mshima/generator-jhipster-tenantview/actions/workflows/generator.yml
+[github-samples-image]: https://github.com/mshima/generator-jhipster-tenantview/actions/workflows/samples.yml/badge.svg
+[github-samples-url]: https://github.com/mshima/generator-jhipster-tenantview/actions/workflows/samples.yml
