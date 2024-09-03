@@ -10,4 +10,5 @@ export const createTenantAwareRelationship = (tenantName, tenantLabel, relations
   autoGenerate: true,
   persistableRelationship: false,
   tenantRelationship: true,
+  liquibaseGenerateFakeData: true,
 });
